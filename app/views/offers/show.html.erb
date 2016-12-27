@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Артикул:</strong>
+  <%= @offer.scu %>
+</p>
+<p>
+  <strong>Название</strong>
+  <%= @offer.title %>
+</p>
+<p>
+  <strong>original ID:</strong>
+  <%= @offer.original_id %>
+</p>
+
+<p>
+  <strong>Строка параметров:</strong>
+  <%= @par %>
+</p>
+
+<p>
+  <strong>Строка свойств:</strong>
+  <%= @chr %>
+</p>
+
+
+
+<%= link_to 'Edit', [:edit,@offer.compare.site,@offer] %> |
+<%= link_to 'Back', site_offers_path( :compare=> @offer.compare_id) %>

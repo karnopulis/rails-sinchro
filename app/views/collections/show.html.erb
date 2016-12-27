@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Название</th>
+      <th>Путь</th>
+      <th>Количество артикулов</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @collection.offers.pluck("scu").sort.each do |scu| %>
+      <tr>
+        <td><%= @collection.name %></td>
+        <td><%= @collection.flat %></td>
+        <td><%= scu %>
+        </td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+<%= link_to 'Edit', edit_collection_path(@collection) %> |
+<%= link_to 'Back', collections_path %>

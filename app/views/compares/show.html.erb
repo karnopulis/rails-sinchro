@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @compare.name %>
+</p>
+
+
+
+
+<%= render 'result' %>
+
+<%= link_to 'Edit', [:edit,@compare.site,@compare] %> |
+<%= link_to 'Back', site_compares_path %>

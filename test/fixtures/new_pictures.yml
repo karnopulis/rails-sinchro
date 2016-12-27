@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  url: 
+  scu: 
+  original_offer_id: MyString
+
+two:
+  url: 
+  scu: 
+  original_offer_id: MyString

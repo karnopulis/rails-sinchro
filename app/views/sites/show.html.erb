@@ -1,0 +1,91 @@
+<p id="notice"><%= notice %></p>
+
+<%= link_to 'Синхронизации', site_compares_path(@site) %> |
+
+<p>
+  <strong>Name:</strong>
+  <%= @site.name %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @site.url %>
+</p>
+
+<p>
+  <strong>Site login:</strong>
+  <%= @site.site_login %>
+</p>
+
+<p>
+  <strong>Site pass:</strong>
+  <%= @site.site_pass %>
+</p>
+
+<p>
+  <strong>Home login:</strong>
+  <%= @site.home_login %>
+</p>
+
+<p>
+  <strong>Home pass:</strong>
+  <%= @site.home_pass %>
+</p>
+
+<p>
+  <strong>Site global parent:</strong>
+  <%= @site.site_global_parent %>
+</p>
+
+<p>
+  <strong>Csv collection order:</strong>
+  <%= @site.csv_collection_order %>
+</p>
+
+<p>
+  <strong>Csv variant order:</strong>
+  <%= @site.csv_variant_order %>
+</p>
+
+<p>
+  <strong>Site variant order:</strong>
+  <%= @site.site_variant_order %>
+</p>
+
+<p>
+  <strong>Csv offer order:</strong>
+  <%= @site.csv_offer_order %>
+</p>
+
+<p>
+  <strong>Site offer order:</strong>
+  <%= @site.site_offer_order %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @site.sort_order %>
+</p>
+
+<p>
+  <strong>Scu field:</strong>
+  <%= @site.scu_field %>
+</p>
+
+<p>
+  <strong>Quantity field:</strong>
+  <%= @site.quantity_field %>
+</p>
+
+<p>
+  <strong>Title field:</strong>
+  <%= @site.title_field %>
+</p>
+
+<p>
+  <strong>Csv images order:</strong>
+  <%= @site.csv_images_order %>
+</p>
+
+<%= link_to 'Edit', edit_site_path(@site) %> |
+<%= link_to 'Back', sites_path %>

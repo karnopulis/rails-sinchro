@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Sites</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Url</th>
+      <th>Site login</th>
+      <th>Site pass</th>
+      <th>Home login</th>
+      <th>Home pass</th>
+      <th>Site global parent</th>
+      <th>Csv collection order</th>
+      <th>Csv variant order</th>
+      <th>Site variant order</th>
+      <th>Csv offer order</th>
+      <th>Site offer order</th>
+      <th>Sort order</th>
+      <th>Scu field</th>
+      <th>Quantity field</th>
+      <th>Title field</th>
+      <th>Csv images order</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sites.each do |site| %>
+      <tr>
+        <td><%= site.name %></td>
+        <td><%= site.url %></td>
+        <td><%= site.site_login %></td>
+        <td><%= site.site_pass %></td>
+        <td><%= site.home_login %></td>
+        <td><%= site.home_pass %></td>
+        <td><%= site.site_global_parent %></td>
+        <td><%= site.csv_collection_order %></td>
+        <td><%= site.csv_variant_order %></td>
+        <td><%= site.site_variant_order %></td>
+        <td><%= site.csv_offer_order %></td>
+        <td><%= site.site_offer_order %></td>
+        <td><%= site.sort_order %></td>
+        <td><%= site.scu_field %></td>
+        <td><%= site.quantity_field %></td>
+        <td><%= site.title_field %></td>
+        <td><%= site.csv_images_order %></td>
+        <td><%= link_to 'Show', site %></td>
+        <td><%= link_to 'Edit', edit_site_path(site) %></td>
+        <td><%= link_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Site', new_site_path %>

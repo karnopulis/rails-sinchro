@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  scu: MyString
+  flat: MyString
+  compare_id: 
+
+two:
+  scu: MyString
+  flat: MyString
+  compare_id: 

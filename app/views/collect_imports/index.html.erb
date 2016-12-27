@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Collect Imports</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Название</th>
+      <th>Путь</th>
+      <th>Количество артикулов</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @collection_imports.each do |collection_import| %>
+      <tr>
+        <td><%= collection_import.split(';').last %></td>
+        <td><%= collection_import %></td>
+        <td>
+          <%= link_to(@collect_imports.where(:flat =>collection_import).first) do %>          
+            <%= @collect_imports.where(:flat => collection_import).size %>
+          <% end %>
+        </td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Collect import', new_collect_import_path %>

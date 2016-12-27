@@ -1,0 +1,291 @@
+<h1>Добавление новых рубрик</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Название</th>
+      <th>Полный путь</th>
+      <th>ИД Родителя</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @nc.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.title %></td>
+        <td><%= elem.collection_flat %></td>
+        <td><%= elem.parent_id %></td>
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<br>
+
+<h1>Удаление старых рубрик</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>ИД рубрики</th>
+      <th>Полный путь</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @oc.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.collection_original_id %></td>
+        <td><%= elem.collection_flat %></td>
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+
+<h1>Добавление новых товаров</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Артикул </th>
+      <th>Строка параметров </th>
+      <th>Строка свойств </th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @no.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.scu %></td>
+        <td><%= elem.edit_offers.first.flat %></td>
+        <td><%= elem.edit_variants.first.flat %></td>
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<br>
+
+<h1>Удаление старых товаров</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>ИД товара</th>
+      <th>Артикул</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @oo.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.original_id %></td>
+        <td><%= elem.scu %></td>
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+
+<h1>Добавление товаров в рубрики</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Артикул</th>
+      <th>Полный путь</th>
+      <th>ИД Артикула</th>
+      <th>ИД Рубрики</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @nco.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.product_scu %></td>
+        <td><%= elem.collection_flat %></td>
+        <td><%= elem.product_original_id %></td>
+        <td><%= elem.collection_original_id %></td>        
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<h1>Удаление товаров из рубрик</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Артикул</th>
+      <th>Полный путь</th>
+      <th>ИД Размещения</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @oco.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.product_scu %></td>
+        <td><%= elem.collection_flat %></td>
+        <td><%= elem.collect_original_id %></td>
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<h1>Редактирование параметров товара</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Артикул</th>
+      <th>Название</th>
+      <th>ИД Артикула</th>
+      <th>Строка параметров</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @eo.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.scu %></td>
+        <td><%= elem.title %></td>
+        <td>
+                      <%= link_to([@compare.site,@compare.offers.where(:original_id => elem.original_id).first]) do %>          
+
+          <%= elem.original_id %>
+                      <% end %>
+ 
+          </td>
+        <td><%= elem.flat %></td>        
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<h1>Редактирование свойств товара</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Артикул</th>
+      <th>Количество</th>
+      
+      <th>ИД Артикула</th>
+      <th>Строка параметров</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ev.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.scu %></td>
+        <td><%= elem.quantity %></td>
+        <td>
+              <%= elem.original_id %>
+          </td>
+        <td><%= elem.flat %></td>        
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<h1>Новые изображения</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Артикул</th>
+      <th>Путь</th>
+      <th>ИД Артикула</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @np.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.scu %></td>
+        <td><%= elem.url %></td>
+        <td><%= elem.original_offer_id %></td>
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<h1>Старые изображения</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Артикул</th>
+      <th>ИД Артикула</th>
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @op.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.scu %></td>
+        <td><%= elem.original_id %></td>
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>

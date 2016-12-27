@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  parent_id: 
+  title: 
+  state: 
+  result_id: 
+
+two:
+  parent_id: 
+  title: 
+  state: 
+  result_id: 

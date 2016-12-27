@@ -1,0 +1,85 @@
+<%= form_for(@site) do |f| %>
+  <% if @site.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@site.errors.count, "error") %> prohibited this site from being saved:</h2>
+
+      <ul>
+      <% @site.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :url %><br>
+    <%= f.text_field :url %>
+  </div>
+  <div class="field">
+    <%= f.label :site_login %><br>
+    <%= f.text_field :site_login %>
+  </div>
+  <div class="field">
+    <%= f.label :site_pass %><br>
+    <%= f.text_field :site_pass %>
+  </div>
+  <div class="field">
+    <%= f.label :home_login %><br>
+    <%= f.text_field :home_login %>
+  </div>
+  <div class="field">
+    <%= f.label :home_pass %><br>
+    <%= f.text_field :home_pass %>
+  </div>
+  <div class="field">
+    <%= f.label :site_global_parent %><br>
+    <%= f.text_field :site_global_parent %>
+  </div>
+  <div class="field">
+    <%= f.label :csv_collection_order %><br>
+    <%= f.text_field :csv_collection_order %>
+  </div>
+  <div class="field">
+    <%= f.label :csv_variant_order %><br>
+    <%= f.text_field :csv_variant_order %>
+  </div>
+  <div class="field">
+    <%= f.label :site_variant_order %><br>
+    <%= f.text_field :site_variant_order %>
+  </div>
+  <div class="field">
+    <%= f.label :csv_offer_order %><br>
+    <%= f.text_field :csv_offer_order %>
+  </div>
+  <div class="field">
+    <%= f.label :site_offer_order %><br>
+    <%= f.text_field :site_offer_order %>
+  </div>
+  <div class="field">
+    <%= f.label :sort_order %><br>
+    <%= f.text_field :sort_order %>
+  </div>
+  <div class="field">
+    <%= f.label :scu_field %><br>
+    <%= f.text_field :scu_field %>
+  </div>
+  <div class="field">
+    <%= f.label :quantity_field %><br>
+    <%= f.text_field :quantity_field %>
+  </div>
+  <div class="field">
+    <%= f.label :title_field %><br>
+    <%= f.text_field :title_field %>
+  </div>
+  <div class="field">
+    <%= f.label :csv_images_order %><br>
+    <%= f.text_field :csv_images_order %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

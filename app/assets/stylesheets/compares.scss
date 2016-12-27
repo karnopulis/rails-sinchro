@@ -1,0 +1,27 @@
+// Place all the styles related to the Compares controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/ 
+table {
+    border-collapse: collapse;
+    width: 90%;
+}
+
+ td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    text-align: left;
+    padding: 8px;
+    background-color: #4CAF50;
+    color: white;
+}
+tr:nth-child(even){background-color: #f2f2f2}
+
+h1 {
+    font-size: 20px;
+    font-family: Verdana,sans-serif;
+    
+}

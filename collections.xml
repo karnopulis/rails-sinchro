@@ -1,0 +1,64 @@
+<html><head>
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"be2e1c4ca5","applicationID":"4617","transactionName":"dl5ZRkRbCFoBRxlTBVZaaF1QUg1VARpFVBdGWFhcRRtMWRBdU0NN","queueTime":0,"applicationTime":69,"ttGuid":"","agentToken":null,"agent":""}</script>
+<script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var o=e[n]={exports:{}};t[n][0].call(o.exports,function(e){var o=t[n][1][e];return r(o||e)},o,o.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({QJf3ax:[function(t,e){function n(){}function r(t){function e(t){return t&&t instanceof n?t:t?a(t,i,o):o()}function c(n,r,o){t&&t(n,r,o);for(var i=e(o),a=f(n),c=a.length,u=0;c>u;u++)a[u].apply(i,r);return i}function u(t,e){p[t]=f(t).concat(e)}function f(t){return p[t]||[]}function s(){return r(c)}var p={};return{on:u,emit:c,create:s,listeners:f,context:e,_events:p}}function o(){return new n}var i="nr@context",a=t("gos");e.exports=r()},{gos:"7eSDFh"}],ee:[function(t,e){e.exports=t("QJf3ax")},{}],3:[function(t,e){function n(t){return function(){r(t,[(new Date).getTime()].concat(i(arguments)))}}var r=t("handle"),o=t(1),i=t(2);"undefined"==typeof window.newrelic&&(newrelic=window.NREUM);var a=["setPageViewName","addPageAction","setCustomAttribute","finished","addToTrace","inlineHit","noticeError"];o(a,function(t,e){window.NREUM[e]=n("api-"+e)}),e.exports=window.NREUM},{1:12,2:13,handle:"D5DuLP"}],gos:[function(t,e){e.exports=t("7eSDFh")},{}],"7eSDFh":[function(t,e){function n(t,e,n){if(r.call(t,e))return t[e];var o=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:o,writable:!0,enumerable:!1}),o}catch(i){}return t[e]=o,o}var r=Object.prototype.hasOwnProperty;e.exports=n},{}],D5DuLP:[function(t,e){function n(t,e,n){return r.listeners(t).length?r.emit(t,e,n):void(r.q&&(r.q[t]||(r.q[t]=[]),r.q[t].push(e)))}var r=t("ee").create();e.exports=n,n.ee=r,r.q={}},{ee:"QJf3ax"}],handle:[function(t,e){e.exports=t("D5DuLP")},{}],XL7HBI:[function(t,e){function n(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:i(t,o,function(){return r++})}var r=1,o="nr@id",i=t("gos");e.exports=n},{gos:"7eSDFh"}],id:[function(t,e){e.exports=t("XL7HBI")},{}],G9z0Bl:[function(t,e){function n(){if(!v++){var t=l.info=NREUM.info,e=f.getElementsByTagName("script")[0];if(t&&t.licenseKey&&t.applicationID&&e){c(p,function(e,n){t[e]||(t[e]=n)});var n="https"===s.split(":")[0]||t.sslForHttp;l.proto=n?"https://":"http://",a("mark",["onload",i()]);var r=f.createElement("script");r.src=l.proto+t.agent,e.parentNode.insertBefore(r,e)}}}function r(){"complete"===f.readyState&&o()}function o(){a("mark",["domContent",i()])}function i(){return(new Date).getTime()}var a=t("handle"),c=t(1),u=window,f=u.document;t(2);var s=(""+location).split("?")[0],p={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-852.min.js"},d=window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&!/CriOS/.test(navigator.userAgent),l=e.exports={offset:i(),origin:s,features:{},xhrWrappable:d};f.addEventListener?(f.addEventListener("DOMContentLoaded",o,!1),u.addEventListener("load",n,!1)):(f.attachEvent("onreadystatechange",r),u.attachEvent("onload",n)),a("mark",["firstbyte",i()]);var v=0},{1:12,2:3,handle:"D5DuLP"}],loader:[function(t,e){e.exports=t("G9z0Bl")},{}],12:[function(t,e){function n(t,e){var n=[],o="",i=0;for(o in t)r.call(t,o)&&(n[i]=e(o,t[o]),i+=1);return n}var r=Object.prototype.hasOwnProperty;e.exports=n},{}],13:[function(t,e){function n(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,o=n-e||0,i=Array(0>o?0:o);++r<o;)i[r]=t[e+r];return i}e.exports=n},{}]},{},["G9z0Bl"]);</script><title>InSales.ru &mdash; Вход в систему</title><link href="/served_assets/login-0bb7ddc03d1a7532ee319d3f9ccdb42e.css" media="screen" rel="stylesheet" type="text/css" /><link href="/served_assets/favicon.ico" rel="shortcut icon" /><meta content="noindex, nofollow" name="robots" /><meta content="width=device-width, initial-scale=1.0" name="viewport" /></head><body><div class="main login_form"><div class="row"><div class="logo grid-left"><svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="133px" height="43px" viewBox="0 0 136.516 48.154" enable-background="new 0 0 136.516 48.154" xml:space="preserve">
+  <path fill="#ffffff" d="M35.102,25.505c-1.248-4.098-0.935-8.557,1.241-12.449c3.725-6.654,11.723-9.526,19.243-7.473l2.183,3.468
+                          l-3.494,2.902c-7.52-1.438-14.602,0.842-17.693,6.368C35.352,20.515,34.892,22.979,35.102,25.505L35.102,25.505z"></path>
+  <g>
+    <path fill="#ffffff" d="M10.986,47.626H5.099V18.097h5.888V47.626z"></path>
+    <path fill="#ffffff" d="M33.881,47.626h-5.8V34.708c-0.06-0.995-0.447-1.83-1.165-2.505c-0.718-0.674-1.589-1.039-2.614-1.099
+                            c-1.113,0.03-2.029,0.381-2.746,1.055c-0.719,0.675-1.121,1.494-1.209,2.461v13.007h-5.888V26.139h5.888v1.318
+                            c1.436-1.23,3.223-1.846,5.361-1.846c2.285,0,4.219,0.864,5.8,2.592c1.582,1.729,2.373,3.896,2.373,6.504V47.626z"></path>
+    <path fill="#ffffff" d="M60.658,38.97c0,3.047-1.136,5.339-3.405,6.877c-2.271,1.538-5.105,2.307-8.503,2.307
+                            c-4.453-0.029-8.48-1.641-12.084-4.834l4.262-4.262c2.549,1.963,5.259,3.031,8.13,3.207c1.758,0,3.164-0.285,4.219-0.856
+                            c1.054-0.571,1.581-1.354,1.581-2.351c0.029-0.996-0.454-1.816-1.45-2.461s-2.68-1.113-5.053-1.406
+                            c-3.516-0.439-6.086-1.435-7.712-2.988c-1.626-1.552-2.425-3.384-2.395-5.492c0-2.578,0.886-4.717,2.658-6.416
+                            c1.772-1.698,4.328-2.562,7.668-2.593c4.071,0.088,7.558,1.362,10.458,3.823L54.857,25.7c-1.669-1.289-3.69-1.992-6.063-2.109
+                            c-1.758,0-3.003,0.257-3.735,0.769c-0.732,0.513-1.099,1.165-1.099,1.956c0.029,0.82,0.418,1.436,1.165,1.845
+                            c0.747,0.411,1.999,0.703,3.757,0.879c3.72,0.352,6.613,1.385,8.679,3.099S60.658,36.128,60.658,38.97z"></path>
+    <path fill="#ffffff" d="M82.729,47.626h-5.58v-0.703c-1.729,0.674-3.633,1.011-5.713,1.011c-2.373,0-4.321-0.674-5.844-2.021
+                            c-1.524-1.347-2.285-3.076-2.285-5.185c0-2.227,0.842-4.079,2.526-5.56c1.685-1.479,3.801-2.219,6.35-2.219
+                            c1.729,0,3.412,0.191,5.054,0.571c0.058-0.791-0.235-1.421-0.879-1.89c-0.645-0.468-1.655-0.717-3.032-0.747
+                            c-2.051,0-4.043,0.527-5.977,1.582l-2.284-4.569c2.929-1.523,5.683-2.285,8.261-2.285c2.812,0,5.082,0.659,6.811,1.978
+                            c1.729,1.317,2.593,3.325,2.593,6.02V47.626z M77.148,41.738v-3.207c-1.758-0.352-3.413-0.527-4.966-0.527
+                            c-0.938,0-1.722,0.234-2.351,0.703c-0.631,0.469-0.945,1.04-0.945,1.714c0,0.645,0.374,1.216,1.121,1.713
+                            c0.747,0.499,1.647,0.747,2.702,0.747C74.32,42.88,75.801,42.5,77.148,41.738z"></path>
+    <path fill="#ffffff" d="M92.272,47.626h-5.888v-26.98l5.888-2.944V47.626z"></path>
+    <path fill="#ffffff" d="M115.312,38.75H101.25c0.264,1.23,0.82,2.197,1.67,2.899c0.85,0.703,1.86,1.041,3.032,1.011
+                            c1.318,0,2.489-0.512,3.516-1.537l3.91,3.075c-1.963,2.549-4.453,3.823-7.47,3.823c-3.047,0-5.537-1.047-7.471-3.142
+                            c-1.933-2.095-2.899-4.782-2.899-8.063c0-2.08,0.439-3.999,1.318-5.757s2.123-3.104,3.734-4.042s3.296-1.406,5.054-1.406
+                            c1.786,0,3.449,0.527,4.987,1.582c1.538,1.054,2.702,2.453,3.493,4.196S115.312,35.586,115.312,38.75z M109.512,33.873
+                            c-0.206-0.938-0.675-1.67-1.406-2.197c-0.732-0.527-1.554-0.805-2.461-0.835c-0.908,0.03-1.735,0.308-2.482,0.835
+                            s-1.224,1.26-1.429,2.197H109.512z"></path>
+    <path fill="#ffffff" d="M136.516,41.43c0,1.758-0.784,3.296-2.351,4.614c-1.567,1.318-4.064,1.978-7.492,1.978
+                            c-3.018,0-6.343-0.819-9.975-2.461l2.593-5.141c2.694,1.553,5.229,2.358,7.602,2.416c1.846-0.058,2.944-0.241,3.296-0.549
+                            s0.527-0.622,0.527-0.945c0-0.321-0.198-0.637-0.594-0.944s-1.619-0.666-3.669-1.076c-2.52-0.498-4.577-1.245-6.174-2.241
+                            s-2.425-2.373-2.482-4.131c-0.06-2.167,0.725-3.933,2.351-5.295s3.786-2.043,6.481-2.043c3.046,0,6.181,0.82,9.403,2.461
+                            l-2.461,4.877c-2.49-1.083-4.73-1.67-6.723-1.758c-1.084,0-1.883,0.117-2.395,0.352c-0.514,0.235-0.77,0.587-0.77,1.055
+                            c0.059,0.352,0.314,0.631,0.77,0.835c0.453,0.205,1.486,0.513,3.098,0.923c2.9,0.674,5.119,1.509,6.657,2.505
+                            S136.516,39.38,136.516,41.43z"></path>
+  </g>
+</svg>
+</div><h1 class="grid-right login_form-title">Вход в систему</h1></div><div id="flash_messages"></div><div class="content login_form-content"><form accept-charset="UTF-8" action="https://auth.insales.ru/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="UUkALVDInrf7UP9NtfP+nwxcAwxflLJDuNBAkc6SRzs=" /></div>
+<input name='continue' type='hidden' value='http://horosho-gk.ru/admin/collections.xml?'>
+<input name='enter_host' type='hidden'>
+<input name='auth_domain' type='hidden' value='zakupky'>
+<div class='login_form-row input row'>
+<label class='input-label grid-left' for='email'>E-mail</label>
+<input class="input-field grid-right" id="email" name="email" type="text" />
+</div>
+<div class='login_form-row input row'>
+<label class='input-label grid-left' for='password'>Пароль</label>
+<input class="input-field grid-right" id="password" name="password" type="password" />
+</div>
+<div class='row'>
+<p class='login_form-row grid-right or'>
+<input class="login_form-submit" name="commit" type="submit" value="Войти" />
+<span class='restore_button'><a href="http://zakupky.myinsales.ru/admin/password/forgot">Восстановить пароль</a></span>
+</p>
+<p class='link login_form-row grid-left'>
+<a href='http://www.insales.ru/'>www.insales.ru</a>
+</p>
+</div>
+</form>
+
+</div></div></body></html>

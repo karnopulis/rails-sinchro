@@ -1,0 +1,18 @@
+<%= form_for([@offer_import.compare.site,@offer_import]) do |f| %>
+  <% if @offer_import.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@offer_import.errors.count, "error") %> prohibited this offer_import from being saved:</h2>
+
+      <ul>
+      <% @offer_import.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+     <%= hidden_field_tag :compare, params[:compare] %>
+    <%= f.submit %>
+  </div>
+<% end %>

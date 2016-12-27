@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Название</th>
+      <th>Путь</th>
+      <th>Количество артикулов</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @collects.each do |collect| %>
+      <tr>
+        <td><%= collect.flat.split(";").last %></td>
+        <td><%= collect.flat %></td>
+        <td><%= collect.scu %>
+        </td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

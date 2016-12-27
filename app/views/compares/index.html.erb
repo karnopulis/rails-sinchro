@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Compares</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Синхронизация</th>
+      <th>Товары</th>
+      <th>Параметры</th>
+      <th>Рубрики</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @compares.each do |compare| %>
+      <tr>
+        <td><%= compare.name %></td>
+        <td>
+          <%= link_to(site_offers_path( :compare=> compare.id)) do %>        
+            <p> На сайте :<%= compare.offers.size %> шт.</p>
+          <% end %>
+          <%= link_to(site_offer_imports_path( :compare=> compare.id)) do %>        
+            <p> В выгрузке :<%= compare.offer_imports.size %> шт.</p>
+          <% end %>
+          </td>
+        <td>
+          <%= link_to(site_properties_path( :compare=> compare.id)) do %>     
+            <p> Параметров товара :<%= compare.properties.size %> шт.</p>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to(site_collections_path( :compare=> compare.id)) do %>     
+            <p> На сайте :<%= compare.collections.size %> шт.</p>
+          <% end %>
+          <%= link_to(site_collect_imports_path( :compare=> compare.id)) do %>     
+            <p> В выгрузке :<%= compare.collect_imports.pluck("flat").uniq.size %> шт.</p>
+          <% end %>
+        </td>
+        <td><%= link_to 'Show', [compare.site,compare] %></td>
+        <td><%= link_to 'Edit', [:edit,compare.site,compare] %></td>
+        <td><%= link_to 'Destroy', [compare.site,compare], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Compare', new_site_compare_path %>
