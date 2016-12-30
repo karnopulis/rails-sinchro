@@ -4,7 +4,7 @@ class Collection < ActiveRecord::Base
     has_many :offers, :through => :collects
   
 
-    def new_from_hash (h)
+    def new_from_hash (h,site_global_parent)
         oo=[]
 #        top_level = h.select{|a| a["parent_id"].to_i==0 }
         top_level = h.select{|a| a["title"] == site_global_parent }

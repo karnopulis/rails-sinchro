@@ -73,7 +73,7 @@ class Compare < ActiveRecord::Base
         self.offers.each do |o|  
             var = o.variants.first
             flat = var.prices.pluck( "title, value").to_h
-            flat = flat.values_at(*site_variant_order)
+            flat = flat.values_at(*self.site.site_variant_order)
             var.flat = flat.join(";")
             var.save
             current.push ( [o.scu,var.quantity,
@@ -121,13 +121,14 @@ class Compare < ActiveRecord::Base
     
     
     def getData
-         self.name+=DateTime.now.to_formatted_s(:long)
-         self.save
-         properties_hash = get_Properties_from_insales
+         self.name+=DateTime.now.to_formatted_s(:long) if self.name
+         
+         properties_hash = self.site.get_Properties_from_insales
          if properties_hash
              getProperties(properties_hash)
          end
-         collections_hash = get_Collections_from_insales
+         properties_hash=nil
+         collections_hash = self.site.get_Collections_from_insales
          if collections_hash
              getCollections(collections_hash)
          end
@@ -135,16 +136,21 @@ class Compare < ActiveRecord::Base
         #  if offers_hash
         #      getOffers_marketplace(offers_hash) 
         #  end
-        
-         offers_hash = get_Offers_from_insales_products
+        collections_hash=nil
+        GC.start
+         offers_hash = self.site.get_Offers_from_insales_products
          if offers_hash
              getOffers_products(offers_hash) 
          end
-         collects_hash = get_Collects_from_insales
+         offers_hash=nil
+         GC.start
+         collects_hash = self.site.get_Collects_from_insales
          if collects_hash
              getCollects(collects_hash)
          end
-        import_csv = get_import_from_odin_ass()
+         collects_hash =nil
+         GC.start
+        import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
         puts import_csv.size
     
@@ -153,17 +159,24 @@ class Compare < ActiveRecord::Base
     def get_import(csv)
         puts "csv"
         puts csv.size
-        offers = csv.values_at(*scu_field, *title_field, *sort_order,*csv_images_order, *csv_offer_order).uniq
+        offers = csv.values_at(*self.site.scu_field, 
+                               *self.site.title_field, 
+                               *self.site.sort_order,
+                               *self.site.csv_images_order.split(","),
+                               *self.site.csv_offer_order.split(",")).uniq
         offers.each do |o| 
             self.offer_imports << OfferImport.create_new(o)
         end
         
-        variants = csv.values_at(*scu_field, *quantity_field, *csv_variant_order).uniq
+        variants = csv.values_at(*self.site.scu_field,
+                                 *self.site.quantity_field,
+                                 *self.site.csv_variant_order.split(",")).uniq
         variants.each do |v| 
                     self.variant_imports << VariantImport.create_new(v)
         end
         
-        collections = csv.values_at(*scu_field,*csv_collection_order).uniq
+        collections = csv.values_at(*self.site.scu_field,
+                                    *self.site.csv_collection_order.split(",")).uniq
 
         self.collect_imports = CollectImport.create_collects(collections)
 
@@ -186,7 +199,7 @@ class Compare < ActiveRecord::Base
         puts "offers"
         puts h.size
        h.each { |a| 
-           o = Offer.new()
+           o = self.offers.new()
            o.new_from_hash_products(a, self.properties)
            self.offers << o
 #           puts "++++++++++++++++++"
@@ -209,7 +222,7 @@ class Compare < ActiveRecord::Base
         puts "collections"
         puts h.size
        o=Collection.new
-       o = o.new_from_hash (h)
+       o = o.new_from_hash(h,self.site.site_global_parent)
        self.collections << o
        
     end

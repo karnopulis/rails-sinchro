@@ -86,13 +86,13 @@ class OffersController < ApplicationController
       @offer = Offer.find(params[:id])
       flat = @offer.characteristics.includes(:property).pluck(
             "properties.title,
-            characteristics.title").to_h.values_at(*site_offer_order)
+            characteristics.title").to_h.values_at(*@offer.compare.site.site_offer_order)
       @par= flat.join(";")
 
       var = @offer.variants.first
       if var
               flat = var.prices.pluck( "title, value").to_h
-              flat = flat.values_at(*site_variant_order)
+              flat = flat.values_at(*@offer.compare.site.site_variant_order)
       @chr=  [@offer.scu,var.quantity,*flat].join(";") 
       end
     end

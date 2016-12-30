@@ -4,10 +4,12 @@ class ComparesController < ApplicationController
   # GET /compares
   # GET /compares.json
   def index
-    @compares = Compare.all
-    
-
-    
+      site= params[:site_id]
+      if site
+        @compares = Site.find(site).compares
+      else
+        @compares =Compare.all
+      end
   end
 
   # GET /compares/1
@@ -54,11 +56,12 @@ class ComparesController < ApplicationController
         format.json { render json: @compare.errors, status: :unprocessable_entity }
       end
     end
-    Thread.new do
-      @compare.getData
-      @compare.compareData
-    ActiveRecord::Base.connection.close
-end
+      Thread.new do
+        @compare.getData
+        @compare.save
+        @compare.compareData
+      ActiveRecord::Base.connection.close
+      end
   end
 
   # PATCH/PUT /compares/1
@@ -93,6 +96,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def compare_params
-      params.require(:compare).permit(:name, :offers, :collections)
+      params.require(:compare).permit(:name, :site)
     end
 end

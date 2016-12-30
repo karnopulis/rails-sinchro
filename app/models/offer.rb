@@ -43,7 +43,7 @@ class Offer < ActiveRecord::Base
 #        puts "================"
 #        puts flat
 #        puts "================"
-        self.flat=flat.to_h.values_at(*site_offer_order).join(";")
+        self.flat=flat.to_h.values_at(*self.compare.site.site_offer_order.split(",")).join(";")
         self.image_status=""
          h["images"].each do |a|
             p= Picture.new

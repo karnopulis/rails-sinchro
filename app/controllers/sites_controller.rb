@@ -73,6 +73,6 @@ class SitesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def site_params
-      params.require(:site).permit(:name, :url, :site_login, :site_pass, :home_login, :home_pass, :site_global_parent, :csv_collection_order, :csv_variant_order, :site_variant_order, :csv_offer_order, :site_offer_order, :sort_order, :scu_field, :quantity_field, :title_field, :csv_images_order)
+      params.require(:site).permit(:name, :url, :site_login, :site_pass,:home_ftp, :home_login, :home_pass, :site_global_parent, :csv_collection_order, :csv_variant_order, :site_variant_order, :csv_offer_order, :site_offer_order, :sort_order, :scu_field, :quantity_field, :title_field, :csv_images_order)
     end
 end
