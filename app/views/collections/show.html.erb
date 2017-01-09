@@ -5,7 +5,7 @@
     <tr>
       <th>Название</th>
       <th>Путь</th>
-      <th>Количество артикулов</th>
+      <th>Артикулы</th>
  
     </tr>
   </thead>
@@ -25,5 +25,5 @@
 
 
 
-<%= link_to 'Edit', edit_collection_path(@collection) %> |
-<%= link_to 'Back', collections_path %>
+<%= link_to 'Edit', [:edit,@collection.compare.site,@collection] %> |
+<%= link_to 'Back', site_collections_path( :compare=> @collection.compare_id) %>

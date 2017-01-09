@@ -38,6 +38,7 @@ class Compare < ActiveRecord::Base
         self.result.add_edit_offers (edited_offers)
         edited_variants = compare_variants (old_offers)
         self.result.add_edit_variants (edited_variants)
+        puts DateTime.now
         
     end
     
@@ -121,8 +122,9 @@ class Compare < ActiveRecord::Base
     
     
     def getData
-         self.name+=DateTime.now.to_formatted_s(:long) if self.name
-         
+         puts self.name
+         self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
+         self.save
          properties_hash = self.site.get_Properties_from_insales
          if properties_hash
              getProperties(properties_hash)
@@ -138,18 +140,21 @@ class Compare < ActiveRecord::Base
         #  end
         collections_hash=nil
         GC.start
-         offers_hash = self.site.get_Offers_from_insales_products
-         if offers_hash
-             getOffers_products(offers_hash) 
-         end
-         offers_hash=nil
-         GC.start
-         collects_hash = self.site.get_Collects_from_insales
-         if collects_hash
-             getCollects(collects_hash)
-         end
-         collects_hash =nil
-         GC.start
+#         offers_hash = 
+         self.site.get_Offers_from_insales_products(self)
+         puts "offers"
+         puts self.offers.size
+#         if offers_hash
+#             getOffers_products(offers_hash) 
+#         end
+
+#         collects_hash = 
+         self.site.get_Collects_from_insales(self)
+#         if collects_hash
+#            getCollects(collects_hash)
+#         end
+         puts "collects"
+         puts self.collects.size
         import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
         puts import_csv.size
@@ -196,8 +201,8 @@ class Compare < ActiveRecord::Base
     def getOffers_products(h)
 #      h= Hash.from_xml(File.open("24025.xml"))
 #       h=hash["yml_catalog"]["shop"]["offers"]["offer"]
-        puts "offers"
-        puts h.size
+#        puts "offers"
+#        puts h.size
        h.each { |a| 
            o = self.offers.new()
            o.new_from_hash_products(a, self.properties)
@@ -236,12 +241,16 @@ class Compare < ActiveRecord::Base
         h.each { |a| 
             offer_id = a["product_id"].to_i
             collection_id= a["collection_id"].to_i
+            puts offer_id
+            puts collection_id
+            puts a
         
             collection_index = self.collections.index{ |b|  b.original_id == collection_id }
             offer_index = self.offers.index{ |c|  c.original_id == offer_id }
             if ( !collection_index )
-                puts "Error not existing or duplicate collection" + 
-                    collection_id.to_s + "  " + a["id"]
+                puts "Error not existing or duplicate collection"
+                puts collection_id
+                puts a["id"]
                 next
             end
             if ( !offer_index )

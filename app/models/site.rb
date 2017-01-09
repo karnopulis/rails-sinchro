@@ -16,40 +16,49 @@ class Site < ActiveRecord::Base
 #        response = get_from_url( URI("http://"+url+"/marketplace/26603.xml"), insales_id, insales_key) #rostov
         response["yml_catalog"]["shop"]["offers"]["offer"]
     end
-    def get_Offers_from_insales_products
-        response = get_from_insales_page( "http://"+self.url+"/admin/"+"products.xml?per_page=250&", "products" )
+    def get_Offers_from_insales_products(compare)
+        response = get_from_insales_page( "http://"+self.url+"/admin/"+"products.xml?per_page=250&", "products", compare )
         #File.open("products.xml", "w") { |file| file.write response.to_xml}
          #response= Hash.from_xml(File.open("products.xml"))
          #response=h["products"]
          return response
     end
-    def get_Collects_from_insales
-        response = get_from_insales_page( "http://"+self.url+"/admin/"+"collects.xml?", "collects")
+    def get_Collects_from_insales(compare)
+        response = get_from_insales_page( "http://"+self.url+"/admin/"+"collects.xml?", "collects",compare)
     end
     
     def get_import_from_odin_ass
-        response = get_csv_from_ftp( self.home_ftp, "horosho.csv",  self.home_login, self.home_pass)
+        response = get_csv_from_ftp( self.home_ftp, self.home_file_name,  self.home_login, self.home_pass)
 #        response = get_csv_from_url( URI("http://"+'94.141.184.178:5080'+"/ftp/site.csv"), home_login, home_pass)
     end
         
-    def get_from_insales_page(uri,model)
+    def get_from_insales_page(uri,model,compare)
         i=1
-        h=[]
+#        h=[]
         loop do
             uri_page = ( URI (uri + "page="+i.to_s ) )
-            get_Collections_from_insales
+#            get_Collections_from_insales
             
             r = get_from_url(uri_page, self.site_login, self.site_pass)
 
             puts uri_page.to_s
             break if r == nil
  #           File.open("products"+i.to_s+".xml", "w") { |file| file.write r.to_xml}
-
-            h=h + r[model]
+            case model
+            when "products"
+                compare.getOffers_products(r[model])
+                r=nil
+                 GC.start
+            when "collects"    
+                compare.getCollects(r[model])
+                r=nil
+                 GC.start
+            end    
+#            h=h + r[model]
             i+=1
-            puts h.class
+#            puts h.class
         end
-        return h
+#        return h
     end
 
  

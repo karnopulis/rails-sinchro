@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161229141622) do
+ActiveRecord::Schema.define(version: 20170109122028) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -302,6 +302,7 @@ ActiveRecord::Schema.define(version: 20161229141622) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.string   "home_ftp"
+    t.string   "home_file_name"
   end
 
   create_table "users", force: :cascade do |t|

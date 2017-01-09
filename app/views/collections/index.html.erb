@@ -18,9 +18,9 @@
         <td><%= collection.name %></td>
         <td><%= collection.flat %></td>
         <td><%= collection.offers.size %></td>
-        <td><%= link_to 'Show', collection %></td>
-        <td><%= link_to 'Edit', edit_collection_path(collection) %></td>
-        <td><%= link_to 'Destroy', collection, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', [collection.compare.site,collection] %></td>
+        <td><%= link_to 'Edit', [:edit,collection.compare.site,collection] %></td>
+        <td><%= link_to 'Destroy', [collection.compare.site,collection], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -28,4 +28,4 @@
 
 <br>
 
-<%= link_to 'New Collection', new_collection_path %>
+<%= link_to 'New Collection', new_site_collection_path(:compare => params[:compare]) %>

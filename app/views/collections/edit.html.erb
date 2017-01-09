@@ -2,5 +2,5 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @collection %> |
-<%= link_to 'Back', collections_path %>
+<%= link_to 'Show', [@collection.compare.site,@collection] %> |
+<%= link_to 'Back', site_collections_path( :compare=> @collection.compare_id) %>
