@@ -238,12 +238,10 @@ class Compare < ActiveRecord::Base
         #h=hash["collects"]
         puts "collects"
         puts h.size
+        collects=[]
         h.each { |a| 
             offer_id = a["product_id"].to_i
             collection_id= a["collection_id"].to_i
-            puts offer_id
-            puts collection_id
-            puts a
         
             collection_index = self.collections.index{ |b|  b.original_id == collection_id }
             offer_index = self.offers.index{ |c|  c.original_id == offer_id }
@@ -258,11 +256,17 @@ class Compare < ActiveRecord::Base
                     offer_id.to_s + "  " + a["id"].to_s
                 next
             end
-            self.collections[collection_index].offers << self.offers[offer_index]
-            self.collections[collection_index].collects.last.original_id = a["id"].to_i
-            self.collects << self.collections[collection_index].collects.last
+#            self.collections[collection_index].offers << self.offers[offer_index]
+#            self.collections[collection_index].collects.last.original_id = a["id"].to_i
+#            self.collects << self.collections[collection_index].collects.last
+            collects << {"original_id" => a["id"].to_i, "collection_id" => collection_index, "offer_id" => offer_index,"compare_id"=>self.id }
         }
        
+       Collect.bulk_insert do |worker|
+            collects.each do |collect|
+            worker.add(collect)
+            end
+       end
     end
     
 end
