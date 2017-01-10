@@ -82,14 +82,24 @@ class Result < ActiveRecord::Base
   
   def add_old_collections(nc)
     nc.sort!
+
+    old_collections=[]
     nc.each do |item|
       cur_id = self.compare.collections.where(:flat => item ).pluck(:original_id)
       parent_flat = item.split(';')
       parent_flat.pop
       parent_flat =parent_flat.join(';')
       par_from_new = self.old_collections.where(:collection_flat => parent_flat).first
-      self.old_collections << OldCollection.create_new(item,cur_id.first,par_from_new)
+
+      old_collections << OldCollection.create_new(item,cur_id.first,par_from_new)
+      old_collections.last.result=self
     end
+    OldCollection.bulk_insert do |worker|
+      old_collections.each do |attrs|
+      worker.add(attrs.attributes.except('created_at','updated_at'))
+      end
+    end
+#    self.old_collections << old_collections
   end
   
   def add_new_collects(nc)

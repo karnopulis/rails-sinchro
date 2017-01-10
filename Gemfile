@@ -25,7 +25,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rack', '~> 1.6.4'
 gem 'devise'
 gem 'mysql2'
-
+gem 'bulk_insert'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

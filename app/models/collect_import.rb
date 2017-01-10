@@ -13,7 +13,7 @@ class CollectImport < ActiveRecord::Base
       
       rez =CollectImport.create_chain( cc )
     
-      result =result+rez
+      result =result+rez if rez.size>0
     end
     
     result= result.uniq;
