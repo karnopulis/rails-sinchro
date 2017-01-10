@@ -18,7 +18,8 @@
         <td><%= collection_import.split(';').last %></td>
         <td><%= collection_import %></td>
         <td>
-          <%= link_to(@collect_imports.where(:flat =>collection_import).first) do %>          
+          <%= link_to([@collect_imports.where(:flat =>collection_import).first.compare.site,
+                       @collect_imports.where(:flat =>collection_import).first]) do %>          
             <%= @collect_imports.where(:flat => collection_import).size %>
           <% end %>
         </td>
@@ -30,4 +31,4 @@
 
 <br>
 
-<%= link_to 'New Collect import', new_collect_import_path %>
+<%= link_to 'New Collect import', new_site_collect_import_path(:compare => params[:compare]) %>

@@ -24,6 +24,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rack', '~> 1.6.4'
 gem 'devise'
+gem 'mysql2'
 
 
 # Use ActiveModel has_secure_password
