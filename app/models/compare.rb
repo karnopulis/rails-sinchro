@@ -40,7 +40,6 @@ class Compare < ActiveRecord::Base
         
         edited_offers = compare_offers_props (old_offers)
         self.result.add_edit_offers (edited_offers)
-        abort
         edited_variants = compare_variants (old_offers)
         self.result.add_edit_variants (edited_variants)
         puts DateTime.now
@@ -91,6 +90,8 @@ class Compare < ActiveRecord::Base
         imported = self.offer_imports.pluck("scu","image_status").uniq
         current=[]
         self.offers.each do |o|  
+            
+            puts "+===========+"
             current.push ( [o.scu,o.image_status] ) if not old_offers.include? o.scu 
         end
         edited_pictures = current- imported
