@@ -4,15 +4,14 @@ class Collect < ActiveRecord::Base
     belongs_to :compare
         
     
-        def new_from_hash (h)
-        oo=[]
-        h.each { |a| 
-            o = Collect.new()
-            o.original_id = a["id"].to_i
-            offer_id = a["product_id"].to_i
-            collection_id= a["collection_id"].to_i
+    def self.create_new(ori,col,of,com)
 
-        }
-       return oo
+            o = Collect.new()
+            o.original_id = ori
+            o.offer_id = of
+            o.collection_id= col
+            o.compare_id =com
+
+       return o
     end
 end

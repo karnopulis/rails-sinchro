@@ -1,5 +1,6 @@
 
 include ComparesHelper
+require 'benchmark'
 
 
 class Compare < ActiveRecord::Base
@@ -203,15 +204,17 @@ class Compare < ActiveRecord::Base
 #       h=hash["yml_catalog"]["shop"]["offers"]["offer"]
 #        puts "offers"
 #        puts h.size
+        offers=[]
        h.each { |a| 
            o = self.offers.new()
            o.new_from_hash_products(a, self.properties)
-           self.offers << o
+           o.compare=self
+           offers << o
 #           puts "++++++++++++++++++"
 #           puts self.offers.last.flat
 #           puts "++++++++++++++++++"
        }
-       
+       Offer.import offers
     end
     def getProperties(h)
         puts "properties"
@@ -239,12 +242,18 @@ class Compare < ActiveRecord::Base
         puts "collects"
         puts h.size
         collects=[]
+        collects2=[]
+        columns=[:original_id,:collection_id,:offer_id,:compare_id]
+        values=[]
         h.each { |a| 
             offer_id = a["product_id"].to_i
             collection_id= a["collection_id"].to_i
         
-            collection_index = self.collections.index{ |b|  b.original_id == collection_id }
-            offer_index = self.offers.index{ |c|  c.original_id == offer_id }
+#            collection_index = self.collections.index{ |b|  b.original_id == collection_id }
+#            offer_index = self.offers.index{ |c|  c.original_id == offer_id }
+            collection_index =self.collections.where("original_id" => collection_id).first.try(:id)
+            offer_index =self.offers.where("original_id" => offer_id).first.try(:id)
+
             if ( !collection_index )
                 puts "Error not existing or duplicate collection"
                 puts collection_id
@@ -260,13 +269,19 @@ class Compare < ActiveRecord::Base
 #            self.collections[collection_index].collects.last.original_id = a["id"].to_i
 #            self.collects << self.collections[collection_index].collects.last
             collects << {"original_id" => a["id"].to_i, "collection_id" => collection_index, "offer_id" => offer_index,"compare_id"=>self.id }
+            values << [a["id"].to_i, collection_index, offer_index,self.id]
+            collects2 << Collect.create_new(a["id"].to_i, collection_index, offer_index,self.id)
         }
-       
+       puts Benchmark.measure{
        Collect.bulk_insert do |worker|
             collects.each do |collect|
             worker.add(collect)
             end
        end
+       }
+       puts Benchmark.measure{Collect.import columns,values     }
+       puts Benchmark.measure{Collect.import collects2     }
+       abort
     end
     
 end
