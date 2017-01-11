@@ -1,4 +1,5 @@
 class OldPicture < ActiveRecord::Base
+   belongs_to :result
         def self.create_new (scu,original_id)
         op =OldPicture.new 
         op.scu= scu

@@ -2,7 +2,7 @@ class OfferImport < ActiveRecord::Base
         belongs_to :compare
         has_many :picture_imports
     
-    def self.create_new(row) 
+    def self.create_new(row,compare) 
         oi = self.new
 #        vi.scu =row[scu_field]
          oi.scu = row[0]
@@ -14,11 +14,13 @@ class OfferImport < ActiveRecord::Base
 
          oi.image_status=""
          oi.image_status = row[3].split("/").last+";" if not row[3]==nil
-         oi.image_status << row[4].split("/").last+";" if not row[4]==nil
+         oi.image_status += row[4].split("/").last+";" if not row[4]==nil
+#         puts oi.image_status
          oi.picture_imports << PictureImport.create_new(row[3])
          oi.picture_imports << PictureImport.create_new(row[4])         
          arr = row[5..100]
         oi.prop_flat=arr.join(';')
+        oi.compare=compare
     return oi
   end
     

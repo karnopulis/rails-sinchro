@@ -27,22 +27,20 @@ class Offer < ActiveRecord::Base
     end
 
     def new_from_hash_products (h , prop)
+        characteristics=[]
        self.original_id = h["id"]
        self.scu = h["variants"].first["sku"]
        self.title = h["title"]    
        flat=[]
-         h["characteristics"].each do |c|
-            prop_id = prop.index { |i| c["property_id"].to_i ==i.original_id }
-            self.properties<< prop[prop_id]
-            self.characteristics.last.original_id= c["id"]
-            self.characteristics.last.title=c["title"]
-            flat << [self.properties.last.title,self.characteristics.last.title]
-#            self.characteristics.last.property_id = prop[prop_id].id
-         end
-#         flat = self.characteristics.includes(:property).pluck("properties.title","characteristics.title").to_h.values_at(*site_offer_order).join(";")
-#        puts "================"
-#        puts flat
-#        puts "================"
+       h["characteristics"].each do |c|
+           prop_id = prop.index { |i| c["property_id"].to_i ==i.original_id }
+           characteristics << Characteristic.create_new(prop[prop_id], self, c["id"], c["title"])
+        #     prop_id = prop.index { |i| c["property_id"].to_i ==i.original_id }
+        #     self.properties<< prop[prop_id]
+        #     self.characteristics.last.original_id= c["id"]
+        #     self.characteristics.last.title=c["title"]
+             flat << [prop[prop_id].title,c["title"]]
+       end
         self.flat=flat.to_h.values_at(*self.compare.site.site_offer_order.split(",")).join(";")
         self.image_status=""
          h["images"].each do |a|
@@ -52,9 +50,9 @@ class Offer < ActiveRecord::Base
          end 
          h["variants"].each do |d|
             v= Variant.new
-            self.variants << v.new_from_hash(d)
+            self.variants << v.new_from_hash(d,self.compare.site)
          end
 
-       return self
+       return characteristics
     end
 end

@@ -32,11 +32,15 @@ class Compare < ActiveRecord::Base
         new_offers, old_offers = compare_offers_simple
         self.result.add_new_offers (new_offers)
         self.result.add_old_offers (old_offers)
+        
         edited_images = compare_images(old_offers)
+        
         self.result.add_new_images (edited_images)
         self.result.add_old_images (edited_images)
+        
         edited_offers = compare_offers_props (old_offers)
         self.result.add_edit_offers (edited_offers)
+        abort
         edited_variants = compare_variants (old_offers)
         self.result.add_edit_variants (edited_variants)
         puts DateTime.now
@@ -74,12 +78,8 @@ class Compare < ActiveRecord::Base
         current=[]
         self.offers.each do |o|  
             var = o.variants.first
-            flat = var.prices.pluck( "title, value").to_h
-            flat = flat.values_at(*self.site.site_variant_order)
-            var.flat = flat.join(";")
-            var.save
-            current.push ( [o.scu,var.quantity,
-            flat.join(";")] ) if not old_offers.include? o.scu 
+
+            current.push ( [o.scu, var.quantity, var.flat] ) if not old_offers.include? o.scu 
         end
         edited_variants = current- imported
         puts "edited_variants " +edited_variants.count.to_s
@@ -159,32 +159,38 @@ class Compare < ActiveRecord::Base
         import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
         puts import_csv.size
+        self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
     
     end
     
     def get_import(csv)
         puts "csv"
         puts csv.size
+        import=[]
         offers = csv.values_at(*self.site.scu_field, 
                                *self.site.title_field, 
                                *self.site.sort_order,
                                *self.site.csv_images_order.split(","),
                                *self.site.csv_offer_order.split(",")).uniq
         offers.each do |o| 
-            self.offer_imports << OfferImport.create_new(o)
+            import << OfferImport.create_new(o,self)
         end
-        
+        OfferImport.import import, recursive: true
+        import.clear
         variants = csv.values_at(*self.site.scu_field,
                                  *self.site.quantity_field,
                                  *self.site.csv_variant_order.split(",")).uniq
         variants.each do |v| 
-                    self.variant_imports << VariantImport.create_new(v)
+            import << VariantImport.create_new(v,self)
         end
-        
+        VariantImport.import import
+        import.clear
         collections = csv.values_at(*self.site.scu_field,
                                     *self.site.csv_collection_order.split(",")).uniq
 
-        self.collect_imports = CollectImport.create_collects(collections)
+        import = CollectImport.create_collects(collections,self)
+        CollectImport.import import
+        import.clear
 
     end
 
@@ -200,88 +206,79 @@ class Compare < ActiveRecord::Base
        }
    end
     def getOffers_products(h)
-#      h= Hash.from_xml(File.open("24025.xml"))
-#       h=hash["yml_catalog"]["shop"]["offers"]["offer"]
-#        puts "offers"
-#        puts h.size
-        offers=[]
+       offers=[]
+       ch=[]
        h.each { |a| 
            o = self.offers.new()
-           o.new_from_hash_products(a, self.properties)
+           ch += o.new_from_hash_products(a, self.properties)
            o.compare=self
            offers << o
-#           puts "++++++++++++++++++"
-#           puts self.offers.last.flat
-#           puts "++++++++++++++++++"
        }
-       Offer.import offers
+       Offer.import offers , recursive: true
+       
+       ch.each do |c|
+           c.run_callbacks(:save) { false }
+       end
+       Characteristic.import ch
+       
     end
     def getProperties(h)
         puts "properties"
         puts h.size
+        pr=[]
         h.each { |a| 
             o=Property.new
             o = o.new_from_hash (a)
-            self.properties << o
+            o.compare=self
+            pr << o
         }
+        Property.import pr
     end
     def getCollections(h)
 #       h=hash["collections"]
         puts "collections"
         puts h.size
        o=Collection.new
-       o = o.new_from_hash(h,self.site.site_global_parent)
-       self.collections << o
+       o = o.new_from_hash(h,self.site.site_global_parent,self.id)
+       Collection.import o
        
     end
     def getCollects(h)
     #    self.save
  ##На маркетплейс невыгружается товар без остатков. 
  ##отключи на сайте галочку не показывать товар при нудевых остатках       
-        #h=hash["collects"]
         puts "collects"
         puts h.size
-        collects=[]
-        collects2=[]
-        columns=[:original_id,:collection_id,:offer_id,:compare_id]
-        values=[]
-        h.each { |a| 
-            offer_id = a["product_id"].to_i
-            collection_id= a["collection_id"].to_i
-        
-#            collection_index = self.collections.index{ |b|  b.original_id == collection_id }
-#            offer_index = self.offers.index{ |c|  c.original_id == offer_id }
-            collection_index =self.collections.where("original_id" => collection_id).first.try(:id)
-            offer_index =self.offers.where("original_id" => offer_id).first.try(:id)
-
-            if ( !collection_index )
-                puts "Error not existing or duplicate collection"
-                puts collection_id
-                puts a["id"]
-                next
+        Collect.bulk_insert do |worker|
+            h.each do |a| 
+                offer_id = a["product_id"].to_i
+                collection_id= a["collection_id"].to_i
+            
+                collection_index = self.collections.index{ |b|  b.original_id == collection_id }
+                offer_index = self.offers.index{ |c|  c.original_id == offer_id }
+    
+                if ( !collection_index )
+                    puts "Error not existing or duplicate collection"
+                    puts collection_id
+                    puts a["id"]
+                    next
+                end
+                if ( !offer_index )
+                    puts "Error not existing or duplicate offer"  
+                    puts offer_id
+                    puts a["id"]
+                    next
+                end
+    #            self.collections[collection_index].offers << self.offers[offer_index]
+    #            self.collections[collection_index].collects.last.original_id = a["id"].to_i
+    #            self.collects << self.collections[collection_index].collects.last
+                 worker.add( {"original_id" => a["id"].to_i, 
+                              "collection_id" => self.collections[collection_index].id, 
+                              "offer_id" => self.offers[offer_index].id,
+                              "compare_id"=>self.id })
             end
-            if ( !offer_index )
-                puts "Error not existing or duplicate offer" + 
-                    offer_id.to_s + "  " + a["id"].to_s
-                next
-            end
-#            self.collections[collection_index].offers << self.offers[offer_index]
-#            self.collections[collection_index].collects.last.original_id = a["id"].to_i
-#            self.collects << self.collections[collection_index].collects.last
-            collects << {"original_id" => a["id"].to_i, "collection_id" => collection_index, "offer_id" => offer_index,"compare_id"=>self.id }
-            values << [a["id"].to_i, collection_index, offer_index,self.id]
-            collects2 << Collect.create_new(a["id"].to_i, collection_index, offer_index,self.id)
-        }
-       puts Benchmark.measure{
-       Collect.bulk_insert do |worker|
-            collects.each do |collect|
-            worker.add(collect)
-            end
-       end
-       }
-       puts Benchmark.measure{Collect.import columns,values     }
-       puts Benchmark.measure{Collect.import collects2     }
-       abort
+        end
+       h=nil
     end
     
 end

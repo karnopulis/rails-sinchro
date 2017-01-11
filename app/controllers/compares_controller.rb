@@ -1,3 +1,4 @@
+require 'pp'
 class ComparesController < ApplicationController
   before_action :set_compare, only: [:show, :edit, :update, :destroy]
 
@@ -57,9 +58,14 @@ class ComparesController < ApplicationController
       end
     end
       Thread.new do
-        @compare.getData
-        @compare.save
-        @compare.compareData
+        begin
+          @compare.getData
+          @compare.save
+          @compare.compareData
+        rescue =>e
+          pp e.message
+          pp e.backtrace
+        end
       ActiveRecord::Base.connection.close
       end
   end

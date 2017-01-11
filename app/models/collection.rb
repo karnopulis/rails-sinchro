@@ -4,7 +4,7 @@ class Collection < ActiveRecord::Base
     has_many :offers, :through => :collects
   
 
-    def new_from_hash (h,site_global_parent)
+    def new_from_hash (h,site_global_parent,compare_id)
         oo=[]
 #        top_level = h.select{|a| a["parent_id"].to_i==0 }
         top_level = h.select{|a| a["title"] == site_global_parent }
@@ -15,6 +15,7 @@ class Collection < ActiveRecord::Base
             o.original_id = a["id"].to_i
             o.name = a["title"]
             o.parent= a["parent_id"].to_i
+            o.compare_id =compare_id
             if (o.parent!=0)
                 o.flat= generate_flat( o.name, o.parent, top_level, h )
                 oo << o if o.flat

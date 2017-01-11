@@ -7,7 +7,7 @@ class CollectImport < ActiveRecord::Base
 #  TOP="ЗАО 'ГК Горчаков'"
   TOP=nil
 
-  def self.create_collects(collections)
+  def self.create_collects(collections,compare)
     result=[]
     collections.each do |cc|
       
@@ -21,7 +21,7 @@ class CollectImport < ActiveRecord::Base
     
     ci_arr=[]
     result.each do |r|
-      ci_arr << CollectImport.create_new(r[0],r[1])
+      ci_arr << CollectImport.create_new(r[0],r[1],compare)
     end
     return ci_arr
     #return result
@@ -42,10 +42,11 @@ class CollectImport < ActiveRecord::Base
     return rez
   end
  
-  def self.create_new(scu,arr) 
+  def self.create_new(scu,arr,compare) 
     ci = self.new
     ci.scu =scu
     ci.flat=arr
+    ci.compare=compare
     return ci
   end
   
