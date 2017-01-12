@@ -64,13 +64,20 @@ class Result < ActiveRecord::Base
  def add_new_offers(no)
    new_offers=[]
      no.each do |item|
-       off_import = self.compare.offer_imports.where(:scu => item).first
-       var_import = self.compare.variant_imports.where(:scu => item).first
+#       off_import = self.compare.offer_imports.where(:scu => item).first
+#       var_import = self.compare.variant_imports.where(:scu => item).first
+        off_import = self.compare.offer_imports.find_by scu: item
+        var_import = self.compare.variant_imports.find_by scu: item
+#       pic_import = self.compare.picture_imports.where(:scu => item).first
        no =NewOffer.create_new(item)
        no.edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title)
        no.edit_offers.last.result=self
        no.edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity)
        no.edit_variants.last.result=self
+       off_import.picture_imports.each do |pi|
+           no.new_pictures << NewPicture.create_new(item,nil,pi.url)
+           no.new_pictures.last.result=self
+       end
        new_offers<< no
        new_offers.last.result=self
      end

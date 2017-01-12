@@ -126,36 +126,28 @@ class Compare < ActiveRecord::Base
          puts self.name
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
-         properties_hash = self.site.get_Properties_from_insales
-         if properties_hash
-             getProperties(properties_hash)
-         end
-         properties_hash=nil
-         collections_hash = self.site.get_Collections_from_insales
-         if collections_hash
-             getCollections(collections_hash)
-         end
-        #  offers_hash = get_Offers_from_insales_marketplace
-        #  if offers_hash
-        #      getOffers_marketplace(offers_hash) 
+        #  properties_hash = self.site.get_Properties_from_insales
+        #  if properties_hash
+        #      getProperties(properties_hash)
         #  end
-        collections_hash=nil
-        GC.start
-#         offers_hash = 
-         self.site.get_Offers_from_insales_products(self)
-         puts "offers"
-         puts self.offers.size
-#         if offers_hash
-#             getOffers_products(offers_hash) 
-#         end
-
-#         collects_hash = 
-         self.site.get_Collects_from_insales(self)
-#         if collects_hash
-#            getCollects(collects_hash)
-#         end
-         puts "collects"
-         puts self.collects.size
+        #  properties_hash=nil
+        #  collections_hash = self.site.get_Collections_from_insales
+        #  if collections_hash
+        #      getCollections(collections_hash)
+        #  end
+        # #  offers_hash = get_Offers_from_insales_marketplace
+        # #  if offers_hash
+        # #      getOffers_marketplace(offers_hash) 
+        # #  end
+        # collections_hash=nil
+        # GC.start
+        #  self.site.get_Offers_from_insales_products(self)
+        #  puts "offers"
+        #  puts self.offers.size
+         
+        #  self.site.get_Collects_from_insales(self)
+        #  puts "collects"
+        #  puts self.collects.size
         import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
         puts import_csv.size

@@ -23,10 +23,10 @@ class ComparesController < ApplicationController
     @oo =rez.try(:old_offers)
     @nco =rez.try(:new_collects)
     @oco =rez.try(:old_collects)
-    @eo =rez.try(:edit_offers)
-    @ev =rez.try(:edit_variants)
-    @np =rez.try(:new_pictures)
-    @op =rez.try(:old_pictures)
+    @eo =rez.try(:edit_offers).try(:where, :original_id => nil).try(:not)
+    @ev =rez.try(:edit_variants).try(:where, :original_id => nil).try(:not)
+    @np =rez.try(:new_pictures).try(:where, :original_id => nil).try(:not)
+    @op =rez.try(:old_pictures).try(:where, :original_id => nil).try(:not)
     
     
   end
