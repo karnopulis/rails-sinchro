@@ -91,7 +91,6 @@ class Compare < ActiveRecord::Base
         current=[]
         self.offers.each do |o|  
             
-            puts "+===========+"
             current.push ( [o.scu,o.image_status] ) if not old_offers.include? o.scu 
         end
         edited_pictures = current- imported

@@ -3,6 +3,10 @@ require 'net/ftp'
 class Site < ActiveRecord::Base
     has_many :compares, dependent: :destroy
     
+    def self.dev_init
+        YAML.load_file("sites.yaml").each { |v|self.create!(v.attributes)}
+    end
+    
     def get_Collections_from_insales
         response = get_from_url( URI("http://"+self.url+"/admin/"+"collections.xml"), self.site_login, self.site_pass)
         response["collections"]
