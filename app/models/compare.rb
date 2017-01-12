@@ -42,7 +42,7 @@ class Compare < ActiveRecord::Base
         self.result.add_edit_offers (edited_offers)
         edited_variants = compare_variants (old_offers)
         self.result.add_edit_variants (edited_variants)
-        puts DateTime.now
+        self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
         
     end
     

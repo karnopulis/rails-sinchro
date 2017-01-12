@@ -138,14 +138,12 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.string   "state"
     t.text     "error"
     t.integer  "result_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "original_id"
     t.string   "scu"
-    t.integer  "new_picture_id"
   end
 
-  add_index "new_offers", ["new_picture_id"], name: "index_new_offers_on_new_picture_id"
   add_index "new_offers", ["result_id"], name: "index_new_offers_on_result_id"
 
   create_table "new_pictures", force: :cascade do |t|
@@ -157,8 +155,10 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "result_id"
     t.string   "state"
     t.string   "error"
+    t.integer  "new_offer_id"
   end
 
+  add_index "new_pictures", ["new_offer_id"], name: "index_new_pictures_on_new_offer_id"
   add_index "new_pictures", ["result_id"], name: "index_new_pictures_on_result_id"
 
   create_table "offer_imports", force: :cascade do |t|
