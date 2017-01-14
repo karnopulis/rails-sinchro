@@ -1,4 +1,4 @@
-class NewCollection < ActiveRecord::Base
+class NewCollection < ApplicationRecord
   belongs_to :result
   belongs_to :new_parent, class_name: "NewCollection"
   has_many :new_collects

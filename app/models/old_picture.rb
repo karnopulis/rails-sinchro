@@ -1,4 +1,4 @@
-class OldPicture < ActiveRecord::Base
+class OldPicture < ApplicationRecord
    belongs_to :result
         def self.create_new (scu,original_id)
         op =OldPicture.new 

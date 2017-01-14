@@ -1,4 +1,4 @@
-class Result < ActiveRecord::Base
+class Result < ApplicationRecord
   belongs_to :compare
   has_many :new_collects, dependent: :destroy
   has_many :old_collects, dependent: :destroy
@@ -102,10 +102,13 @@ class Result < ActiveRecord::Base
       parent_flat =parent_flat.join(';')
       par_id_from_cur = self.compare.collections.where(:flat => parent_flat ).pluck(:original_id)
       par_from_new = self.new_collections.where(:collection_flat => parent_flat).first if par_id_from_cur.none?
-      new_collections << NewCollection.create_new(item,par_id_from_cur,par_from_new,title)
-      new_collections.last.result=self
+      self.new_collections << NewCollection.create_new(item,par_id_from_cur,par_from_new,title)
+    #   new_collections.last.result=self
     end
-    NewCollection.import new_collections  
+    # new_collections.each do |c|
+    #     c.run_callbacks(:save) { false }
+    # end
+    # NewCollection.import new_collections  
   end
   
   def add_old_collections(nc)

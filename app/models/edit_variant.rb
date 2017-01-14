@@ -1,4 +1,4 @@
-class EditVariant < ActiveRecord::Base
+class EditVariant < ApplicationRecord
     
     belongs_to :new_offer
     belongs_to :result

@@ -1,4 +1,4 @@
-class Variant < ActiveRecord::Base
+class Variant < ApplicationRecord
     belongs_to :offer
     has_many :prices
     

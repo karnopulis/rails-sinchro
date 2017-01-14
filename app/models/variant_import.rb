@@ -1,4 +1,4 @@
-class VariantImport < ActiveRecord::Base
+class VariantImport < ApplicationRecord
     belongs_to :compare
     
     def self.create_new(row,compare) 

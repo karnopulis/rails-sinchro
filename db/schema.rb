@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -20,10 +19,9 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "title"
+    t.index ["offer_id"], name: "index_characteristics_on_offer_id"
+    t.index ["property_id"], name: "index_characteristics_on_property_id"
   end
-
-  add_index "characteristics", ["offer_id"], name: "index_characteristics_on_offer_id"
-  add_index "characteristics", ["property_id"], name: "index_characteristics_on_property_id"
 
   create_table "collect_imports", force: :cascade do |t|
     t.string   "scu"
@@ -31,9 +29,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "compare_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["compare_id"], name: "index_collect_imports_on_compare_id"
   end
-
-  add_index "collect_imports", ["compare_id"], name: "index_collect_imports_on_compare_id"
 
   create_table "collections", force: :cascade do |t|
     t.string   "name"
@@ -43,9 +40,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "compare_id"
     t.integer  "original_id"
     t.string   "flat"
+    t.index ["compare_id"], name: "index_collections_on_compare_id"
   end
-
-  add_index "collections", ["compare_id"], name: "index_collections_on_compare_id"
 
   create_table "collects", force: :cascade do |t|
     t.integer  "original_id"
@@ -54,20 +50,18 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "compare_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["collection_id"], name: "index_collects_on_collection_id"
+    t.index ["compare_id"], name: "index_collects_on_compare_id"
+    t.index ["offer_id"], name: "index_collects_on_offer_id"
   end
-
-  add_index "collects", ["collection_id"], name: "index_collects_on_collection_id"
-  add_index "collects", ["compare_id"], name: "index_collects_on_compare_id"
-  add_index "collects", ["offer_id"], name: "index_collects_on_offer_id"
 
   create_table "compares", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "site_id"
+    t.index ["site_id"], name: "index_compares_on_site_id"
   end
-
-  add_index "compares", ["site_id"], name: "index_compares_on_site_id"
 
   create_table "edit_offers", force: :cascade do |t|
     t.string   "scu"
@@ -80,10 +74,9 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.string   "flat"
+    t.index ["new_offer_id"], name: "index_edit_offers_on_new_offer_id"
+    t.index ["result_id"], name: "index_edit_offers_on_result_id"
   end
-
-  add_index "edit_offers", ["new_offer_id"], name: "index_edit_offers_on_new_offer_id"
-  add_index "edit_offers", ["result_id"], name: "index_edit_offers_on_result_id"
 
   create_table "edit_variants", force: :cascade do |t|
     t.string   "scu"
@@ -96,10 +89,9 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.string   "flat"
+    t.index ["new_offer_id"], name: "index_edit_variants_on_new_offer_id"
+    t.index ["result_id"], name: "index_edit_variants_on_result_id"
   end
-
-  add_index "edit_variants", ["new_offer_id"], name: "index_edit_variants_on_new_offer_id"
-  add_index "edit_variants", ["result_id"], name: "index_edit_variants_on_result_id"
 
   create_table "new_collections", force: :cascade do |t|
     t.integer  "parent_id"
@@ -111,10 +103,9 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "result_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["new_parent_id"], name: "index_new_collections_on_new_parent_id"
+    t.index ["result_id"], name: "index_new_collections_on_result_id"
   end
-
-  add_index "new_collections", ["new_parent_id"], name: "index_new_collections_on_new_parent_id"
-  add_index "new_collections", ["result_id"], name: "index_new_collections_on_result_id"
 
   create_table "new_collects", force: :cascade do |t|
     t.integer  "collection_original_id"
@@ -128,11 +119,10 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "result_id"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.index ["new_collection_id"], name: "index_new_collects_on_new_collection_id"
+    t.index ["new_product_id"], name: "index_new_collects_on_new_product_id"
+    t.index ["result_id"], name: "index_new_collects_on_result_id"
   end
-
-  add_index "new_collects", ["new_collection_id"], name: "index_new_collects_on_new_collection_id"
-  add_index "new_collects", ["new_product_id"], name: "index_new_collects_on_new_product_id"
-  add_index "new_collects", ["result_id"], name: "index_new_collects_on_result_id"
 
   create_table "new_offers", force: :cascade do |t|
     t.string   "state"
@@ -142,9 +132,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.datetime "updated_at",  null: false
     t.integer  "original_id"
     t.string   "scu"
+    t.index ["result_id"], name: "index_new_offers_on_result_id"
   end
-
-  add_index "new_offers", ["result_id"], name: "index_new_offers_on_result_id"
 
   create_table "new_pictures", force: :cascade do |t|
     t.string   "url"
@@ -156,10 +145,9 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.string   "state"
     t.string   "error"
     t.integer  "new_offer_id"
+    t.index ["new_offer_id"], name: "index_new_pictures_on_new_offer_id"
+    t.index ["result_id"], name: "index_new_pictures_on_result_id"
   end
-
-  add_index "new_pictures", ["new_offer_id"], name: "index_new_pictures_on_new_offer_id"
-  add_index "new_pictures", ["result_id"], name: "index_new_pictures_on_result_id"
 
   create_table "offer_imports", force: :cascade do |t|
     t.string   "title"
@@ -170,9 +158,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.string   "image_status"
+    t.index ["compare_id"], name: "index_offer_imports_on_compare_id"
   end
-
-  add_index "offer_imports", ["compare_id"], name: "index_offer_imports_on_compare_id"
 
   create_table "offers", force: :cascade do |t|
     t.string   "scu"
@@ -183,9 +170,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.string   "title"
     t.string   "flat"
     t.string   "image_status"
+    t.index ["compare_id"], name: "index_offers_on_compare_id"
   end
-
-  add_index "offers", ["compare_id"], name: "index_offers_on_compare_id"
 
   create_table "old_collections", force: :cascade do |t|
     t.integer  "collection_original_id"
@@ -196,10 +182,9 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "result_id"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.index ["old_collection_id"], name: "index_old_collections_on_old_collection_id"
+    t.index ["result_id"], name: "index_old_collections_on_result_id"
   end
-
-  add_index "old_collections", ["old_collection_id"], name: "index_old_collections_on_old_collection_id"
-  add_index "old_collections", ["result_id"], name: "index_old_collections_on_result_id"
 
   create_table "old_collects", force: :cascade do |t|
     t.integer  "collect_original_id"
@@ -210,9 +195,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "result_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.index ["result_id"], name: "index_old_collects_on_result_id"
   end
-
-  add_index "old_collects", ["result_id"], name: "index_old_collects_on_result_id"
 
   create_table "old_offers", force: :cascade do |t|
     t.string   "scu"
@@ -222,9 +206,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "result_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["result_id"], name: "index_old_offers_on_result_id"
   end
-
-  add_index "old_offers", ["result_id"], name: "index_old_offers_on_result_id"
 
   create_table "old_pictures", force: :cascade do |t|
     t.string   "scu"
@@ -234,18 +217,16 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "result_id"
     t.string   "state"
     t.string   "error"
+    t.index ["result_id"], name: "index_old_pictures_on_result_id"
   end
-
-  add_index "old_pictures", ["result_id"], name: "index_old_pictures_on_result_id"
 
   create_table "picture_imports", force: :cascade do |t|
     t.string   "url"
     t.integer  "offer_import_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["offer_import_id"], name: "index_picture_imports_on_offer_import_id"
   end
-
-  add_index "picture_imports", ["offer_import_id"], name: "index_picture_imports_on_offer_import_id"
 
   create_table "pictures", force: :cascade do |t|
     t.string   "url"
@@ -253,9 +234,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "original_id"
+    t.index ["offer_id"], name: "index_pictures_on_offer_id"
   end
-
-  add_index "pictures", ["offer_id"], name: "index_pictures_on_offer_id"
 
   create_table "prices", force: :cascade do |t|
     t.float    "value"
@@ -271,17 +251,15 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "compare_id"
+    t.index ["compare_id"], name: "index_properties_on_compare_id"
   end
-
-  add_index "properties", ["compare_id"], name: "index_properties_on_compare_id"
 
   create_table "results", force: :cascade do |t|
     t.integer  "compare_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["compare_id"], name: "index_results_on_compare_id"
   end
-
-  add_index "results", ["compare_id"], name: "index_results_on_compare_id"
 
   create_table "sites", force: :cascade do |t|
     t.string   "name"
@@ -320,10 +298,9 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
   create_table "variant_imports", force: :cascade do |t|
     t.integer  "quantity"
@@ -332,9 +309,8 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "compare_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["compare_id"], name: "index_variant_imports_on_compare_id"
   end
-
-  add_index "variant_imports", ["compare_id"], name: "index_variant_imports_on_compare_id"
 
   create_table "variants", force: :cascade do |t|
     t.string   "sku"
@@ -344,8 +320,7 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.integer  "original_id"
     t.integer  "offer_id"
     t.string   "flat"
+    t.index ["offer_id"], name: "index_variants_on_offer_id"
   end
-
-  add_index "variants", ["offer_id"], name: "index_variants_on_offer_id"
 
 end

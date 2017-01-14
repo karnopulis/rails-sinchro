@@ -1,4 +1,4 @@
-class OfferImport < ActiveRecord::Base
+class OfferImport < ApplicationRecord
         belongs_to :compare
         has_many :picture_imports
     

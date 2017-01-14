@@ -1,5 +1,5 @@
 include ComparesHelper
-class CollectImport < ActiveRecord::Base
+class CollectImport < ApplicationRecord
   belongs_to :compare
   
 

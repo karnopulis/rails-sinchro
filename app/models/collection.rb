@@ -1,4 +1,4 @@
-class Collection < ActiveRecord::Base
+class Collection < ApplicationRecord
     belongs_to :compare
     has_many :collects, dependent: :destroy
     has_many :offers, :through => :collects

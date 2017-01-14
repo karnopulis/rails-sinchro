@@ -1,4 +1,4 @@
-class OldCollection < ActiveRecord::Base
+class OldCollection < ApplicationRecord
   belongs_to :result
   has_one :old_collection
   

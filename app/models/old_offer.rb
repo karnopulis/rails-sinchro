@@ -1,4 +1,4 @@
-class OldOffer < ActiveRecord::Base
+class OldOffer < ApplicationRecord
   belongs_to :result
 
 

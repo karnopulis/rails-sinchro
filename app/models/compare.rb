@@ -3,7 +3,7 @@ include ComparesHelper
 require 'benchmark'
 
 
-class Compare < ActiveRecord::Base
+class Compare < ApplicationRecord
     belongs_to :site
     has_many :offers, dependent: :destroy
     has_many :collections, dependent: :destroy
@@ -19,29 +19,39 @@ class Compare < ActiveRecord::Base
 #    module Helpers
 #        extend ActionView::Helpers::ComparesHelper
 #    end
-    
+    def to_json
+        puts self.attributes
+        ApplicationController.new.view_context.render( template: "compares/show.json.jbuilder", locals: {"compare" =>  self})
+#           ,
+# #          locals: { self.class.model_name.element => self },
+#           formats: [:json],
+#           handlers: [:jbuilder]
+        # )
+    end
     def compareData
         self.result = Result.new
 
         new_collections,old_collections = compare_collections
         self.result.add_new_collections(new_collections)
         self.result.add_old_collections(old_collections)
-        new_collects, old_collects = compare_collects
-        self.result.add_new_collects(new_collects)
-        self.result.add_old_collects(old_collects)
         new_offers, old_offers = compare_offers_simple
         self.result.add_new_offers (new_offers)
         self.result.add_old_offers (old_offers)
-        
-        edited_images = compare_images(old_offers)
-        
-        self.result.add_new_images (edited_images)
-        self.result.add_old_images (edited_images)
-        
+        new_collects, old_collects = compare_collects
+        self.result.add_new_collects(new_collects)
+        self.result.add_old_collects(old_collects)
         edited_offers = compare_offers_props (old_offers)
         self.result.add_edit_offers (edited_offers)
         edited_variants = compare_variants (old_offers)
         self.result.add_edit_variants (edited_variants)
+    
+        edited_images = compare_images(old_offers)
+    
+        self.result.add_new_images (edited_images)
+        self.result.add_old_images (edited_images)
+        
+        
+        puts self.name
         self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
         
     end
@@ -152,6 +162,7 @@ class Compare < ActiveRecord::Base
         get_import( import_csv ) if import_csv
         puts import_csv.size
         self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
+        self.save
     
     end
     

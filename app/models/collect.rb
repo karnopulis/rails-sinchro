@@ -1,4 +1,4 @@
-class Collect < ActiveRecord::Base
+class Collect < ApplicationRecord
     belongs_to :offer
     belongs_to :collection
     belongs_to :compare

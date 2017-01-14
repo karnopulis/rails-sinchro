@@ -1,4 +1,4 @@
-class NewPicture < ActiveRecord::Base
+class NewPicture < ApplicationRecord
   belongs_to :result   
     def self.create_new(scu,original_id,url)
         np =NewPicture.new 

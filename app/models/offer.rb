@@ -1,4 +1,4 @@
-class Offer < ActiveRecord::Base
+class Offer < ApplicationRecord
     has_many :pictures, dependent: :destroy
     belongs_to :compare
     has_many :collects, dependent: :destroy

@@ -1,4 +1,4 @@
-class PictureImport < ActiveRecord::Base
+class PictureImport < ApplicationRecord
     belongs_to :offer_import
     
      def self.create_new(url) 

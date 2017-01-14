@@ -1,7 +1,7 @@
 
 
 
-class NewOffer < ActiveRecord::Base
+class NewOffer < ApplicationRecord
     has_many :edit_offers, dependent: :destroy
     has_many :edit_variants, dependent: :destroy
     has_many :new_pictures, dependent: :destroy

@@ -1,6 +1,6 @@
 require 'net/ftp'
 
-class Site < ActiveRecord::Base
+class Site < ApplicationRecord
     has_many :compares, dependent: :destroy
     
     def self.dev_init

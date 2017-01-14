@@ -1,4 +1,4 @@
-class Picture < ActiveRecord::Base
+class Picture < ApplicationRecord
     belongs_to :offer
     
 #    def initialize (h)

@@ -1,4 +1,4 @@
-class EditOffer < ActiveRecord::Base
+class EditOffer < ApplicationRecord
     belongs_to :new_offer
     belongs_to :result
     

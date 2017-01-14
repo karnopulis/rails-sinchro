@@ -1,4 +1,4 @@
-class Property < ActiveRecord::Base
+class Property < ApplicationRecord
     belongs_to :compare
     has_many :characteristics, dependent: :destroy
     has_many :offers, :through => :characteristics

@@ -1,4 +1,4 @@
-class Characteristic < ActiveRecord::Base
+class Characteristic < ApplicationRecord
     
     belongs_to :offer
     belongs_to :property

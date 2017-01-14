@@ -1,4 +1,4 @@
-class NewCollect < ActiveRecord::Base
+class NewCollect < ApplicationRecord
   belongs_to :result
   belongs_to :new_collection
   belongs_to :new_product
