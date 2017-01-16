@@ -53,6 +53,7 @@ class Compare < ApplicationRecord
         
         puts self.name
         self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
+        self.save
         
     end
     
@@ -67,7 +68,7 @@ class Compare < ApplicationRecord
         return new_offers, old_offers
     end
     def compare_offers_props (old_offers)
-        imported = self.offer_imports.pluck("scu","title","prop_flat").uniq
+        imported = self.offer_imports.pluck("scu","title","sort_order","prop_flat").uniq
         current=[]
         self.offers.each do |o|  
 #            flat = o.characteristics.includes(:property).pluck(
@@ -75,7 +76,7 @@ class Compare < ApplicationRecord
  #           characteristics.title").to_h.values_at(*site_offer_order)
 #            o.flat = flat.join(";")
             o.save
-            current.push ( [o.scu,o.title,o.flat] ) if not old_offers.include? o.scu 
+            current.push ( [o.scu,o.title,o.sort_weight,o.flat] ) if not old_offers.include? o.scu 
         end
         edited_offers = current- imported
         puts "edited offers " + edited_offers.count.to_s
@@ -136,28 +137,28 @@ class Compare < ApplicationRecord
          puts self.name
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
-        #  properties_hash = self.site.get_Properties_from_insales
-        #  if properties_hash
-        #      getProperties(properties_hash)
+         properties_hash = self.site.get_Properties_from_insales
+         if properties_hash
+             getProperties(properties_hash)
+         end
+         properties_hash=nil
+         collections_hash = self.site.get_Collections_from_insales
+         if collections_hash
+             getCollections(collections_hash)
+         end
+        #  offers_hash = get_Offers_from_insales_marketplace
+        #  if offers_hash
+        #      getOffers_marketplace(offers_hash) 
         #  end
-        #  properties_hash=nil
-        #  collections_hash = self.site.get_Collections_from_insales
-        #  if collections_hash
-        #      getCollections(collections_hash)
-        #  end
-        # #  offers_hash = get_Offers_from_insales_marketplace
-        # #  if offers_hash
-        # #      getOffers_marketplace(offers_hash) 
-        # #  end
-        # collections_hash=nil
-        # GC.start
-        #  self.site.get_Offers_from_insales_products(self)
-        #  puts "offers"
-        #  puts self.offers.size
+        collections_hash=nil
+        GC.start
+         self.site.get_Offers_from_insales_products(self)
+         puts "offers"
+         puts self.offers.size
          
-        #  self.site.get_Collects_from_insales(self)
-        #  puts "collects"
-        #  puts self.collects.size
+         self.site.get_Collects_from_insales(self)
+         puts "collects"
+         puts self.collects.size
         import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
         puts import_csv.size

@@ -43,9 +43,10 @@ class Offer < ApplicationRecord
        end
         self.flat=flat.to_h.values_at(*self.compare.site.site_offer_order.split(",")).join(";")
         self.image_status=""
+        self.sort_weight= h["sort_weight"]
          h["images"].each do |a|
             p= Picture.new
-            self.image_status << a["filename"]+";"
+            self.image_status = self.image_status + a["filename"]+";"
             self.pictures << p.new_from_hash_products( a )
          end 
          h["variants"].each do |d|

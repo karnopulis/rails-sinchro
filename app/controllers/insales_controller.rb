@@ -1,0 +1,2 @@
+class InsalesController < ApplicationController
+end

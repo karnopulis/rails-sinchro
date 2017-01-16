@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170112115032) do
+ActiveRecord::Schema.define(version: 20170116141234) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.string   "flat"
+    t.string   "sort_weight"
     t.index ["new_offer_id"], name: "index_edit_offers_on_new_offer_id"
     t.index ["result_id"], name: "index_edit_offers_on_result_id"
   end
@@ -91,6 +92,11 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.string   "flat"
     t.index ["new_offer_id"], name: "index_edit_variants_on_new_offer_id"
     t.index ["result_id"], name: "index_edit_variants_on_result_id"
+  end
+
+  create_table "insales", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "new_collections", force: :cascade do |t|
@@ -170,6 +176,7 @@ ActiveRecord::Schema.define(version: 20170112115032) do
     t.string   "title"
     t.string   "flat"
     t.string   "image_status"
+    t.string   "sort_weight"
     t.index ["compare_id"], name: "index_offers_on_compare_id"
   end
 

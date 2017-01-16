@@ -9,7 +9,7 @@ class Collection < ApplicationRecord
 #        top_level = h.select{|a| a["parent_id"].to_i==0 }
         top_level = h.select{|a| a["title"] == site_global_parent }
 #        puts top_level
-        top_level = top_level[0]["id"].to_i
+        top_level = top_level[0]["id"].to_i if top_level
         h.each { |a| 
             o = Collection.new()
             o.original_id = a["id"].to_i
@@ -17,7 +17,11 @@ class Collection < ApplicationRecord
             o.parent= a["parent_id"].to_i
             o.compare_id =compare_id
             if (o.parent!=0)
-                o.flat= generate_flat( o.name, o.parent, top_level, h )
+                if o.name == site_global_parent
+                    o.flat= generate_flat( o.name, o.parent, o.parent, h )
+                else
+                    o.flat= generate_flat( o.name, o.parent, top_level, h )
+                end
                 oo << o if o.flat
 #                puts o.flat
         end

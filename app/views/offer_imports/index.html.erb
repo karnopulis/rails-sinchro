@@ -7,6 +7,8 @@
     <tr>
       <th>Артикул</th>
       <th>Название</th>
+      <th>Вес сортировки</th>
+       <th>Изображения</th>
       <th>Количество</th>
       <th>Строка параметров:</th>
       <th>Строка цен:</th>
@@ -19,6 +21,8 @@
       <tr>
         <td><%= offer_import.scu %></td>
         <td><%= offer_import.title %></td>
+        <td><%= offer_import.sort_order %></td>
+        <td><%= offer_import.image_status %></td>
         <td><%= @variant_imports.where(:scu => offer_import.scu).first.quantity %></td>
         <td><%= offer_import.prop_flat %></td>
         <td><%= @variant_imports.where(:scu => offer_import.scu).first.pric_flat %></td>

@@ -8,6 +8,8 @@
       <th>Артикул</th>
       <th>Название</th>
       <th>original_id</th>
+      <th>Вес сортировки</th>
+      <th>Изображения</th>
       <th>Строка параметров:</th>
       <th>Строка свойств:</th>  
       <th colspan="3"></th>
@@ -19,7 +21,10 @@
       <tr>
         <td><%= offer.scu %></td>
         <td><%= offer.title %></td>
-        <td><%= offer.original_id %></td>
+          <td><%= offer.original_id %></td>
+         <td><%= offer.sort_weight %></td>
+          <td><%= offer.image_status %></td>
+
         <td><%= offer.flat %></td>
         <td><%= offer.variants.first.flat %></td>
         <td><%= link_to 'Show', [offer.compare.site,offer] %></td>

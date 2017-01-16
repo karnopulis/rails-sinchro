@@ -43,7 +43,8 @@ class Result < ApplicationRecord
      orig = self.compare.offers.where( :scu => item[0]).pluck("original_id").first
      flat = self.compare.offer_imports.where( :scu => item[0]).pluck("prop_flat").first
      name = self.compare.offer_imports.where( :scu => item[0]).pluck("title").first
-     e_offers << EditOffer.create_new(item[0],orig,flat,name)
+     so = self.compare.offer_imports.where( :scu => item[0]).pluck("sort_order").first
+     e_offers << EditOffer.create_new(item[0],orig,flat,name,so)
      e_offers.last.result=self
    end
    EditOffer.import e_offers
@@ -70,7 +71,7 @@ class Result < ApplicationRecord
         var_import = self.compare.variant_imports.find_by scu: item
 #       pic_import = self.compare.picture_imports.where(:scu => item).first
        no =NewOffer.create_new(item)
-       no.edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title)
+       no.edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order)
        no.edit_offers.last.result=self
        no.edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity)
        no.edit_variants.last.result=self
@@ -100,9 +101,9 @@ class Result < ApplicationRecord
       parent_flat = item.split(';')
       title = parent_flat.pop
       parent_flat =parent_flat.join(';')
-      par_id_from_cur = self.compare.collections.where(:flat => parent_flat ).pluck(:original_id)
-      par_from_new = self.new_collections.where(:collection_flat => parent_flat).first if par_id_from_cur.none?
-      self.new_collections << NewCollection.create_new(item,par_id_from_cur,par_from_new,title)
+      parent = self.compare.collections.find_by flat: parent_flat
+      parent_new = self.new_collections.find_by collection_flat: parent_flat if parent==nil
+      self.new_collections << NewCollection.create_new(item, parent.try(:original_id) ,parent_new.try(:new_parent), title)
     #   new_collections.last.result=self
     end
     # new_collections.each do |c|
