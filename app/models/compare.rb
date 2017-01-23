@@ -51,7 +51,7 @@ class Compare < ApplicationRecord
         self.result.add_old_images (edited_images)
         
         
-        puts self.name
+        # puts self.name
         self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
         self.save
         
@@ -137,28 +137,28 @@ class Compare < ApplicationRecord
          puts self.name
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
-         properties_hash = self.site.get_Properties_from_insales
-         if properties_hash
-             getProperties(properties_hash)
-         end
-         properties_hash=nil
-         collections_hash = self.site.get_Collections_from_insales
-         if collections_hash
-             getCollections(collections_hash)
-         end
+        #  properties_hash = self.site.get_Properties_from_insales
+        #  if properties_hash
+        #      getProperties(properties_hash)
+        #  end
+        #  properties_hash=nil
+        #  collections_hash = self.site.get_Collections_from_insales
+        #  if collections_hash
+        #      getCollections(collections_hash)
+        #  end
         #  offers_hash = get_Offers_from_insales_marketplace
         #  if offers_hash
         #      getOffers_marketplace(offers_hash) 
         #  end
-        collections_hash=nil
-        GC.start
-         self.site.get_Offers_from_insales_products(self)
-         puts "offers"
-         puts self.offers.size
+        # collections_hash=nil
+        # GC.start
+        #  self.site.get_Offers_from_insales_products(self)
+        #  puts "offers"
+        #  puts self.offers.size
          
-         self.site.get_Collects_from_insales(self)
-         puts "collects"
-         puts self.collects.size
+        #  self.site.get_Collects_from_insales(self)
+        #  puts "collects"
+        #  puts self.collects.size
         import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
         puts import_csv.size
@@ -172,10 +172,10 @@ class Compare < ApplicationRecord
         puts csv.size
         import=[]
         offers = csv.values_at(*self.site.scu_field, 
-                               *self.site.title_field, 
-                               *self.site.sort_order,
-                               *self.site.csv_images_order.split(","),
-                               *self.site.csv_offer_order.split(",")).uniq
+                              *self.site.title_field, 
+                              *self.site.sort_order,
+                              *self.site.csv_images_order.split(","),
+                              *self.site.csv_offer_order.split(",")).uniq
         offers.each do |o| 
             import << OfferImport.create_new(o,self)
         end

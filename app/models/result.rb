@@ -10,6 +10,27 @@ class Result < ApplicationRecord
   has_many :edit_variants, dependent: :destroy
   has_many :new_pictures, dependent: :destroy
   has_many :old_pictures, dependent: :destroy
+
+ def apply
+     loop do 
+         self.new_collections.where(:state => "listing" ).update_all(state: "active")
+         self.new_collections.where(:state => "active" ).each do|nc|
+             nc.apply
+         end
+         new_collections =self.new_collections.where(:state => "listing" )
+        break if  new_collections.size == 0
+    end
+    loop do 
+         self.old_collections.where(:state => "listing" ).update_all(state: "active")
+         self.old_collections.where(:state => "active" ).each do|oc|
+             oc.apply
+         end
+         old_collections =self.old_collections.where(:state => "waiting" ).each do |cc|
+               
+         end
+        break if  old_collections.size == 0
+    end
+ end
   
  def add_new_images (edited_images)
    new_pictures=[]
@@ -63,26 +84,30 @@ class Result < ApplicationRecord
  end
  
  def add_new_offers(no)
-   new_offers=[]
-     no.each do |item|
-#       off_import = self.compare.offer_imports.where(:scu => item).first
-#       var_import = self.compare.variant_imports.where(:scu => item).first
-        off_import = self.compare.offer_imports.find_by scu: item
-        var_import = self.compare.variant_imports.find_by scu: item
-#       pic_import = self.compare.picture_imports.where(:scu => item).first
-       no =NewOffer.create_new(item)
-       no.edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order)
-       no.edit_offers.last.result=self
-       no.edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity)
-       no.edit_variants.last.result=self
-       off_import.picture_imports.each do |pi|
-           no.new_pictures << NewPicture.create_new(item,nil,pi.url)
-           no.new_pictures.last.result=self
-       end
-       new_offers<< no
-       new_offers.last.result=self
-     end
-     NewOffer.import new_offers, recursive: true
+
+    no.each_slice(400) do |slice|
+         new_offers=[]
+         slice.each do |item|
+    #       off_import = self.compare.offer_imports.where(:scu => item).first
+    #       var_import = self.compare.variant_imports.where(:scu => item).first
+            off_import = self.compare.offer_imports.find_by scu: item
+            var_import = self.compare.variant_imports.find_by scu: item
+    #       pic_import = self.compare.picture_imports.where(:scu => item).first
+           no =NewOffer.create_new(item)
+           no.edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order)
+           no.edit_offers.last.result=self
+           no.edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity)
+           no.edit_variants.last.result=self
+           off_import.picture_imports.each do |pi|
+               no.new_pictures << NewPicture.create_new(item,nil,pi.url)
+               no.new_pictures.last.result=self
+           end
+           new_offers<< no
+           new_offers.last.result=self
+         end
+         NewOffer.import new_offers, recursive: true
+         new_offers=nil
+    end
  end
  def add_old_offers(oo)
       old_offers=[]
@@ -102,8 +127,19 @@ class Result < ApplicationRecord
       title = parent_flat.pop
       parent_flat =parent_flat.join(';')
       parent = self.compare.collections.find_by flat: parent_flat
-      parent_new = self.new_collections.find_by collection_flat: parent_flat if parent==nil
-      self.new_collections << NewCollection.create_new(item, parent.try(:original_id) ,parent_new.try(:new_parent), title)
+      if item ==  title
+          state="listing"
+          parent_id =self.compare.global_parent_id
+      else
+          if parent
+            state="listing"
+            parent_id = parent.original_id
+          else
+            state="waiting"        
+            parent_new = self.new_collections.find_by collection_flat: parent_flat 
+          end
+      end
+      self.new_collections << NewCollection.create_new(item, parent_id ,parent_new, title, state)
     #   new_collections.last.result=self
     end
     # new_collections.each do |c|
@@ -113,33 +149,44 @@ class Result < ApplicationRecord
   end
   
   def add_old_collections(nc)
-    nc.sort!
+    nc.sort!.reverse!
 
     old_collections=[]
     nc.each do |item|
-      cur_id = self.compare.collections.where(:flat => item ).pluck(:original_id)
-      parent_flat = item.split(';')
-      parent_flat.pop
-      parent_flat =parent_flat.join(';')
-      par_from_new = self.old_collections.where(:collection_flat => parent_flat).first
-
-      old_collections << OldCollection.create_new(item,cur_id.first,par_from_new)
-      old_collections.last.result=self
+      current = self.compare.collections.find_by flat: item 
+      parent_new =self.old_collections.where("collection_flat LIKE ?", "%#{item}%").first
+      puts parent_new.try(:attributes)
+      if parent_new
+        state="waiting"    
+      else
+        state="listing"   
+      end
+      puts "==========================="
+      self.old_collections << OldCollection.create_new(item,current.try(:original_id),parent_new.try(:id),state)
+#      old_collections.last.result=self
     end
-    OldCollection.import old_collections
+    #OldCollection.import old_collections
 #    self.old_collections << old_collections
   end
   
   def add_new_collects(nc)
-    new_collects=[]
-    nc.each do |item|
-      col_id = self.compare.collections.where(:flat => item[1]).pluck(:original_id)
-      new_col_id = self.new_collections.where(:collection_flat => item[1]).first if col_id.none?
-      off_id = self.compare.offers.where(:scu => item[0]).pluck(:original_id)
-      new_collects << NewCollect.create_new( item, col_id.first, off_id.first, new_col_id )
-      new_collects.last.result=self
+    nc.each_slice(2000) do |slice|
+        new_collects=[]
+        slice.each do |item|
+              col_id = self.compare.collections.where(:flat => item[1]).pluck(:original_id)
+              if col_id
+                state="listing"    
+              else
+                state="waiting" 
+              end
+              new_col_id = self.new_collections.where(:collection_flat => item[1]).first if col_id.none?
+              off_id = self.compare.offers.where(:scu => item[0]).pluck(:original_id)
+              new_collects << NewCollect.create_new( item, col_id.first, off_id.first, new_col_id,state )
+              new_collects.last.result=self
+        end
+        NewCollect.import new_collects
+        new_collects=nil
     end
-    NewCollect.import new_collects
   end
   
   def add_old_collects(oc)

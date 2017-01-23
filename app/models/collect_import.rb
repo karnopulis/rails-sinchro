@@ -4,7 +4,7 @@ class CollectImport < ApplicationRecord
   
 
 
-#  TOP="ЗАО 'ГК Горчаков'"
+#  TOP="parent"
   TOP=nil
 
   def self.create_collects(collections,compare)

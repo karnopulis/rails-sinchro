@@ -2,6 +2,310 @@
 - !ruby/object:Site
   raw_attributes:
     id: 1
+    name: horosho-test
+    url: horosho-gk.ru
+    site_login: afcd84ca7c5e6f7cabeb11132dec61f1
+    site_pass: fa0e77096f1a2c38b080aed9e4899dd1
+    home_login: sed
+    home_pass: paranoid123
+    site_global_parent: parent
+    csv_collection_order: Родитель1,Родитель5,Родитель4,Родитель3,Родитель2
+    csv_variant_order: 01.Базовая цена,01.Базовая цена,01.Базовая ценаПЛЮС100,11.Розн.3,10.МДК
+    site_variant_order: price,price2,price3,price4,price5
+    csv_offer_order: Текст внутри,Отделка,Формат открытки,Кол-во в упак.,Родитель1,Код
+      цены,Актуальность,Конструктив,Послеобрезной формат,АктуальностьЦифра,Дата первого
+      прихода,Материал изг.
+    site_offer_order: текст,Отделка,Формат,Количество в упаковке,поставщик,Код цены,Поступления,конструктив,Размер,ац,Дата
+      первого прихода,Материал
+    sort_order: АктуальностьЦифра
+    scu_field: Артикул
+    quantity_field: Количество
+    title_field: Наименование
+    csv_images_order: Изображение,ИзображениеОборота
+    created_at: '2016-12-21 11:35:59.953148'
+    updated_at: '2017-01-18 00:31:47.771148'
+    home_ftp: ftp.mirpoz.ru
+    home_file_name: horosho_test.txt
+  attributes: !ruby/object:ActiveRecord::AttributeSet
+    attributes: !ruby/object:ActiveRecord::LazyAttributeHash
+      delegate_hash:
+        id: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: id
+          value_before_type_cast: 1
+          type: &3 !ruby/object:ActiveModel::Type::Integer
+            precision: 
+            scale: 
+            limit: 
+            range: !ruby/range
+              begin: -2147483648
+              end: 2147483648
+              excl: true
+          original_attribute: 
+        name: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: name
+          value_before_type_cast: horosho-test
+          type: &1 !ruby/object:ActiveModel::Type::String
+            precision: 
+            scale: 
+            limit: 
+          original_attribute: 
+        url: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: url
+          value_before_type_cast: horosho-gk.ru
+          type: *1
+          original_attribute: 
+        site_login: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_login
+          value_before_type_cast: afcd84ca7c5e6f7cabeb11132dec61f1
+          type: *1
+          original_attribute: 
+        site_pass: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_pass
+          value_before_type_cast: fa0e77096f1a2c38b080aed9e4899dd1
+          type: *1
+          original_attribute: 
+        home_login: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: home_login
+          value_before_type_cast: sed
+          type: *1
+          original_attribute: 
+        home_pass: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: home_pass
+          value_before_type_cast: paranoid123
+          type: *1
+          original_attribute: 
+        site_global_parent: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_global_parent
+          value_before_type_cast: parent
+          type: *1
+          original_attribute: 
+        csv_collection_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: csv_collection_order
+          value_before_type_cast: Родитель1,Родитель5,Родитель4,Родитель3,Родитель2
+          type: *1
+          original_attribute: 
+        csv_variant_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: csv_variant_order
+          value_before_type_cast: 01.Базовая цена,01.Базовая цена,01.Базовая ценаПЛЮС100,11.Розн.3,10.МДК
+          type: *1
+          original_attribute: 
+        site_variant_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_variant_order
+          value_before_type_cast: price,price2,price3,price4,price5
+          type: *1
+          original_attribute: 
+        csv_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: csv_offer_order
+          value_before_type_cast: Текст внутри,Отделка,Формат открытки,Кол-во в упак.,Родитель1,Код
+            цены,Актуальность,Конструктив,Послеобрезной формат,АктуальностьЦифра,Дата
+            первого прихода,Материал изг.
+          type: *1
+          original_attribute: 
+        site_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_offer_order
+          value_before_type_cast: текст,Отделка,Формат,Количество в упаковке,поставщик,Код
+            цены,Поступления,конструктив,Размер,ац,Дата первого прихода,Материал
+          type: *1
+          original_attribute: 
+        sort_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: sort_order
+          value_before_type_cast: АктуальностьЦифра
+          type: *1
+          original_attribute: 
+        scu_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: scu_field
+          value_before_type_cast: Артикул
+          type: *1
+          original_attribute: 
+        quantity_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: quantity_field
+          value_before_type_cast: Количество
+          type: *1
+          original_attribute: 
+        title_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: title_field
+          value_before_type_cast: Наименование
+          type: *1
+          original_attribute: 
+        csv_images_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: csv_images_order
+          value_before_type_cast: Изображение,ИзображениеОборота
+          type: *1
+          original_attribute: 
+        created_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: created_at
+          value_before_type_cast: '2016-12-21 11:35:59.953148'
+          type: &4 !ruby/marshalable:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter
+            :__v2__: []
+            []: &2 !ruby/object:ActiveRecord::Type::DateTime
+              precision: 
+              scale: 
+              limit: 
+          original_attribute: 
+        updated_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: updated_at
+          value_before_type_cast: '2017-01-18 00:31:47.771148'
+          type: &5 !ruby/marshalable:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter
+            :__v2__: []
+            []: *2
+          original_attribute: 
+        home_ftp: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: home_ftp
+          value_before_type_cast: ftp.mirpoz.ru
+          type: *1
+          original_attribute: 
+        home_file_name: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: home_file_name
+          value_before_type_cast: horosho_test.txt
+          type: *1
+          original_attribute: 
+  new_record: false
+  active_record_yaml_version: 1
+- !ruby/object:Site
+  raw_attributes:
+    id: 2
+    name: horosho-ufa.ru
+    url: horosho-ufa.ru
+    site_login: f3e029120b56b2c4a0f554abbb009eb2
+    site_pass: 24e491fca4ac082d63ac20131788d287
+    home_login: sed
+    home_pass: paranoid123
+    site_global_parent: Товары
+    csv_collection_order: Родитель5,Родитель4,Родитель3,Родитель2,Родитель1
+    csv_variant_order: Оптовая цена,Розничная цена
+    site_variant_order: price,price3
+    csv_offer_order: Наличие текста,Отделка,Формат, Количество в упаковке,Поставщик,Код
+      цены,Актуальность
+    site_offer_order: текст,Отделка,Формат,Количество в упаковке, поставщик,Код цены,Поступления
+    sort_order: АктуальностьЦифра
+    scu_field: Артикул
+    quantity_field: Количество
+    title_field: Наименование
+    csv_images_order: Изображение,ИзображениеОборота
+    created_at: '2016-12-29 13:18:13.648844'
+    updated_at: '2017-01-18 00:26:45.541414'
+    home_ftp: 81.30.200.232
+    home_file_name: site.csv
+  attributes: !ruby/object:ActiveRecord::AttributeSet
+    attributes: !ruby/object:ActiveRecord::LazyAttributeHash
+      delegate_hash:
+        id: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: id
+          value_before_type_cast: 2
+          type: *3
+          original_attribute: 
+        name: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: name
+          value_before_type_cast: horosho-ufa.ru
+          type: *1
+          original_attribute: 
+        url: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: url
+          value_before_type_cast: horosho-ufa.ru
+          type: *1
+          original_attribute: 
+        site_login: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_login
+          value_before_type_cast: f3e029120b56b2c4a0f554abbb009eb2
+          type: *1
+          original_attribute: 
+        site_pass: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_pass
+          value_before_type_cast: 24e491fca4ac082d63ac20131788d287
+          type: *1
+          original_attribute: 
+        home_login: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: home_login
+          value_before_type_cast: sed
+          type: *1
+          original_attribute: 
+        home_pass: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: home_pass
+          value_before_type_cast: paranoid123
+          type: *1
+          original_attribute: 
+        site_global_parent: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_global_parent
+          value_before_type_cast: Товары
+          type: *1
+          original_attribute: 
+        csv_collection_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: csv_collection_order
+          value_before_type_cast: Родитель5,Родитель4,Родитель3,Родитель2,Родитель1
+          type: *1
+          original_attribute: 
+        csv_variant_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: csv_variant_order
+          value_before_type_cast: Оптовая цена,Розничная цена
+          type: *1
+          original_attribute: 
+        site_variant_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_variant_order
+          value_before_type_cast: price,price3
+          type: *1
+          original_attribute: 
+        csv_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: csv_offer_order
+          value_before_type_cast: Наличие текста,Отделка,Формат, Количество в упаковке,Поставщик,Код
+            цены,Актуальность
+          type: *1
+          original_attribute: 
+        site_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: site_offer_order
+          value_before_type_cast: текст,Отделка,Формат,Количество в упаковке, поставщик,Код
+            цены,Поступления
+          type: *1
+          original_attribute: 
+        sort_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: sort_order
+          value_before_type_cast: АктуальностьЦифра
+          type: *1
+          original_attribute: 
+        scu_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: scu_field
+          value_before_type_cast: Артикул
+          type: *1
+          original_attribute: 
+        quantity_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: quantity_field
+          value_before_type_cast: Количество
+          type: *1
+          original_attribute: 
+        title_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: title_field
+          value_before_type_cast: Наименование
+          type: *1
+          original_attribute: 
+        csv_images_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: csv_images_order
+          value_before_type_cast: Изображение,ИзображениеОборота
+          type: *1
+          original_attribute: 
+        created_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: created_at
+          value_before_type_cast: '2016-12-29 13:18:13.648844'
+          type: *4
+          original_attribute: 
+        updated_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: updated_at
+          value_before_type_cast: '2017-01-18 00:26:45.541414'
+          type: *5
+          original_attribute: 
+        home_ftp: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: home_ftp
+          value_before_type_cast: 81.30.200.232
+          type: *1
+          original_attribute: 
+        home_file_name: !ruby/object:ActiveRecord::Attribute::FromDatabase
+          name: home_file_name
+          value_before_type_cast: site.csv
+          type: *1
+          original_attribute: 
+  new_record: false
+  active_record_yaml_version: 1
+- !ruby/object:Site
+  raw_attributes:
+    id: 3
     name: horosho-gk.ru
     url: horosho-gk.ru
     site_login: afcd84ca7c5e6f7cabeb11132dec61f1
@@ -22,317 +326,270 @@
     quantity_field: Количество
     title_field: Наименование
     csv_images_order: Изображение,ИзображениеОборота
-    created_at: '2016-12-21 11:35:59.953148'
-    updated_at: '2017-01-09 12:24:35.158816'
+    created_at: '2017-01-18 00:25:23.291914'
+    updated_at: '2017-01-18 00:25:23.291914'
     home_ftp: ftp.mirpoz.ru
     home_file_name: horosho.csv
   attributes: !ruby/object:ActiveRecord::AttributeSet
     attributes: !ruby/object:ActiveRecord::LazyAttributeHash
-      types: &6
-        id: &3 !ruby/object:ActiveRecord::Type::Integer
-          precision: 
-          scale: 
-          limit: 
-          range: !ruby/range
-            begin: -2147483648
-            end: 2147483648
-            excl: true
-        name: &1 !ruby/object:ActiveRecord::Type::String
-          precision: 
-          scale: 
-          limit: 
-        url: *1
-        site_login: *1
-        site_pass: *1
-        home_login: *1
-        home_pass: *1
-        site_global_parent: *1
-        csv_collection_order: *1
-        csv_variant_order: *1
-        site_variant_order: *1
-        csv_offer_order: *1
-        site_offer_order: *1
-        sort_order: *1
-        scu_field: *1
-        quantity_field: *1
-        title_field: *1
-        csv_images_order: *1
-        created_at: &4 !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter
-          subtype: &2 !ruby/object:ActiveRecord::Type::DateTime
-            precision: 
-            scale: 
-            limit: 
-        updated_at: &5 !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter
-          subtype: *2
-        home_ftp: *1
-        home_file_name: *1
-      values:
-        id: 1
-        name: horosho-gk.ru
-        url: horosho-gk.ru
-        site_login: afcd84ca7c5e6f7cabeb11132dec61f1
-        site_pass: fa0e77096f1a2c38b080aed9e4899dd1
-        home_login: sed
-        home_pass: paranoid123
-        site_global_parent: Каталог
-        csv_collection_order: Родитель1,Родитель5,Родитель4,Родитель3,Родитель2
-        csv_variant_order: 01.Базовая цена,01.Базовая цена,01.Базовая ценаПЛЮС100,11.Розн.3,10.МДК
-        site_variant_order: price,price2,price3,price4,price5
-        csv_offer_order: Текст внутри,Отделка,Формат открытки,Кол-во в упак.,Родитель1,Код
-          цены,Актуальность,Конструктив,Послеобрезной формат,АктуальностьЦифра,Дата
-          первого прихода,Материал изг.
-        site_offer_order: текст,Отделка,Формат,Количество в упаковке,поставщик,Код
-          цены,Поступления,конструктив,Размер,ац,Дата первого прихода,Материал
-        sort_order: АктуальностьЦифра
-        scu_field: Артикул
-        quantity_field: Количество
-        title_field: Наименование
-        csv_images_order: Изображение,ИзображениеОборота
-        created_at: '2016-12-21 11:35:59.953148'
-        updated_at: '2017-01-09 12:24:35.158816'
-        home_ftp: ftp.mirpoz.ru
-        home_file_name: horosho.csv
-      additional_types: &7 {}
-      materialized: true
       delegate_hash:
         id: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: id
-          value_before_type_cast: 1
+          value_before_type_cast: 3
           type: *3
+          original_attribute: 
         name: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: name
           value_before_type_cast: horosho-gk.ru
           type: *1
+          original_attribute: 
         url: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: url
           value_before_type_cast: horosho-gk.ru
           type: *1
+          original_attribute: 
         site_login: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_login
           value_before_type_cast: afcd84ca7c5e6f7cabeb11132dec61f1
           type: *1
+          original_attribute: 
         site_pass: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_pass
           value_before_type_cast: fa0e77096f1a2c38b080aed9e4899dd1
           type: *1
+          original_attribute: 
         home_login: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: home_login
           value_before_type_cast: sed
           type: *1
+          original_attribute: 
         home_pass: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: home_pass
           value_before_type_cast: paranoid123
           type: *1
+          original_attribute: 
         site_global_parent: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_global_parent
           value_before_type_cast: Каталог
           type: *1
+          original_attribute: 
         csv_collection_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: csv_collection_order
           value_before_type_cast: Родитель1,Родитель5,Родитель4,Родитель3,Родитель2
           type: *1
+          original_attribute: 
         csv_variant_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: csv_variant_order
           value_before_type_cast: 01.Базовая цена,01.Базовая цена,01.Базовая ценаПЛЮС100,11.Розн.3,10.МДК
           type: *1
+          original_attribute: 
         site_variant_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_variant_order
           value_before_type_cast: price,price2,price3,price4,price5
           type: *1
+          original_attribute: 
         csv_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: csv_offer_order
           value_before_type_cast: Текст внутри,Отделка,Формат открытки,Кол-во в упак.,Родитель1,Код
             цены,Актуальность,Конструктив,Послеобрезной формат,АктуальностьЦифра,Дата
             первого прихода,Материал изг.
           type: *1
+          original_attribute: 
         site_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_offer_order
           value_before_type_cast: текст,Отделка,Формат,Количество в упаковке,поставщик,Код
             цены,Поступления,конструктив,Размер,ац,Дата первого прихода,Материал
           type: *1
+          original_attribute: 
         sort_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: sort_order
           value_before_type_cast: АктуальностьЦифра
           type: *1
+          original_attribute: 
         scu_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: scu_field
           value_before_type_cast: Артикул
           type: *1
+          original_attribute: 
         quantity_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: quantity_field
           value_before_type_cast: Количество
           type: *1
+          original_attribute: 
         title_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: title_field
           value_before_type_cast: Наименование
           type: *1
+          original_attribute: 
         csv_images_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: csv_images_order
           value_before_type_cast: Изображение,ИзображениеОборота
           type: *1
+          original_attribute: 
         created_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: created_at
-          value_before_type_cast: '2016-12-21 11:35:59.953148'
+          value_before_type_cast: '2017-01-18 00:25:23.291914'
           type: *4
+          original_attribute: 
         updated_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: updated_at
-          value_before_type_cast: '2017-01-09 12:24:35.158816'
+          value_before_type_cast: '2017-01-18 00:25:23.291914'
           type: *5
+          original_attribute: 
         home_ftp: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: home_ftp
           value_before_type_cast: ftp.mirpoz.ru
           type: *1
+          original_attribute: 
         home_file_name: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: home_file_name
           value_before_type_cast: horosho.csv
           type: *1
+          original_attribute: 
   new_record: false
-  active_record_yaml_version: 0
+  active_record_yaml_version: 1
 - !ruby/object:Site
   raw_attributes:
-    id: 2
-    name: horosho-ufa.ru
-    url: horosho-ufa.ru
-    site_login: f3e029120b56b2c4a0f554abbb009eb2
-    site_pass: 24e491fca4ac082d63ac20131788d287
+    id: 4
+    name: mirpoz-test
+    url: mirpoz.ru
+    site_login: ''
+    site_pass: ''
     home_login: sed
     home_pass: paranoid123
-    site_global_parent: Товары
-    csv_collection_order: Родитель1,Родитель2,Родитель3,Родитель4,Родитель5
-    csv_variant_order: Оптовая цена,Розничная цена
-    site_variant_order: price,price3
-    csv_offer_order: Наличие текста,Отделка,Формат, Количество в упаковке,Поставщик,Код
-      цены,Актуальность
-    site_offer_order: текст,Отделка,Формат,Количество в упаковке, поставщик,Код цены,Поступления
+    site_global_parent: ''
+    csv_collection_order: Родитель1,Родитель5,Родитель4,Родитель3,Родитель2
+    csv_variant_order: 01.Базовая цена,01.Базовая цена,01.Базовая ценаПЛЮС100,11.Розн.3,10.МДК
+    site_variant_order: price,price2,price3,price4,price5
+    csv_offer_order: Текст внутри,Отделка,Формат открытки,Кол-во в упак.,Родитель1,Код
+      цены,Актуальность,Конструктив,Послеобрезной формат,АктуальностьЦифра,Дата первого
+      прихода,Материал изг.
+    site_offer_order: текст,Отделка,Формат,Количество в упаковке,поставщик,Код цены,Поступления,конструктив,Размер,ац,Дата
+      первого прихода,Материал
     sort_order: АктуальностьЦифра
     scu_field: Артикул
     quantity_field: Количество
     title_field: Наименование
     csv_images_order: Изображение,ИзображениеОборота
-    created_at: '2016-12-29 13:18:13.648844'
-    updated_at: '2017-01-09 12:24:00.457000'
-    home_ftp: 81.30.200.232
-    home_file_name: site.csv
+    created_at: '2017-01-23 07:37:25.945466'
+    updated_at: '2017-01-23 07:38:24.974771'
+    home_ftp: ftp.mirpoz.ru
+    home_file_name: mirpoz.csv
   attributes: !ruby/object:ActiveRecord::AttributeSet
     attributes: !ruby/object:ActiveRecord::LazyAttributeHash
-      types: *6
-      values:
-        id: 2
-        name: horosho-ufa.ru
-        url: horosho-ufa.ru
-        site_login: f3e029120b56b2c4a0f554abbb009eb2
-        site_pass: 24e491fca4ac082d63ac20131788d287
-        home_login: sed
-        home_pass: paranoid123
-        site_global_parent: Товары
-        csv_collection_order: Родитель1,Родитель2,Родитель3,Родитель4,Родитель5
-        csv_variant_order: Оптовая цена,Розничная цена
-        site_variant_order: price,price3
-        csv_offer_order: Наличие текста,Отделка,Формат, Количество в упаковке,Поставщик,Код
-          цены,Актуальность
-        site_offer_order: текст,Отделка,Формат,Количество в упаковке, поставщик,Код
-          цены,Поступления
-        sort_order: АктуальностьЦифра
-        scu_field: Артикул
-        quantity_field: Количество
-        title_field: Наименование
-        csv_images_order: Изображение,ИзображениеОборота
-        created_at: '2016-12-29 13:18:13.648844'
-        updated_at: '2017-01-09 12:24:00.457000'
-        home_ftp: 81.30.200.232
-        home_file_name: site.csv
-      additional_types: *7
-      materialized: true
       delegate_hash:
         id: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: id
-          value_before_type_cast: 2
+          value_before_type_cast: 4
           type: *3
+          original_attribute: 
         name: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: name
-          value_before_type_cast: horosho-ufa.ru
+          value_before_type_cast: mirpoz-test
           type: *1
+          original_attribute: 
         url: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: url
-          value_before_type_cast: horosho-ufa.ru
+          value_before_type_cast: mirpoz.ru
           type: *1
+          original_attribute: 
         site_login: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_login
-          value_before_type_cast: f3e029120b56b2c4a0f554abbb009eb2
+          value_before_type_cast: ''
           type: *1
+          original_attribute: 
         site_pass: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_pass
-          value_before_type_cast: 24e491fca4ac082d63ac20131788d287
+          value_before_type_cast: ''
           type: *1
+          original_attribute: 
         home_login: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: home_login
           value_before_type_cast: sed
           type: *1
+          original_attribute: 
         home_pass: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: home_pass
           value_before_type_cast: paranoid123
           type: *1
+          original_attribute: 
         site_global_parent: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_global_parent
-          value_before_type_cast: Товары
+          value_before_type_cast: ''
           type: *1
+          original_attribute: 
         csv_collection_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: csv_collection_order
-          value_before_type_cast: Родитель1,Родитель2,Родитель3,Родитель4,Родитель5
+          value_before_type_cast: Родитель1,Родитель5,Родитель4,Родитель3,Родитель2
           type: *1
+          original_attribute: 
         csv_variant_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: csv_variant_order
-          value_before_type_cast: Оптовая цена,Розничная цена
+          value_before_type_cast: 01.Базовая цена,01.Базовая цена,01.Базовая ценаПЛЮС100,11.Розн.3,10.МДК
           type: *1
+          original_attribute: 
         site_variant_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_variant_order
-          value_before_type_cast: price,price3
+          value_before_type_cast: price,price2,price3,price4,price5
           type: *1
+          original_attribute: 
         csv_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: csv_offer_order
-          value_before_type_cast: Наличие текста,Отделка,Формат, Количество в упаковке,Поставщик,Код
-            цены,Актуальность
+          value_before_type_cast: Текст внутри,Отделка,Формат открытки,Кол-во в упак.,Родитель1,Код
+            цены,Актуальность,Конструктив,Послеобрезной формат,АктуальностьЦифра,Дата
+            первого прихода,Материал изг.
           type: *1
+          original_attribute: 
         site_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_offer_order
-          value_before_type_cast: текст,Отделка,Формат,Количество в упаковке, поставщик,Код
-            цены,Поступления
+          value_before_type_cast: текст,Отделка,Формат,Количество в упаковке,поставщик,Код
+            цены,Поступления,конструктив,Размер,ац,Дата первого прихода,Материал
           type: *1
+          original_attribute: 
         sort_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: sort_order
           value_before_type_cast: АктуальностьЦифра
           type: *1
+          original_attribute: 
         scu_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: scu_field
           value_before_type_cast: Артикул
           type: *1
+          original_attribute: 
         quantity_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: quantity_field
           value_before_type_cast: Количество
           type: *1
+          original_attribute: 
         title_field: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: title_field
           value_before_type_cast: Наименование
           type: *1
+          original_attribute: 
         csv_images_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: csv_images_order
           value_before_type_cast: Изображение,ИзображениеОборота
           type: *1
+          original_attribute: 
         created_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: created_at
-          value_before_type_cast: '2016-12-29 13:18:13.648844'
+          value_before_type_cast: '2017-01-23 07:37:25.945466'
           type: *4
+          original_attribute: 
         updated_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: updated_at
-          value_before_type_cast: '2017-01-09 12:24:00.457000'
+          value_before_type_cast: '2017-01-23 07:38:24.974771'
           type: *5
+          original_attribute: 
         home_ftp: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: home_ftp
-          value_before_type_cast: 81.30.200.232
+          value_before_type_cast: ftp.mirpoz.ru
           type: *1
+          original_attribute: 
         home_file_name: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: home_file_name
-          value_before_type_cast: site.csv
+          value_before_type_cast: mirpoz.csv
           type: *1
+          original_attribute: 
   new_record: false
-  active_record_yaml_version: 0
+  active_record_yaml_version: 1

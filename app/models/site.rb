@@ -6,7 +6,21 @@ class Site < ApplicationRecord
     def self.dev_init
         YAML.load_file("sites.yaml").each { |v|self.create!(v.attributes)}
     end
+    def self.dev_dump
+        File.open("sites.yaml","w"){ |f| f.write(Site.all.to_yaml) }   
+    end
     
+    def add_Collection_to_insales(collection)
+        message = ApplicationController.new.view_context.render( :partial => "insales/add_collection.json.jbuilder", :locals => {:new_collection =>  collection})
+        
+        response = post_to_url_json(URI("http://"+self.url+"/admin/"+"collections.json"),message , self.site_login, self.site_pass)
+        return response
+    end
+    def delete_Collection_from_insales(collection)
+    
+        response = delete_url_json( URI("http://"+self.url+"/admin/"+"collections/"+collection.collection_original_id.to_s+".json"), self.site_login, self.site_pass)
+        return response
+    end
     def get_Collections_from_insales
         response = get_from_url( URI("http://"+self.url+"/admin/"+"collections.xml"), self.site_login, self.site_pass)
         response["collections"]
@@ -64,7 +78,86 @@ class Site < ApplicationRecord
         end
 #        return h
     end
-
+    def delete_url_json(uri,id,key )
+        req  = Net::HTTP::Delete.new(uri.request_uri)
+        req.basic_auth id,key
+        req.content_type="application/json"
+#        req.body=message
+#        puts    req.body 
+        begin
+        resp = Net::HTTP.start(uri.hostname,uri.port) { |http|
+            http.request(req)
+            
+        }
+        rescue Exception => exc
+            puts exc.message
+            return nil
+        end
+        r = resp.get_fields("api-usage-limit")
+        if r
+            r= r[0].split('/')
+            puts resp.get_fields("api-usage-limit").to_s
+            puts r[0].to_i
+        end
+        puts resp
+        case resp
+        when Net::HTTPOK
+            puts (resp.code + " " + resp.message)
+            h=JSON.parse(resp.body)
+            puts h
+            return h
+            # if h["nil_classes"]
+            #     return nil
+            # else
+            #     return h
+            # end
+        when Net::HTTPClientError, Net::HTTPInternalServerError
+            puts (resp.code + " " + resp.message)
+            h=JSON.parse(resp.body)
+            puts h
+            return nil
+        end
+    end
+    def post_to_url_json(uri,message,id,key )
+        req  = Net::HTTP::Post.new(uri.request_uri)
+        req.basic_auth id,key
+        req.content_type="application/json"
+        req.body=message
+        puts    req.body 
+        begin
+        resp = Net::HTTP.start(uri.hostname,uri.port) { |http|
+            http.request(req)
+            
+        }
+        rescue Exception => exc
+            puts exc.message
+            return nil
+        end
+        r = resp.get_fields("api-usage-limit")
+        if r
+            r= r[0].split('/')
+            puts resp.get_fields("api-usage-limit").to_s
+            puts r[0].to_i
+        end
+        puts resp
+        case resp
+        when Net::HTTPCreated
+            puts (resp.code + " " + resp.message)
+            h=JSON.parse(resp.body)
+            puts h
+            return h
+            # if h["nil_classes"]
+            #     return nil
+            # else
+            #     return h
+            # end
+        when Net::HTTPClientError, Net::HTTPInternalServerError
+            puts (resp.code + " " + resp.message)
+            h=JSON.parse(resp.body)
+            puts h
+            return nil
+        end
+    end
  
  
     def get_from_url (uri, id,key )
