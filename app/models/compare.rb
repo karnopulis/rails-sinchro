@@ -105,7 +105,7 @@ class Compare < ApplicationRecord
             current.push ( [o.scu,o.image_status] ) if not old_offers.include? o.scu 
         end
         edited_pictures = current- imported
-        puts "edited_variants " +edited_pictures.count.to_s
+        puts "edited_images " +edited_pictures.count.to_s
         
         return edited_pictures
         

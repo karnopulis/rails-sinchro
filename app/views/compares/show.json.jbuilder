@@ -11,7 +11,7 @@ json.offers do
     new_offers= @compare.try(:result).try(:new_offers)
     json.array! new_offers do |no|
          json.product do
-            eo = no.try(:edit_offers).first
+            eo = no.try(:edit_offers).try(:first)
             json.extract! eo, :id, :scu, :title
             json.properties do
                 soo=@compare.site.site_offer_order.split(',')
