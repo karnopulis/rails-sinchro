@@ -72,8 +72,8 @@
     <% @no.try(:each) do |elem| %>
       <tr>
         <td><%= elem.scu %></td>
-        <td><%= elem.edit_offers.first.flat %></td>
-        <td><%= elem.edit_variants.first.flat %></td>
+        <td><%= elem.edit_offers.try(:first).try(:flat) %></td>
+        <td><%= elem.edit_variants.try(:first).try(:flat) %></td>
         <td><%= elem.state %></td>
         <td><%= elem.error %></td>
       </tr>
