@@ -1,6 +1,6 @@
 class NewPicture < ApplicationRecord
   belongs_to :result   
-  belongs_to :new_picture
+  belongs_to :new_offer
     def self.create_new(scu,original_id,url)
         np =NewPicture.new 
         np.scu= scu
