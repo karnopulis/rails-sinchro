@@ -13,9 +13,10 @@ class Picture < ApplicationRecord
        return self
     end
     
-    def new_from_hash_products(h)
+    def new_from_hash_products(h,offer)
        self.url = h["original_url"]
        self.original_id = h["id"]
+       self.offer=offer
        return self
     end
 end

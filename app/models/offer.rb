@@ -28,6 +28,8 @@ class Offer < ApplicationRecord
 
     def new_from_hash_products (h , prop)
         characteristics=[]
+        pictures=[]
+        variants=[]
        self.original_id = h["id"]
        self.scu = h["variants"].first["sku"]
        self.title = h["title"]    
@@ -47,13 +49,12 @@ class Offer < ApplicationRecord
          h["images"].each do |a|
             p= Picture.new
             self.image_status = self.image_status + a["filename"]+";"
-            self.pictures << p.new_from_hash_products( a )
+            pictures << p.new_from_hash_products( a,self )
          end 
          h["variants"].each do |d|
             v= Variant.new
-            self.variants << v.new_from_hash(d,self.compare.site)
+            variants << v.new_from_hash(d,self.compare.site,self)
          end
-
-       return characteristics
+       return variants,pictures,characteristics
     end
 end

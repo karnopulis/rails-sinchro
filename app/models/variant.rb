@@ -3,7 +3,7 @@ class Variant < ApplicationRecord
     has_many :prices
     
     
-    def new_from_hash (v,site)
+    def new_from_hash (v,site,offer)
        self.sku = v["sku"]
        self.quantity = v["quantity"]
        self.original_id = v["id"]
@@ -15,6 +15,7 @@ class Variant < ApplicationRecord
         self.prices << p.new_price(k, v[k]) 
        end
        self.flat=flat.join(";")
+       self.offer=offer
        return self
        
     end

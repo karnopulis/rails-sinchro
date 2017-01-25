@@ -75,7 +75,6 @@ class Compare < ApplicationRecord
 #            "properties.title,
  #           characteristics.title").to_h.values_at(*site_offer_order)
 #            o.flat = flat.join(";")
-            o.save
             current.push ( [o.scu,o.title,o.sort_weight,o.flat] ) if not old_offers.include? o.scu 
         end
         edited_offers = current- imported
@@ -146,10 +145,10 @@ class Compare < ApplicationRecord
         #  if collections_hash
         #      getCollections(collections_hash)
         #  end
-        #  offers_hash = get_Offers_from_insales_marketplace
-        #  if offers_hash
-        #      getOffers_marketplace(offers_hash) 
-        #  end
+        # #  offers_hash = get_Offers_from_insales_marketplace
+        # #  if offers_hash
+        # #      getOffers_marketplace(offers_hash) 
+        # #  end
         # collections_hash=nil
         # GC.start
         #  self.site.get_Offers_from_insales_products(self)
@@ -171,15 +170,20 @@ class Compare < ApplicationRecord
         puts "csv"
         puts csv.size
         import=[]
+        p_import=[]
         offers = csv.values_at(*self.site.scu_field, 
                               *self.site.title_field, 
                               *self.site.sort_order,
                               *self.site.csv_images_order.split(","),
                               *self.site.csv_offer_order.split(",")).uniq
         offers.each do |o| 
-            import << OfferImport.create_new(o,self)
+            oi,pi = OfferImport.create_new(o,self)
+            import << oi
+            p_import= p_import+pi
         end
-        OfferImport.import import, recursive: true
+        OfferImport.import import
+        p_import.each { |c|   c.run_callbacks(:save) { false } }
+        PictureImport.import p_import
         import.clear
         variants = csv.values_at(*self.site.scu_field,
                                  *self.site.quantity_field,
@@ -211,19 +215,26 @@ class Compare < ApplicationRecord
    end
     def getOffers_products(h)
        offers=[]
-       ch=[]
+       characteristics=[]
+       variants=[]
+       pictures=[]
        h.each { |a| 
            o = self.offers.new()
-           ch += o.new_from_hash_products(a, self.properties)
+           var,pic,ch = o.new_from_hash_products(a, self.properties)
+           variants=variants+var
+           pictures=pictures+pic
+           characteristics=characteristics+ch
            o.compare=self
            offers << o
        }
-       Offer.import offers , recursive: true
+       Offer.import offers 
        
-       ch.each do |c|
-           c.run_callbacks(:save) { false }
-       end
-       Characteristic.import ch
+       characteristics.each { |c| c.run_callbacks(:save) { false } }
+       Characteristic.import characteristics
+       pictures.each { |c| c.run_callbacks(:save) { false } }
+       Picture.import pictures
+       variants.each { |c| c.run_callbacks(:save) { false } }
+       Variant.import variants
        
     end
     def getProperties(h)

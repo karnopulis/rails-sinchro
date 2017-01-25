@@ -38,8 +38,7 @@ class Result < ApplicationRecord
      poid= self.compare.offers.where(:scu => e[0]).first.original_id
      imgs= self.compare.offer_imports.where(:scu => e[0]).first.picture_imports
      imgs.each do |pi|
-        new_pictures << NewPicture.create_new(e[0],poid,pi.url)
-        new_pictures.last.result=self
+        new_pictures << NewPicture.create_new(e[0],poid,pi.url,self,nil)
      end
      
    end
@@ -65,8 +64,7 @@ class Result < ApplicationRecord
      flat = self.compare.offer_imports.where( :scu => item[0]).pluck("prop_flat").first
      name = self.compare.offer_imports.where( :scu => item[0]).pluck("title").first
      so = self.compare.offer_imports.where( :scu => item[0]).pluck("sort_order").first
-     e_offers << EditOffer.create_new(item[0],orig,flat,name,so)
-     e_offers.last.result=self
+     e_offers << EditOffer.create_new(item[0],orig,flat,name,so,self,nil)
    end
    EditOffer.import e_offers
  end
@@ -77,36 +75,39 @@ class Result < ApplicationRecord
      orig = self.compare.offers.where( :scu => item[0]).first.variants.pluck("original_id").first
      flat = self.compare.variant_imports.where( :scu => item[0]).pluck("pric_flat").first
      qo = self.compare.variant_imports.where( :scu => item[0]).pluck("quantity").first
-     e_variants << EditVariant.create_new(item[0],orig,flat,qo)
-     e_variants.last.result=self
+     e_variants << EditVariant.create_new(item[0],orig,flat,qo,self,nil)
    end
    EditVariant.import e_variants
  end
  
  def add_new_offers(no)
 
-    no.each_slice(400) do |slice|
+    no.each_slice(4) do |slice|
          new_offers=[]
+         edit_offers=[]
+         edit_variants=[]
+         new_pictures=[]
          slice.each do |item|
-    #       off_import = self.compare.offer_imports.where(:scu => item).first
-    #       var_import = self.compare.variant_imports.where(:scu => item).first
             off_import = self.compare.offer_imports.find_by scu: item
             var_import = self.compare.variant_imports.find_by scu: item
-    #       pic_import = self.compare.picture_imports.where(:scu => item).first
            no =NewOffer.create_new(item)
-           no.edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order)
-           no.edit_offers.last.result=self
-           no.edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity)
-           no.edit_variants.last.result=self
-           off_import.picture_imports.each do |pi|
-               no.new_pictures << NewPicture.create_new(item,nil,pi.url)
-               no.new_pictures.last.result=self
-           end
+           edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order,self,no)
+           edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity,self,no)
+          off_import.picture_imports.each do |pi|
+              new_pictures << NewPicture.create_new(item,nil,pi.url,self,no)
+          end
            new_offers<< no
+           puts new_offers
            new_offers.last.result=self
          end
-         NewOffer.import new_offers, recursive: true
-         new_offers=nil
+         NewOffer.import new_offers
+         edit_offers.each { |c|   c.run_callbacks(:save) { false } }
+         EditOffer.import edit_offers
+         edit_variants.each { |c|   c.run_callbacks(:save) { false } }
+         EditVariant.import edit_variants
+         new_pictures.each { |c|   c.run_callbacks(:save) { false } }
+         NewPicture.import new_pictures
+         new_offers=edit_offers=edit_variants=new_pictures=nil
     end
  end
  def add_old_offers(oo)
