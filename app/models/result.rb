@@ -88,26 +88,29 @@ class Result < ApplicationRecord
          edit_variants=[]
          new_pictures=[]
          slice.each do |item|
-            off_import = self.compare.offer_imports.find_by scu: item
-            var_import = self.compare.variant_imports.find_by scu: item
-           no =NewOffer.create_new(item)
-           edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order,self,no)
-           edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity,self,no)
-          off_import.picture_imports.each do |pi|
-              new_pictures << NewPicture.create_new(item,nil,pi.url,self,no)
-          end
-           new_offers<< no
-           puts new_offers
-           new_offers.last.result=self
+                off_import = self.compare.offer_imports.find_by scu: item
+                var_import = self.compare.variant_imports.find_by scu: item
+               no =NewOffer.create_new(item,self)
+               new_offers<< no
+               edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order,self,no)
+               edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity,self,no)
+              off_import.picture_imports.each do |pi|
+                  new_pictures << NewPicture.create_new(item,nil,pi.url,self,no)
+              end
          end
          NewOffer.import new_offers
-         edit_offers.each { |c|   c.run_callbacks(:save) { false } }
-         EditOffer.import edit_offers
-         edit_variants.each { |c|   c.run_callbacks(:save) { false } }
+         keys= new_offers.map(&:scu)
+         no_ids = NewOffer.where(:result=>self,:scu=>keys).pluck(:scu,:id).to_h
+         edit_offers.each { |n| n.new_offer_id= no_ids[n.scu] }
+         EditOffer.import edit_offers 
+         edit_variants.each { |n| n.new_offer_id= no_ids[n.scu] }
          EditVariant.import edit_variants
-         new_pictures.each { |c|   c.run_callbacks(:save) { false } }
+         new_pictures.each { |n| n.new_offer_id= no_ids[n.scu] }
          NewPicture.import new_pictures
-         new_offers=edit_offers=edit_variants=new_pictures=nil
+         new_offers.clear
+         edit_offers.clear
+         edit_variants.clear
+         new_pictures.clear
     end
  end
  def add_old_offers(oo)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118133507) do
+ActiveRecord::Schema.define(version: 20170126102035) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -234,6 +234,7 @@ ActiveRecord::Schema.define(version: 20170118133507) do
     t.integer  "offer_import_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.string   "scu"
     t.index ["offer_import_id"], name: "index_picture_imports_on_offer_import_id"
   end
 

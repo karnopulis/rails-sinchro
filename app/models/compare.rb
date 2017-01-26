@@ -30,6 +30,8 @@ class Compare < ApplicationRecord
     end
     def compareData
         self.result = Result.new
+        self.save
+        
 
         new_collections,old_collections = compare_collections
         self.result.add_new_collections(new_collections)
@@ -182,9 +184,14 @@ class Compare < ApplicationRecord
             p_import= p_import+pi
         end
         OfferImport.import import
-        p_import.each { |c|   c.run_callbacks(:save) { false } }
+
+         keys= import.map(&:scu)
+         no_ids = OfferImport.where(:compare=>self,:scu=>keys).pluck(:scu,:id).to_h
+         p_import.each { |n| n.offer_import_id= no_ids[n.scu] }
+         
         PictureImport.import p_import
         import.clear
+        p_import.clear
         variants = csv.values_at(*self.site.scu_field,
                                  *self.site.quantity_field,
                                  *self.site.csv_variant_order.split(",")).uniq

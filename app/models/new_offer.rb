@@ -8,11 +8,12 @@ class NewOffer < ApplicationRecord
     belongs_to :result
     
     
-  def self.create_new (item)
+  def self.create_new (item,result)
           nc = NewOffer.new 
           nc.scu=item
           nc.error=nil
           nc.state=nil
+          nc.result=result
       return nc
   end
 end
