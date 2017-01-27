@@ -82,7 +82,7 @@ class Result < ApplicationRecord
  
  def add_new_offers(no)
 
-    no.each_slice(4) do |slice|
+    no.each_slice(400) do |slice|
          new_offers=[]
          edit_offers=[]
          edit_variants=[]
@@ -107,10 +107,10 @@ class Result < ApplicationRecord
          EditVariant.import edit_variants
          new_pictures.each { |n| n.new_offer_id= no_ids[n.scu] }
          NewPicture.import new_pictures
-         new_offers.clear
-         edit_offers.clear
-         edit_variants.clear
-         new_pictures.clear
+        #  new_offers.clear
+        #  edit_offers.clear
+        #  edit_variants.clear
+        #  new_pictures.clear
     end
  end
  def add_old_offers(oo)

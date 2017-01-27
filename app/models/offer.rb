@@ -30,13 +30,15 @@ class Offer < ApplicationRecord
         characteristics=[]
         pictures=[]
         variants=[]
+        prices=[]
        self.original_id = h["id"]
-       self.scu = h["variants"].first["sku"]
+       scu = h["variants"].first["sku"]
+       self.scu=scu
        self.title = h["title"]    
        flat=[]
        h["characteristics"].each do |c|
            prop_id = prop.index { |i| c["property_id"].to_i ==i.original_id }
-           characteristics << Characteristic.create_new(prop[prop_id], self, c["id"], c["title"])
+           characteristics << Characteristic.create_new(prop[prop_id], self, c["id"], c["title"],scu)
         #     prop_id = prop.index { |i| c["property_id"].to_i ==i.original_id }
         #     self.properties<< prop[prop_id]
         #     self.characteristics.last.original_id= c["id"]
@@ -49,12 +51,14 @@ class Offer < ApplicationRecord
          h["images"].each do |a|
             p= Picture.new
             self.image_status = self.image_status + a["filename"]+";"
-            pictures << p.new_from_hash_products( a,self )
+            pictures << p.new_from_hash_products( a,self, scu)
          end 
          h["variants"].each do |d|
             v= Variant.new
-            variants << v.new_from_hash(d,self.compare.site,self)
+            v,pri = v.new_from_hash(d,self.compare,self)
+            variants << v
+            prices=prices+pri
          end
-       return variants,pictures,characteristics
+       return variants,pictures,characteristics,prices
     end
 end

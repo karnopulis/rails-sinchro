@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126102035) do
+ActiveRecord::Schema.define(version: 20170126140332) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20170126102035) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "title"
+    t.string   "scu"
     t.index ["offer_id"], name: "index_characteristics_on_offer_id"
     t.index ["property_id"], name: "index_characteristics_on_property_id"
   end
@@ -244,6 +245,7 @@ ActiveRecord::Schema.define(version: 20170126102035) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "original_id"
+    t.string   "scu"
     t.index ["offer_id"], name: "index_pictures_on_offer_id"
   end
 
@@ -253,6 +255,7 @@ ActiveRecord::Schema.define(version: 20170126102035) do
     t.string   "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "sku"
   end
 
   create_table "properties", force: :cascade do |t|
@@ -330,6 +333,8 @@ ActiveRecord::Schema.define(version: 20170126102035) do
     t.integer  "original_id"
     t.integer  "offer_id"
     t.string   "flat"
+    t.integer  "compare_id"
+    t.index ["compare_id"], name: "index_variants_on_compare_id"
     t.index ["offer_id"], name: "index_variants_on_offer_id"
   end
 

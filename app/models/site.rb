@@ -169,15 +169,14 @@ class Site < ApplicationRecord
             http.request(req)
             
         }
-        rescue Exception => exc
-            puts exc.message
+        rescue C
             return nil
         end
         r = resp.get_fields("api-usage-limit")
         if r
             r= r[0].split('/')
             puts resp.get_fields("api-usage-limit").to_s
-            puts r[0].to_i
+#            puts r[0].to_i
         end
         case resp
         when Net::HTTPOK

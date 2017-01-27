@@ -6,6 +6,8 @@ require 'benchmark'
 class Compare < ApplicationRecord
     belongs_to :site
     has_many :offers, dependent: :destroy
+    has_many :variants, dependent: :destroy
+
     has_many :collections, dependent: :destroy
     has_many :collects, dependent: :destroy
     has_many :collect_imports, dependent: :destroy
@@ -86,12 +88,19 @@ class Compare < ApplicationRecord
     end
     def compare_variants (old_offers)
         imported = self.variant_imports.pluck("scu","quantity","pric_flat").uniq
-        current=[]
-        self.offers.each do |o|  
-            var = o.variants.first
-
-            current.push ( [o.scu, var.quantity, var.flat] ) if not old_offers.include? o.scu 
-        end
+        puts "self.variants"
+        puts self.variants.size
+        current = self.variants.where.not("sku" =>old_offers).pluck("sku","quantity","flat").uniq
+        
+        # current=[]
+        # self.offers.each do |o|  
+        #     var = o.variants.first
+        #     begin
+        #     current.push ( [o.scu, var.quantity, var.flat] ) if not old_offers.include? o.scu 
+        #     rescue Exception => exc
+        #         puts o.scu
+        #     end
+        # end
         edited_variants = current- imported
         puts "edited_variants " +edited_variants.count.to_s
         
@@ -156,7 +165,6 @@ class Compare < ApplicationRecord
         #  self.site.get_Offers_from_insales_products(self)
         #  puts "offers"
         #  puts self.offers.size
-         
         #  self.site.get_Collects_from_insales(self)
         #  puts "collects"
         #  puts self.collects.size
@@ -221,28 +229,45 @@ class Compare < ApplicationRecord
        }
    end
     def getOffers_products(h)
-       offers=[]
-       characteristics=[]
-       variants=[]
-       pictures=[]
-       h.each { |a| 
-           o = self.offers.new()
-           var,pic,ch = o.new_from_hash_products(a, self.properties)
-           variants=variants+var
-           pictures=pictures+pic
-           characteristics=characteristics+ch
-           o.compare=self
-           offers << o
-       }
-       Offer.import offers 
-       
-       characteristics.each { |c| c.run_callbacks(:save) { false } }
-       Characteristic.import characteristics
-       pictures.each { |c| c.run_callbacks(:save) { false } }
-       Picture.import pictures
-       variants.each { |c| c.run_callbacks(:save) { false } }
-       Variant.import variants
-       
+        h.each_slice(400) do |slice|
+            offers=[]
+            characteristics=[]
+            variants=[]
+            pictures=[]
+            prices=[]
+            slice.each do |item|
+  
+                   o = Offer.new()
+                   o.compare=self
+
+                   var,pic,ch,pr = o.new_from_hash_products(item, self.properties)
+                   variants=variants+var
+                   pictures=pictures+pic
+                   characteristics=characteristics+ch
+                   prices=prices+pr
+                   offers << o
+      
+            end
+            Offer.import offers
+            
+            keys= offers.map(&:scu)
+            no_ids = Offer.where(:compare=>self,:scu=>keys).pluck(:scu,:id).to_h
+            characteristics.each { |n| n.offer_id= no_ids[n.scu] }
+            Characteristic.import characteristics
+            pictures.each { |n| n.offer_id= no_ids[n.scu] }
+            Picture.import pictures
+            variants.each { |n| n.offer_id= no_ids[n.sku] }
+            Variant.import variants
+            keys= variants.map(&:sku)
+            no_ids = Variant.where(:compare=>self,:sku=>keys).pluck(:sku,:id).to_h
+            prices.each { |n| n.variant_id= no_ids[n.sku] }
+            Price.import prices
+            offers.clear
+            characteristics.clear
+            variants.clear
+            pictures.clear
+            prices.clear
+       end
     end
     def getProperties(h)
         puts "properties"
@@ -272,6 +297,7 @@ class Compare < ApplicationRecord
         puts "collects"
         puts h.size
         Collect.bulk_insert do |worker|
+            worker.set_size = 1000
             h.each do |a| 
                 offer_id = a["product_id"].to_i
                 collection_id= a["collection_id"].to_i
