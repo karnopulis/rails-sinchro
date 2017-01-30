@@ -170,7 +170,7 @@ class Compare < ApplicationRecord
         #  puts self.collects.size
         import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
-        puts import_csv.size
+        puts import_csv.size if import_csv
         self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
         self.save
     

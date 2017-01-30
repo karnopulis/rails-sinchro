@@ -232,6 +232,7 @@ class Site < ApplicationRecord
         ftp.getbinaryfile(file,"upload.csv")
         rescue Exception => exc
                 puts exc.message
+                logger.error exc.message
                 return nil
         end
         ftp.close
@@ -242,7 +243,7 @@ class Site < ApplicationRecord
                 h = CSV.parse( r, 
                             {:headers => true,  :col_sep => ';'})
                 
-    
+                logger.info h.size if h
                 return h
     
         
