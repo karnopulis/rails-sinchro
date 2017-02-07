@@ -56,7 +56,7 @@ class Compare < ApplicationRecord
         
         
         # puts self.name
-        self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
+        self.name= self.name + " "+ Time.now.to_formatted_s(:time) if self.name
         self.save
         
     end
@@ -182,7 +182,7 @@ class Compare < ApplicationRecord
         import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
         puts import_csv.size if import_csv
-        self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
+        self.name= self.name + " "+ Time.now.to_formatted_s(:time) if self.name
         self.save
     
     end

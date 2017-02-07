@@ -66,6 +66,7 @@ class ComparesController < ApplicationController
           @compare.getData
           @compare.save
           @compare.compareData
+          @compare.result.apply
         rescue =>e
           logger.error e.message
           logger error e.backtrace
