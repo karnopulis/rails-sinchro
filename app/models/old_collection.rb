@@ -17,7 +17,6 @@ class OldCollection < ApplicationRecord
      if result 
          self.state="completed"
          self.save
-         self.update_listing
      else
          self.state="error"
          self.save
@@ -28,7 +27,7 @@ class OldCollection < ApplicationRecord
       
   end
   def update_listing
-     self.result.old_collections.where(:old_collection =>self.id).update_all(:state=>"listing")
+ #    self.result.old_collections.where(:old_collection =>self.id).update_all(:state=>"listing")
 #     self.result.old_collects.where(:new_collection =>self.id).update_all(:collection_original_id =>id, :state=>"listing")
   end
   

@@ -33,6 +33,7 @@ class NewCollection < ApplicationRecord
   def update_listing(id)
      self.result.new_collections.where(:new_parent =>self.id).update_all(:parent_id =>id, :state=>"listing")
      self.result.new_collects.where(:new_collection =>self.id).update_all(:collection_original_id =>id, :state=>"listing")
+     self.result.new_collects.where(:new_collection =>self.id).where.not(:product_original_id => nil).update_all(:state=>"listing")
   end
   
 end

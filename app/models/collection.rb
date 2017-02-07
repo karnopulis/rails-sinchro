@@ -47,7 +47,7 @@ class Collection < ApplicationRecord
                 id =p[0]["parent_id"].to_i
             end
         end
-        tflat+=name
+        tflat+=name+";"
         tflat=nil if top_level_include==0
         return tflat
     end

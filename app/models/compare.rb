@@ -38,21 +38,21 @@ class Compare < ApplicationRecord
         new_collections,old_collections = compare_collections
         self.result.add_new_collections(new_collections)
         self.result.add_old_collections(old_collections)
-        new_offers, old_offers = compare_offers_simple
-        self.result.add_new_offers (new_offers)
-        self.result.add_old_offers (old_offers)
+        new_offers, old_offers, old_offers_ids = compare_offers_simple
+        self.result.add_new_offers(new_offers)
+        self.result.add_old_offers(old_offers, old_offers_ids)
         new_collects, old_collects = compare_collects
         self.result.add_new_collects(new_collects)
         self.result.add_old_collects(old_collects)
-        edited_offers = compare_offers_props (old_offers)
+        edited_offers = compare_offers_props (old_offers_ids)
         self.result.add_edit_offers (edited_offers)
-        edited_variants = compare_variants (old_offers)
+        edited_variants = compare_variants (old_offers_ids)
         self.result.add_edit_variants (edited_variants)
     
-        edited_images = compare_images(old_offers)
+         edited_images = compare_images(old_offers_ids)
     
-        self.result.add_new_images (edited_images)
-        self.result.add_old_images (edited_images)
+         self.result.add_new_images (edited_images)
+         self.result.add_old_images (edited_images)
         
         
         # puts self.name
@@ -62,25 +62,32 @@ class Compare < ApplicationRecord
     end
     
     def compare_offers_simple
-        imported = self.collect_imports.pluck("scu").uniq
+        imported = self.offer_imports.pluck("scu").uniq
         current = self.offers.pluck("scu")
+        
         new_offers = imported-current
         old_offers = current - imported
+        old_offers_ids= self.offers.where(:scu=> old_offers).pluck("original_id")
+        dubs= current.find_all { |e| current.count(e) > 1 }
+        dubs.uniq.each do |d|
+            old_offers_ids<< self.offers.where(:scu => d).pluck("original_id").drop(1)
+        end
         puts "new offers " + new_offers.count.to_s
         puts "_____________"
         puts "old offers " + old_offers.count.to_s
-        return new_offers, old_offers
+        return new_offers, old_offers, old_offers_ids.flatten
     end
     def compare_offers_props (old_offers)
         imported = self.offer_imports.pluck("scu","title","sort_order","prop_flat").uniq
-        current=[]
-        self.offers.each do |o|  
-#            flat = o.characteristics.includes(:property).pluck(
-#            "properties.title,
- #           characteristics.title").to_h.values_at(*site_offer_order)
-#            o.flat = flat.join(";")
-            current.push ( [o.scu,o.title,o.sort_weight,o.flat] ) if not old_offers.include? o.scu 
-        end
+        # current=[]
+        current = self.offers.where.not(:original_id => old_offers).pluck("scu","title","sort_weight","flat").uniq
+#         self.offers.each do |o|  
+# #            flat = o.characteristics.includes(:property).pluck(
+# #            "properties.title,
+#  #           characteristics.title").to_h.values_at(*site_offer_order)
+# #            o.flat = flat.join(";")
+#             current.push ( [o.scu,o.title,o.sort_weight,o.flat] ) if not old_offers.include? o.original_id 
+#         end
         edited_offers = current- imported
         puts "edited offers " + edited_offers.count.to_s
         
@@ -90,7 +97,7 @@ class Compare < ApplicationRecord
         imported = self.variant_imports.pluck("scu","quantity","pric_flat").uniq
         puts "self.variants"
         puts self.variants.size
-        current = self.variants.where.not("sku" =>old_offers).pluck("sku","quantity","flat").uniq
+        current = self.variants.includes(:offer).where.not("offers.original_id" =>old_offers).pluck("variants.sku","variants.quantity","variants.flat").uniq
         
         # current=[]
         # self.offers.each do |o|  
@@ -112,7 +119,7 @@ class Compare < ApplicationRecord
         current=[]
         self.offers.each do |o|  
             
-            current.push ( [o.scu,o.image_status] ) if not old_offers.include? o.scu 
+            current.push ( [o.scu,o.image_status] ) if not old_offers.include? o.original_id 
         end
         edited_pictures = current- imported
         puts "edited_images " +edited_pictures.count.to_s
@@ -147,27 +154,31 @@ class Compare < ApplicationRecord
          puts self.name
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
-        #  properties_hash = self.site.get_Properties_from_insales
-        #  if properties_hash
-        #      getProperties(properties_hash)
-        #  end
-        #  properties_hash=nil
-        #  collections_hash = self.site.get_Collections_from_insales
-        #  if collections_hash
-        #      getCollections(collections_hash)
-        #  end
+         categories_hash = self.site.get_Categories_from_insales
+         if categories_hash
+             getLastCategory(categories_hash)
+         end
+         properties_hash = self.site.get_Properties_from_insales
+         if properties_hash
+             getProperties(properties_hash)
+         end
+         properties_hash=nil
+         collections_hash = self.site.get_Collections_from_insales
+         if collections_hash
+             getCollections(collections_hash)
+         end
         # #  offers_hash = get_Offers_from_insales_marketplace
         # #  if offers_hash
         # #      getOffers_marketplace(offers_hash) 
         # #  end
-        # collections_hash=nil
-        # GC.start
-        #  self.site.get_Offers_from_insales_products(self)
-        #  puts "offers"
-        #  puts self.offers.size
-        #  self.site.get_Collects_from_insales(self)
-        #  puts "collects"
-        #  puts self.collects.size
+        collections_hash=nil
+        GC.start
+         self.site.get_Offers_from_insales_products(self)
+         puts "offers"
+         puts self.offers.size
+         self.site.get_Collects_from_insales(self)
+         puts "collects"
+         puts self.collects.size
         import_csv = self.site.get_import_from_odin_ass()
         get_import( import_csv ) if import_csv
         puts import_csv.size if import_csv
@@ -269,6 +280,10 @@ class Compare < ApplicationRecord
             prices.clear
        end
     end
+    def getLastCategory(h)
+        self.category_original_id = h.pluck("id").max
+        self.save
+    end
     def getProperties(h)
         puts "properties"
         puts h.size
@@ -297,7 +312,7 @@ class Compare < ApplicationRecord
         puts "collects"
         puts h.size
         Collect.bulk_insert do |worker|
-            worker.set_size = 1000
+            worker.set_size = 500
             h.each do |a| 
                 offer_id = a["product_id"].to_i
                 collection_id= a["collection_id"].to_i

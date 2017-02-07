@@ -16,9 +16,60 @@ class Site < ApplicationRecord
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"collections.json"),message , self.site_login, self.site_pass)
         return response
     end
+    def add_Product_to_insales(product)
+        message = ApplicationController.new.view_context.render( :partial => "insales/add_product.json.jbuilder", :locals => {:new_offer =>  product})
+        
+        response = post_to_url_json(URI("http://"+self.url+"/admin/"+"products.json"),message , self.site_login, self.site_pass)
+        return response
+    end
+    def add_Collect_to_insales(collect)
+        message = ApplicationController.new.view_context.render( :partial => "insales/add_collect.json.jbuilder", :locals => {:new_collect => collect})
+        
+        response = post_to_url_json(URI("http://"+self.url+"/admin/"+"collects.json"),message , self.site_login, self.site_pass)
+        return response
+    end
+    def add_Picture_to_insales(image)
+        message = ApplicationController.new.view_context.render( :partial => "insales/add_image.json.jbuilder", :locals => {:new_image =>  image})
+        
+        response = post_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+image.original_offer_id+"/images.json"),message , self.site_login, self.site_pass)
+        return response
+    end
+    def edit_Product_to_insales(product)
+        message = ApplicationController.new.view_context.render( :partial => "insales/edit_product.json.jbuilder", :locals => {:edit_offer =>  product})
+
+        response = put_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+product.original_id.to_s+".json"),message , self.site_login, self.site_pass)
+        return response
+    end
+    def edit_Collection_to_insales(collection)
+        message = ApplicationController.new.view_context.render( :partial => "insales/edit_collection.json.jbuilder", :locals => {:edit_collection =>  collection})
+
+        response = put_to_url_json(URI("http://"+self.url+"/admin/"+"collections/"+collection.collection_original_id.to_s+".json"),message , self.site_login, self.site_pass)
+        return response
+    end
+    def edit_Variants_to_insales(variants)
+        message = ApplicationController.new.view_context.render( :partial => "insales/edit_variants.json.jbuilder", :locals => {:edit_variants =>  variants})
+
+        response = put_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+"variants_group_update.json"),message , self.site_login, self.site_pass)
+        return response
+    end
+     def delete_Product_from_insales(product)
+    
+        response = delete_url_json( URI("http://"+self.url+"/admin/"+"products/"+product.original_id.to_s+".json"), self.site_login, self.site_pass)
+        return response
+    end
+     def delete_Picture_from_insales(image)
+    
+        response = delete_url_json( URI("http://"+self.url+"/admin/"+"products/"+image.original_offer_id.to_s+"/images/"+image.original_id.to_s+".json"), self.site_login, self.site_pass)
+        return response
+    end
     def delete_Collection_from_insales(collection)
     
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"collections/"+collection.collection_original_id.to_s+".json"), self.site_login, self.site_pass)
+        return response
+    end
+        def delete_Collect_from_insales(collect)
+    
+        response = delete_url_json( URI("http://"+self.url+"/admin/"+"collects/"+collect.collect_original_id.to_s+".json"), self.site_login, self.site_pass)
         return response
     end
     def get_Collections_from_insales
@@ -28,6 +79,10 @@ class Site < ApplicationRecord
     def get_Properties_from_insales
         response = get_from_url( URI("http://"+self.url+"/admin/"+"properties.xml"), self.site_login, self.site_pass)
         response["properties"]
+    end
+    def get_Categories_from_insales
+        response = get_from_url( URI("http://"+self.url+"/admin/"+"categories.xml"), self.site_login, self.site_pass)
+        response["categories"]
     end
     def get_Offers_from_insales_marketplace
         response = get_from_url( URI("http://"+self.url+"/marketplace/24025.xml"), self.site_login, self.site_pass) #gk
@@ -158,6 +213,46 @@ class Site < ApplicationRecord
             return nil
         end
     end
+    def put_to_url_json(uri,message,id,key )
+        req  = Net::HTTP::Put.new(uri.request_uri)
+        req.basic_auth id,key
+        req.content_type="application/json"
+        req.body=message
+        puts    req.body 
+        begin
+        resp = Net::HTTP.start(uri.hostname,uri.port) { |http|
+            http.request(req)
+            
+        }
+        rescue Exception => exc
+            puts exc.message
+            return nil
+        end
+        r = resp.get_fields("api-usage-limit")
+        if r
+            r= r[0].split('/')
+            puts resp.get_fields("api-usage-limit").to_s
+            puts r[0].to_i
+        end
+        puts resp
+        case resp
+        when Net::HTTPOK
+            puts (resp.code + " " + resp.message)
+            h=JSON.parse(resp.body)
+            puts h
+            return h
+            # if h["nil_classes"]
+            #     return nil
+            # else
+            #     return h
+            # end
+        when Net::HTTPClientError, Net::HTTPInternalServerError
+            puts (resp.code + " " + resp.message)
+            h=JSON.parse(resp.body)
+            puts h
+            return nil
+        end
+    end
  
  
     def get_from_url (uri, id,key )
@@ -244,6 +339,7 @@ class Site < ApplicationRecord
                             {:headers => true,  :col_sep => ';'})
                 
                 logger.info h.size if h
+                File.delete("upload.csv")
                 return h
     
         

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126140332) do
+ActiveRecord::Schema.define(version: 20170207133820) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 20170126140332) do
     t.string   "state"
     t.string   "error"
     t.integer  "new_offer_id"
+    t.integer  "position"
     t.index ["new_offer_id"], name: "index_new_pictures_on_new_offer_id"
     t.index ["result_id"], name: "index_new_pictures_on_result_id"
   end
@@ -161,7 +162,7 @@ ActiveRecord::Schema.define(version: 20170126140332) do
   create_table "offer_imports", force: :cascade do |t|
     t.string   "title"
     t.string   "prop_flat"
-    t.integer  "sort_order"
+    t.float    "sort_order"
     t.string   "scu"
     t.integer  "compare_id"
     t.datetime "created_at",   null: false
@@ -179,7 +180,7 @@ ActiveRecord::Schema.define(version: 20170126140332) do
     t.string   "title"
     t.string   "flat"
     t.string   "image_status"
-    t.string   "sort_weight"
+    t.float    "sort_weight"
     t.index ["compare_id"], name: "index_offers_on_compare_id"
   end
 
@@ -222,11 +223,12 @@ ActiveRecord::Schema.define(version: 20170126140332) do
   create_table "old_pictures", force: :cascade do |t|
     t.string   "scu"
     t.string   "original_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "result_id"
     t.string   "state"
     t.string   "error"
+    t.integer  "original_offer_id"
     t.index ["result_id"], name: "index_old_pictures_on_result_id"
   end
 
@@ -236,6 +238,7 @@ ActiveRecord::Schema.define(version: 20170126140332) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.string   "scu"
+    t.integer  "position"
     t.index ["offer_import_id"], name: "index_picture_imports_on_offer_import_id"
   end
 

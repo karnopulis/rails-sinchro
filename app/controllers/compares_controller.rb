@@ -1,4 +1,4 @@
-require 'pp'
+#require 'pp'
 class ComparesController < ApplicationController
   before_action :set_compare, only: [:show, :edit, :update, :destroy]
 
@@ -26,11 +26,11 @@ class ComparesController < ApplicationController
     @eo =rez.try(:edit_offers)
     @eo = @eo.where.not(:original_id => nil) if @eo
     @ev =rez.try(:edit_variants)
-    @ev = @ev.where.not(:original_id => nil)if @ev
+    @ev = @ev.where.not(:original_id => nil).order(:scu) if @ev
     @np =rez.try(:new_pictures)
-    @np = @np.where.not(:original_offer_id => nil) if @np
+    #@np = @np.where.not(:original_offer_id => nil) if @np
     @op =rez.try(:old_pictures)
-    @op = @op.where.not(:original_id => nil) if @op
+    #@op = @op.where.not(:original_id => nil) if @op
     
     
   end
@@ -67,8 +67,8 @@ class ComparesController < ApplicationController
           @compare.save
           @compare.compareData
         rescue =>e
-          pp e.message
-          pp e.backtrace
+          logger.error e.message
+          logger error e.backtrace
         end
       ActiveRecord::Base.connection.close
       end

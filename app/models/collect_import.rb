@@ -45,7 +45,7 @@ class CollectImport < ApplicationRecord
   def self.create_new(scu,arr,compare) 
     ci = self.new
     ci.scu =scu
-    ci.flat=arr
+    ci.flat=arr+";"
     ci.compare=compare
     return ci
   end

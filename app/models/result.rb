@@ -21,15 +21,100 @@ class Result < ApplicationRecord
         break if  new_collections.size == 0
     end
     loop do 
-         self.old_collections.where(:state => "listing" ).update_all(state: "active")
-         self.old_collections.where(:state => "active" ).each do|oc|
+         pack = self.old_collections.where(:state => "listing" )
+         pack.update_all(state: "active")
+         pack = self.old_collections.where(:state => "active" )
+         puts pack
+         pack.each do|oc|
+             puts ="=========="
              oc.apply
          end
-         old_collections =self.old_collections.where(:state => "waiting" ).each do |cc|
-               
+         parent_ids = pack.pluck(:old_collection_id).uniq.compact
+         puts parent_ids
+         parent_ids.each do |pi|
+             r= self.old_collections.where(:old_collection_id => pi).where.not(:state =>"completed")
+             puts r
+             if  r.size== 0
+                 cur =self.old_collections.find(pi)
+                 cur.state="listing"
+                 cur.save
+             end
          end
-        break if  old_collections.size == 0
+
+        break if  parent_ids.size == 0
     end
+    loop do
+        self.new_offers.where(:state => "listing" ).update_all(state: "active")
+        self.new_offers.where(:state => "active" ).each do|no|
+             no.apply
+                 
+
+         end
+         new_offers =self.new_offers.where(:state => "listing" )
+    break if  new_offers.size == 0
+    end
+    loop do
+        self.old_offers.where(:state => "listing" ).update_all(state: "active")
+        self.old_offers.where(:state => "active" ).each do|oo|
+             oo.apply
+
+         end
+         old_offers =self.new_offers.where(:state => "listing" )
+    break if  old_offers.size == 0
+    end
+    loop do
+        self.edit_offers.where(:state => "listing" ).update_all(state: "active")
+        self.edit_offers.where(:state => "active" ).each do|oo|
+             oo.apply
+         end
+         edit_offers =self.edit_offers.where(:state => "listing" )
+    break if  edit_offers.size == 0
+    end
+    loop do
+        self.edit_variants.where(:state => "listing" ).update_all(state: "active")
+        self.edit_variants.where(:state => "active" ).each_slice(100) do|slice|
+             EditVariant.apply_bulk(slice,self)
+         end
+         edit_variants =self.edit_variants.where(:state => "listing" )
+         
+    break if  edit_variants.size == 0
+    end
+    loop do
+        self.new_pictures.where(:state => "listing" ).update_all(state: "active")
+        self.new_pictures.where(:state => "active" ).each do|np|
+             np.apply
+         end
+         new_pictures =self.new_pictures.where(:state => "listing" )
+         
+    break if  new_pictures.size == 0
+    end
+        loop do
+        self.old_pictures.where(:state => "listing" ).update_all(state: "active")
+        self.old_pictures.where(:state => "active" ).each do|op|
+             op.apply
+         end
+         old_pictures =self.old_pictures.where(:state => "listing" )
+         
+    break if  old_pictures.size == 0
+    end
+    loop do
+         self.old_collects.where(:state => "listing" ).update_all(state: "active")
+         self.old_collects.where(:state => "active" ).each do|oc|
+              oc.apply
+          end
+          old_collects =self.old_collects.where(:state => "listing" )
+         
+    break if  old_collects.size == 0
+    end
+    loop do
+         self.new_collects.where(:state => "listing" ).update_all(state: "active")
+         self.new_collects.where(:state => "active" ).each do|nc|
+              nc.apply
+          end
+          new_collects =self.new_collects.where(:state => "listing" )
+         
+     break if  new_collects.size == 0
+     end
  end
   
  def add_new_images (edited_images)
@@ -38,7 +123,7 @@ class Result < ApplicationRecord
      poid= self.compare.offers.where(:scu => e[0]).first.original_id
      imgs= self.compare.offer_imports.where(:scu => e[0]).first.picture_imports
      imgs.each do |pi|
-        new_pictures << NewPicture.create_new(e[0],poid,pi.url,self,nil)
+        new_pictures << NewPicture.create_new(e[0],poid,pi.url,pi.position,self,nil)
      end
      
    end
@@ -49,7 +134,7 @@ class Result < ApplicationRecord
    old_pictures=[]
    edited_images.each do |e|
     self.compare.offers.where("scu" => e[0]).first.pictures.each do |p|
-      old_pictures << OldPicture.create_new(e[0],p.original_id)
+      old_pictures << OldPicture.create_new(e[0],p.original_id,p.offer.original_id)
       old_pictures.last.result=self
     end
     
@@ -61,10 +146,9 @@ class Result < ApplicationRecord
    e_offers=[]
    edited_offers.each do |item|
      orig = self.compare.offers.where( :scu => item[0]).pluck("original_id").first
-     flat = self.compare.offer_imports.where( :scu => item[0]).pluck("prop_flat").first
-     name = self.compare.offer_imports.where( :scu => item[0]).pluck("title").first
-     so = self.compare.offer_imports.where( :scu => item[0]).pluck("sort_order").first
-     e_offers << EditOffer.create_new(item[0],orig,flat,name,so,self,nil)
+     oi = self.compare.offer_imports.where( :scu => item[0]).pluck("prop_flat","title","sort_order").first
+ 
+     e_offers << EditOffer.create_new(item[0],orig,oi[0],oi[1],oi[2],self,nil)
    end
    EditOffer.import e_offers
  end
@@ -73,9 +157,8 @@ class Result < ApplicationRecord
    e_variants=[]
     edited_variants.each do |item|
      orig = self.compare.offers.where( :scu => item[0]).first.variants.pluck("original_id").first
-     flat = self.compare.variant_imports.where( :scu => item[0]).pluck("pric_flat").first
-     qo = self.compare.variant_imports.where( :scu => item[0]).pluck("quantity").first
-     e_variants << EditVariant.create_new(item[0],orig,flat,qo,self,nil)
+     vi= self.compare.variant_imports.where( :scu => item[0]).pluck("pric_flat","quantity").first
+     e_variants << EditVariant.create_new(item[0],orig,vi[0],vi[1],self,nil)
    end
    EditVariant.import e_variants
  end
@@ -95,7 +178,7 @@ class Result < ApplicationRecord
                edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order,self,no)
                edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity,self,no)
               off_import.picture_imports.each do |pi|
-                  new_pictures << NewPicture.create_new(item,nil,pi.url,self,no)
+                  new_pictures << NewPicture.create_new(item,nil,pi.url,pi.position,self,no)
               end
          end
          NewOffer.import new_offers
@@ -113,11 +196,19 @@ class Result < ApplicationRecord
         #  new_pictures.clear
     end
  end
- def add_old_offers(oo)
+ def add_old_offers(oo,oo_ids)
       old_offers=[]
-      oo.each do |item|
-        off_id = self.compare.offers.where(:scu => item).pluck(:original_id).first
-        old_offers<< OldOffer.create_new(item,off_id)
+      oo_scu=""
+      oo_ids.each do |item|
+        off = self.compare.offers.find_by original_id: item
+        if oo.include? off.scu 
+            oo_scu = off.scu
+        else
+            puts item
+            oo_scu = off.scu
+            oo_scu+=" DUPLICATE" 
+        end
+        old_offers<< OldOffer.create_new(oo_scu,item)
         old_offers.last.result =self
       end
       OldOffer.import old_offers
@@ -127,12 +218,14 @@ class Result < ApplicationRecord
     nc.sort!
     new_collections=[]
     nc.each do |item|
-      parent_flat = item.split(';')
+      parent_flat = item.split(';').compact
       title = parent_flat.pop
-      parent_flat =parent_flat.join(';')
+      parent_flat =parent_flat.join(';')+";"
       parent = self.compare.collections.find_by flat: parent_flat
       if item ==  title
           state="listing"
+          puts "+============================"
+          puts self.compare.global_parent_id
           parent_id =self.compare.global_parent_id
       else
           if parent
@@ -153,14 +246,18 @@ class Result < ApplicationRecord
   end
   
   def add_old_collections(nc)
-    nc.sort!.reverse!
+    nc.sort!
 
     old_collections=[]
     nc.each do |item|
       current = self.compare.collections.find_by flat: item 
-      parent_new =self.old_collections.where("collection_flat LIKE ?", "%#{item}%").first
+#      parent_new =self.old_collections.where("collection_flat LIKE ?", "%#{item}%").first
+      parent_flat = item.split(';').compact
+      title = parent_flat.pop
+      parent_flat =parent_flat.join(';')+";"
+      parent_new = self.old_collections.find_by collection_flat: parent_flat 
       puts parent_new.try(:attributes)
-      if parent_new
+      if nc.select { |s| s.include?(item) }.size> 1
         state="waiting"    
       else
         state="listing"   
@@ -178,14 +275,16 @@ class Result < ApplicationRecord
         new_collects=[]
         slice.each do |item|
               col_id = self.compare.collections.where(:flat => item[1]).pluck(:original_id)
-              if col_id
-                state="listing"    
+              off_id = self.compare.offers.where(:scu => item[0]).pluck(:original_id)
+              if col_id.empty? or off_id.empty?
+                state="waiting"  
               else
-                state="waiting" 
+                state="listing"   
               end
               new_col_id = self.new_collections.where(:collection_flat => item[1]).first if col_id.none?
-              off_id = self.compare.offers.where(:scu => item[0]).pluck(:original_id)
-              new_collects << NewCollect.create_new( item, col_id.first, off_id.first, new_col_id,state )
+              new_off_id = self.new_offers.where(:scu => item[0]).first if off_id.none?
+
+              new_collects << NewCollect.create_new( item, col_id.first, off_id.first, new_col_id,new_off_id,state )
               new_collects.last.result=self
         end
         NewCollect.import new_collects
@@ -203,6 +302,14 @@ class Result < ApplicationRecord
     end
     OldCollect.import old_collects
   end
-  
+  def edit_Collection_temp
+      ec=[]
+      self.compare.collections.each do |e|
+          oc =OldCollection.new
+          oc.collection_original_id=e.original_id
+          self.compare.site.edit_Collection_to_insales(oc)
+          
+      end
+  end
   
 end

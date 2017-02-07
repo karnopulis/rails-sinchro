@@ -12,8 +12,23 @@ class EditVariant < ApplicationRecord
         ev.result = result
         ev.new_offer=no
         ev.error=nil
-        ev.state=nil
+        no==nil ? ev.state="listing" : ev.state="waiting" 
         
         return ev        
     end
+    
+     def self.apply_bulk(variants,result)
+         res = result.compare.site.edit_Variants_to_insales(variants)
+         
+         errors = res.select {|r| r["status"]!="ok"}
+
+         success = res.select {|r| r["status"]=="ok"}
+         succ= success.map{ |m| m["id"] }
+         result.edit_variants.where(:original_id => succ).update_all(:state =>"completed")
+         EditVariant.error_handler(errors)
+     
+    end
+      def self.error_handler(errors)
+          
+      end
 end
