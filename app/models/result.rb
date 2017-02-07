@@ -115,7 +115,9 @@ class Result < ApplicationRecord
          
      break if  new_collects.size == 0
      end
-     self.compare.name= self.compare.name + " "+ Time.now.to_formatted_s(:time) if self.name
+     c =self.compare
+     c.name= self.compare.name + " "+ Time.now.to_formatted_s(:time) if self.name
+     c.save
  end
   
  def add_new_images (edited_images)
