@@ -264,7 +264,7 @@ class Site < ApplicationRecord
             http.request(req)
             
         }
-        rescue C
+        resque Exception => exc
             return nil
         end
         r = resp.get_fields("api-usage-limit")
