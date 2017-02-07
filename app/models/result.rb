@@ -116,7 +116,7 @@ class Result < ApplicationRecord
      break if  new_collects.size == 0
      end
      c =self.compare
-     c.name= self.compare.name + " "+ Time.now.to_formatted_s(:time) if self.name
+     c.name= self.compare.name + " "+ Time.now.to_formatted_s(:time) if c.name
      c.save
  end
   
