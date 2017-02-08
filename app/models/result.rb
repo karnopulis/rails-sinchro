@@ -43,69 +43,69 @@ class Result < ApplicationRecord
 
         break if  parent_ids.size == 0
     end
-    # loop do
-    #     self.new_offers.where(:state => "listing" ).update_all(state: "active")
-    #     self.new_offers.where(:state => "active" ).each do|no|
-    #          no.apply
+    loop do
+        self.new_offers.where(:state => "listing" ).update_all(state: "active")
+        self.new_offers.where(:state => "active" ).each do|no|
+             no.apply
                  
 
-    #      end
-    #      new_offers =self.new_offers.where(:state => "listing" )
-    # break if  new_offers.size == 0
-    # end
-    # loop do
-    #     self.old_offers.where(:state => "listing" ).update_all(state: "active")
-    #     self.old_offers.where(:state => "active" ).each do|oo|
-    #          oo.apply
+         end
+         new_offers =self.new_offers.where(:state => "listing" )
+    break if  new_offers.size == 0
+    end
+    loop do
+        self.old_offers.where(:state => "listing" ).update_all(state: "active")
+        self.old_offers.where(:state => "active" ).each do|oo|
+             oo.apply
 
-    #      end
-    #      old_offers =self.new_offers.where(:state => "listing" )
-    # break if  old_offers.size == 0
-    # end
-    # loop do
-    #     self.edit_offers.where(:state => "listing" ).update_all(state: "active")
-    #     self.edit_offers.where(:state => "active" ).each do|oo|
-    #          oo.apply
-    #      end
-    #      edit_offers =self.edit_offers.where(:state => "listing" )
-    # break if  edit_offers.size == 0
-    # end
-    # loop do
-    #     self.edit_variants.where(:state => "listing" ).update_all(state: "active")
-    #     self.edit_variants.where(:state => "active" ).each_slice(100) do|slice|
-    #          EditVariant.apply_bulk(slice,self)
-    #      end
-    #      edit_variants =self.edit_variants.where(:state => "listing" )
+         end
+         old_offers =self.new_offers.where(:state => "listing" )
+    break if  old_offers.size == 0
+    end
+    loop do
+        self.edit_offers.where(:state => "listing" ).update_all(state: "active")
+        self.edit_offers.where(:state => "active" ).each do|oo|
+             oo.apply
+         end
+         edit_offers =self.edit_offers.where(:state => "listing" )
+    break if  edit_offers.size == 0
+    end
+    loop do
+        self.edit_variants.where(:state => "listing" ).update_all(state: "active")
+        self.edit_variants.where(:state => "active" ).each_slice(100) do|slice|
+             EditVariant.apply_bulk(slice,self)
+         end
+         edit_variants =self.edit_variants.where(:state => "listing" )
          
-    # break if  edit_variants.size == 0
-    # end
-    # loop do
-    #     self.new_pictures.where(:state => "listing" ).update_all(state: "active")
-    #     self.new_pictures.where(:state => "active" ).each do|np|
-    #          np.apply
-    #      end
-    #      new_pictures =self.new_pictures.where(:state => "listing" )
+    break if  edit_variants.size == 0
+    end
+    loop do
+        self.new_pictures.where(:state => "listing" ).update_all(state: "active")
+        self.new_pictures.where(:state => "active" ).each do|np|
+             np.apply
+         end
+         new_pictures =self.new_pictures.where(:state => "listing" )
          
-    # break if  new_pictures.size == 0
-    # end
-    #     loop do
-    #     self.old_pictures.where(:state => "listing" ).update_all(state: "active")
-    #     self.old_pictures.where(:state => "active" ).each do|op|
-    #          op.apply
-    #      end
-    #      old_pictures =self.old_pictures.where(:state => "listing" )
+    break if  new_pictures.size == 0
+    end
+        loop do
+        self.old_pictures.where(:state => "listing" ).update_all(state: "active")
+        self.old_pictures.where(:state => "active" ).each do|op|
+             op.apply
+         end
+         old_pictures =self.old_pictures.where(:state => "listing" )
          
-    # break if  old_pictures.size == 0
-    # end
-    # loop do
-    #      self.old_collects.where(:state => "listing" ).update_all(state: "active")
-    #      self.old_collects.where(:state => "active" ).each do|oc|
-    #           oc.apply
-    #       end
-    #       old_collects =self.old_collects.where(:state => "listing" )
+    break if  old_pictures.size == 0
+    end
+    loop do
+         self.old_collects.where(:state => "listing" ).update_all(state: "active")
+         self.old_collects.where(:state => "active" ).each do|oc|
+              oc.apply
+          end
+          old_collects =self.old_collects.where(:state => "listing" )
          
-    # break if  old_collects.size == 0
-    # end
+    break if  old_collects.size == 0
+    end
     loop do
          self.new_collects.where(:state => "listing" ).update_all(state: "active")
          self.new_collects.where(:state => "active" ).each do|nc|
