@@ -4,11 +4,26 @@
   <strong>Name:</strong>
   <%= @compare.name %>
 </p>
+<%= form_tag([@compare.site,@compare], method: :get) do |f| %>
+
+  <div class="checkbox">
+    
+    <% if params[:details]=="1" %>
+      <%= label_tag "Убрать детали" %> 
+       <%= check_box_tag "details" ,"1",true %>
+    <% else %>
+      <%= label_tag "Детализировать" %> 
+       <%= check_box_tag "details" ,"1",false %>
+    <% end %> 
+   
+
+    <%= submit_tag "Обновить" %>
+  </div>
+<% end %>
 
 
 
-
-<%= render 'result' %>
+<%= render @part %>
 
 <%= link_to 'Edit', [:edit,@compare.site,@compare] %> |
 <%= link_to 'Back', site_compares_path %>

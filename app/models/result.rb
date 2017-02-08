@@ -11,7 +11,22 @@ class Result < ApplicationRecord
   has_many :new_pictures, dependent: :destroy
   has_many :old_pictures, dependent: :destroy
 
+ def validate_before_apply
+     os =self.compare.offers.size 
+     ois = self.compare.offer_imports.size
+     dopusk=(os+ois)/20
+     puts dopusk
+     puts (os-ois).abs
+     if (os-ois).abs > dopusk 
+        return nil
+     else
+        return true
+     end 
+ end
+
  def apply
+     return "beware!" if validate_before_apply.nil?
+     
      loop do 
          self.new_collections.where(:state => "listing" ).update_all(state: "active")
          self.new_collections.where(:state => "active" ).each do|nc|
@@ -221,11 +236,11 @@ class Result < ApplicationRecord
     nc.sort!
     new_collections=[]
     nc.each do |item|
-      parent_flat = item.split(';').compact
-      title = parent_flat.pop
-      parent_flat =parent_flat.join(';')+";"
+      parent_flat_arr = item.split(';').compact
+      title = parent_flat_arr.pop
+      parent_flat =parent_flat_arr.join(';')+";"
       parent = self.compare.collections.find_by flat: parent_flat
-      if parent_flat ==  title
+      if parent_flat_arr.size==0
           state="listing"
           puts "+============================"
           puts self.compare.global_parent_id

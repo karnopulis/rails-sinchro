@@ -7,9 +7,9 @@ class ComparesController < ApplicationController
   def index
       site= params[:site_id]
       if site
-        @compares = Site.find(site).compares
+        @compares = Site.find(site).compares.sort.reverse
       else
-        @compares =Compare.all
+        @compares =Compare.all.sort.reverse
       end
   end
 
@@ -17,20 +17,45 @@ class ComparesController < ApplicationController
   # GET /compares/1.json
   def show
     rez = @compare.try(:result)
-    @nc =rez.try(:new_collections)
-    @oc =rez.try(:old_collections)
-    @no =rez.try(:new_offers)
-    @oo =rez.try(:old_offers)
-    @nco =rez.try(:new_collects)
-    @oco =rez.try(:old_collects)
-    @eo =rez.try(:edit_offers)
-    @eo = @eo.where.not(:original_id => nil) if @eo
-    @ev =rez.try(:edit_variants)
-    @ev = @ev.where.not(:original_id => nil).order(:scu) if @ev
-    @np =rez.try(:new_pictures)
-    #@np = @np.where.not(:original_offer_id => nil) if @np
-    @op =rez.try(:old_pictures)
-    #@op = @op.where.not(:original_id => nil) if @op
+    if rez
+      details = params[:details]
+      if details == "1"
+        @nc =rez.try(:new_collections)
+        @oc =rez.try(:old_collections)
+        @no =rez.try(:new_offers)
+        @oo =rez.try(:old_offers)
+        @nco =rez.try(:new_collects)
+        @oco =rez.try(:old_collects)
+        @eo =rez.try(:edit_offers)
+        @eo = @eo.where.not(:original_id => nil) if @eo
+        @ev =rez.try(:edit_variants)
+        @ev = @ev.where.not(:original_id => nil).order(:scu) if @ev
+        @np =rez.try(:new_pictures)
+        #@np = @np.where.not(:original_offer_id => nil) if @np
+        @op =rez.try(:old_pictures)
+        #@op = @op.where.not(:original_id => nil) if @op
+        @part ="result"
+      else  
+        @nc =rez.try(:new_collections).try(:group, :state ).try(:count)
+        puts "========"
+        puts @nc
+        puts "===="
+        @oc =rez.try(:old_collections).try(:group, :state).try(:count)
+        @no =rez.try(:new_offers).try(:group, :state).try(:count)
+        @oo =rez.try(:old_offers).try(:group, :state).try(:count)
+        @nco =rez.try(:new_collects).try(:group, :state).try(:count)
+        @oco =rez.try(:old_collects).try(:group, :state).try(:count)
+        @eo =rez.try(:edit_offers).try(:group, :state).try(:count)
+        @ev =rez.try(:edit_variants).try(:group, :state).try(:count)
+        @np =rez.try(:new_pictures).try(:group, :state).try(:count)
+        @op =rez.try(:old_pictures).try(:group, :state).try(:count)
+         @part ="result_simple"
+      end
+    else 
+      @part ="result_simple"
+    end
+    
+  
     
     
   end
