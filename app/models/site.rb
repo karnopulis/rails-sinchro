@@ -320,6 +320,7 @@ class Site < ApplicationRecord
 
     def get_csv_from_ftp (uri,file,id,key)
         ftp = Net::FTP.new
+        puts uri
         begin
         ftp.connect(uri,21)
         ftp.login(id,key)
@@ -339,6 +340,7 @@ class Site < ApplicationRecord
                             {:headers => true,  :col_sep => ';'})
                 
                 logger.info h.size if h
+                puts h.size
                 File.delete("upload.csv")
                 return h
     

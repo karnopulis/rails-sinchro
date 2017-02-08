@@ -1,4 +1,30 @@
 <p id="notice"><%= notice %></p>
 
+
+<p>
+  <strong>Артикул:</strong>
+  <%= @offer_import.scu %>
+</p>
+<p>
+  <strong>Название</strong>
+  <%= @offer_import.title %>
+</p>
+
+ <strong>Sort Weight:</strong>
+  <%= @offer_import.sort_order %>
+</p>
+
+<p>
+  <strong>Строка параметров:</strong>
+  <%= @offer_import.prop_flat %>
+</p>
+
+<p>
+  <strong>Строка свойств:</strong>
+ 
+</p>
+
+
+
 <%= link_to 'Edit',  [:edit, @offer_import.compare.site,@offer_import] %> |
 <%= link_to 'Back', site_offer_imports_path( :compare=> @offer_import.compare_id)%>

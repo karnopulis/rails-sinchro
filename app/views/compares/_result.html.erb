@@ -187,7 +187,12 @@
   <tbody>
     <% @eo.try(:each) do |elem| %>
       <tr>
-        <td><%= elem.scu %></td>
+        <td>
+            <%= link_to([@compare.site,@compare.offer_imports.where(:scu => elem.scu).first]) do %>  
+          <%= elem.scu %>
+          <% end %>
+          
+          </td>
         <td><%= elem.title %></td>
         <td>
                       <%= link_to([@compare.site,@compare.offers.where(:original_id => elem.original_id).first]) do %>          

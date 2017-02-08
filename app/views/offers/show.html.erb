@@ -18,14 +18,13 @@
 
 <p>
   <strong>Строка параметров:</strong>
-  <%= @par %>
+  <%= @offer.flat %>
 </p>
 
 <p>
   <strong>Строка свойств:</strong>
-  <%= @chr %>
+  <%= @offer.variants.first.try(:flat) %>
 </p>
-
 
 
 <%= link_to 'Edit', [:edit,@offer.compare.site,@offer] %> |
