@@ -325,14 +325,15 @@ class Site < ApplicationRecord
         ftp.connect(uri,21)
         ftp.login(id,key)
         ftp.passive = true
-        ftp.getbinaryfile(file,"upload.csv")
+        filename = "tmp/upload.csv"+DateTime.now.to_i.to_s
+        ftp.getbinaryfile(file,filename)
         rescue Exception => exc
                 puts exc.message
                 logger.error exc.message
                 return nil
         end
         ftp.close
-        csv= File.open("upload.csv")
+        csv= File.open(filename)
                 r = csv.read.encode(Encoding::UTF_8, Encoding::CP1251, {   :invalid => :replace,
                                                                                 :undef   => :replace,
                                                                                 :replace => '?'})
@@ -341,7 +342,7 @@ class Site < ApplicationRecord
                 
                 logger.info h.size if h
                 puts h.size
-                File.delete("upload.csv")
+                File.delete(filename)
                 return h
     
         

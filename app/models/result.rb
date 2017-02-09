@@ -18,13 +18,17 @@ class Result < ApplicationRecord
      puts dopusk
      puts (os-ois).abs
      if (os-ois).abs > dopusk 
+        self.status_trackers.add("WARN","Количество товаров на сайте и в выгрузке сильно различается ") 
+        self.status_trackers.add("FATAL","Внесение изменений прервано. Проверьте задачу и запустите ее вручную") 
         return nil
+        
      else
         return true
      end 
  end
 
  def apply
+     self.status_trackers.add("INFO","Запуск процесса внесения изменений") 
      return "beware!" if validate_before_apply.nil?
      
      loop do 
@@ -133,6 +137,8 @@ class Result < ApplicationRecord
      c =self.compare
      c.name= self.compare.name + " "+ Time.now.to_formatted_s(:time) if c.name
      c.save
+     self.status_trackers.add("INFO","Завершение процесса внесения изменений") 
+
  end
   
  def add_new_images (edited_images)

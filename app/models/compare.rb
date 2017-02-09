@@ -16,6 +16,7 @@ class Compare < ApplicationRecord
     has_one :result, dependent: :destroy
     has_many :properties, dependent: :destroy
     
+    has_many :status_trackers , dependent: :destroy
 #    before_save :getData
     
 #    module Helpers
@@ -31,9 +32,10 @@ class Compare < ApplicationRecord
         # )
     end
     def compareData
+        
         self.result = Result.new
         self.save
-        
+        self.status_trackers.add("INFO","Cтарт процесса сравнения ")
 
         new_collections,old_collections = compare_collections
         self.result.add_new_collections(new_collections)
@@ -58,7 +60,7 @@ class Compare < ApplicationRecord
         # puts self.name
         self.name= self.name + " "+ Time.now.to_formatted_s(:time) if self.name
         self.save
-        
+        self.status_trackers.add("INFO","Окончание процесса сравнения ")
     end
     
     def compare_offers_simple
@@ -154,19 +156,31 @@ class Compare < ApplicationRecord
          puts self.name
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
+         pid = fork do
+            self.status_trackers.add("INFO","1с FTP старт процесса загрузки")
+            import_csv = self.site.get_import_from_odin_ass()
+            get_import( import_csv ) if import_csv
+            puts import_csv.size if import_csv
+            self.status_trackers.add("INFO","1с FTP окончание процесса загрузки")
+         end 
+         self.status_trackers.add("INFO","Insales старт процесса загрузки")
          categories_hash = self.site.get_Categories_from_insales
          if categories_hash
              getLastCategory(categories_hash)
          end
+         self.status_trackers.add("INFO","Insales Категорий загружено: "+categories_hash.size.to_s)
          properties_hash = self.site.get_Properties_from_insales
          if properties_hash
              getProperties(properties_hash)
          end
+         self.status_trackers.add("INFO","Insales Параметров товаров  загружено: "+properties_hash.size.to_s)
+
          properties_hash=nil
          collections_hash = self.site.get_Collections_from_insales
          if collections_hash
              getCollections(collections_hash)
          end
+         self.status_trackers.add("INFO","Insales Рубрик загружено: "+collections_hash.size.to_s)
         # #  offers_hash = get_Offers_from_insales_marketplace
         # #  if offers_hash
         # #      getOffers_marketplace(offers_hash) 
@@ -176,14 +190,16 @@ class Compare < ApplicationRecord
          self.site.get_Offers_from_insales_products(self)
          puts "offers"
          puts self.offers.size
+         self.status_trackers.add("INFO","Insales Товаров загружено: "+self.offers.size.to_s)
          self.site.get_Collects_from_insales(self)
          puts "collects"
          puts self.collects.size
-        import_csv = self.site.get_import_from_odin_ass()
-        get_import( import_csv ) if import_csv
-        puts import_csv.size if import_csv
+         self.status_trackers.add("INFO","Insales Размещений продуктов загружено: "+self.collects.size.to_s)
+         
+        Process.wait(pid)
         self.name= self.name + " "+ Time.now.to_formatted_s(:time) if self.name
         self.save
+        self.status_trackers.add("INFO","Insales окончание процесса загрузки")
     
     end
     
@@ -203,12 +219,13 @@ class Compare < ApplicationRecord
             p_import= p_import+pi
         end
         OfferImport.import import
-
+        self.status_trackers.add("INFO","1с FTP Товаров загружено: "+import.size.to_s)
          keys= import.map(&:scu)
          no_ids = OfferImport.where(:compare=>self,:scu=>keys).pluck(:scu,:id).to_h
          p_import.each { |n| n.offer_import_id= no_ids[n.scu] }
          
         PictureImport.import p_import
+        self.status_trackers.add("INFO","1с FTP Ссылок изображений загружено: "+p_import.size.to_s)
         import.clear
         p_import.clear
         variants = csv.values_at(*self.site.scu_field,
@@ -218,12 +235,14 @@ class Compare < ApplicationRecord
             import << VariantImport.create_new(v,self)
         end
         VariantImport.import import
+        self.status_trackers.add("INFO","1с FTP Свойств товаров загружено: "+import.size.to_s)
         import.clear
         collections = csv.values_at(*self.site.scu_field,
                                     *self.site.csv_collection_order.split(",")).uniq
 
         import = CollectImport.create_collects(collections,self)
         CollectImport.import import
+        self.status_trackers.add("INFO","1с FTP Размещений товаров загружено: "+import.size.to_s)
         import.clear
 
     end

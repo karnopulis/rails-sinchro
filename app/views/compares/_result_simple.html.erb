@@ -1,5 +1,13 @@
 
+<br>
+<% progress_log = @compare.status_trackers.pluck(:thread, :date, :level, :message).map{ |v| "["+v.join("][")+"]" }  %>
+<%= text_area_tag "",progress_log.join("\n"), cols: 100, rows: 15, disabled: true, class: "progress", style: 'resize: none; overflow-y: scroll;' %>
 
+<h2>Всего</h2>
+<div style="overflow-x:auto;">
+   <%= render :partial => "status", :locals => { :status_hash => @total.to_h } %>
+</div>
+<br>
 <h2>Добавление новых рубрик</h2>
 <div style="overflow-x:auto;">
    <%= render :partial => "status", :locals => { :status_hash => @nc.to_h } %>

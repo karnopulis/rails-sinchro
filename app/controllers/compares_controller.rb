@@ -37,18 +37,18 @@ class ComparesController < ApplicationController
         @part ="result"
       else  
         @nc =rez.try(:new_collections).try(:group, :state ).try(:count)
-        puts "========"
-        puts @nc
-        puts "===="
-        @oc =rez.try(:old_collections).try(:group, :state).try(:count)
-        @no =rez.try(:new_offers).try(:group, :state).try(:count)
-        @oo =rez.try(:old_offers).try(:group, :state).try(:count)
-        @nco =rez.try(:new_collects).try(:group, :state).try(:count)
-        @oco =rez.try(:old_collects).try(:group, :state).try(:count)
-        @eo =rez.try(:edit_offers).try(:group, :state).try(:count)
-        @ev =rez.try(:edit_variants).try(:group, :state).try(:count)
-        @np =rez.try(:new_pictures).try(:group, :state).try(:count)
-        @op =rez.try(:old_pictures).try(:group, :state).try(:count)
+        itogo=[]
+        itogo<< @oc =rez.try(:old_collections).try(:group, :state).try(:count)
+        itogo<< @no =rez.try(:new_offers).try(:group, :state).try(:count)
+        itogo<< @oo =rez.try(:old_offers).try(:group, :state).try(:count)
+        itogo<< @nco =rez.try(:new_collects).try(:group, :state).try(:count)
+        itogo<< @oco =rez.try(:old_collects).try(:group, :state).try(:count)
+        itogo<< @eo =rez.try(:edit_offers).try(:group, :state).try(:count)
+        itogo<< @ev =rez.try(:edit_variants).try(:group, :state).try(:count)
+        itogo<< @np =rez.try(:new_pictures).try(:group, :state).try(:count)
+        itogo<< @op =rez.try(:old_pictures).try(:group, :state).try(:count)
+        @total =itogo.inject{|tot,new| tot.merge(new){|_,x,y| x + y} }  
+        puts @total
          @part ="result_simple"
       end
     else 
