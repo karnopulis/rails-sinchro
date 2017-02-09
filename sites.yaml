@@ -176,14 +176,14 @@
     site_variant_order: price,price3
     csv_offer_order: Наличие текста,Отделка,Формат, Количество в упаковке,Поставщик,Код
       цены,Актуальность
-    site_offer_order: текст,Отделка,Формат,Количество в упаковке, поставщик,Код цены,Поступления
+    site_offer_order: текст,Отделка,Формат,Количество в упаковке,поставщик,Код цены,Поступления
     sort_order: АктуальностьЦифра
     scu_field: Артикул
     quantity_field: Количество
     title_field: Наименование
     csv_images_order: Изображение,ИзображениеОборота
     created_at: '2016-12-29 13:18:13.648844'
-    updated_at: '2017-01-18 00:26:45.541414'
+    updated_at: '2017-02-09 14:10:14.829194'
     home_ftp: 81.30.200.232
     home_file_name: site.csv
   attributes: !ruby/object:ActiveRecord::AttributeSet
@@ -252,7 +252,7 @@
           original_attribute: 
         site_offer_order: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: site_offer_order
-          value_before_type_cast: текст,Отделка,Формат,Количество в упаковке, поставщик,Код
+          value_before_type_cast: текст,Отделка,Формат,Количество в упаковке,поставщик,Код
             цены,Поступления
           type: *1
           original_attribute: 
@@ -288,7 +288,7 @@
           original_attribute: 
         updated_at: !ruby/object:ActiveRecord::Attribute::FromDatabase
           name: updated_at
-          value_before_type_cast: '2017-01-18 00:26:45.541414'
+          value_before_type_cast: '2017-02-09 14:10:14.829194'
           type: *5
           original_attribute: 
         home_ftp: !ruby/object:ActiveRecord::Attribute::FromDatabase
