@@ -164,6 +164,7 @@ class Compare < ApplicationRecord
             puts import_csv.size if import_csv
             self.status_trackers.add("INFO","1с FTP окончание процесса загрузки")
          end 
+         ActiveRecord::Base.establish_connection
          self.status_trackers.add("INFO","Insales старт процесса загрузки")
          categories_hash = self.site.get_Categories_from_insales
          if categories_hash
