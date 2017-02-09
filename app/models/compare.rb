@@ -157,6 +157,7 @@ class Compare < ApplicationRecord
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
          pid = fork do
+            ActiveRecord::Base.establish_connection
             self.status_trackers.add("INFO","1с FTP старт процесса загрузки")
             import_csv = self.site.get_import_from_odin_ass()
             get_import( import_csv ) if import_csv
