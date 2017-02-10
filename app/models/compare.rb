@@ -42,8 +42,7 @@ class Compare < ApplicationRecord
      end
     
     def launch
-        Thread.new do
-        begin
+
             if self.site.compares.where(:state => "active" ).size ==0  
                 self.state="active"
                 self.save
@@ -57,12 +56,7 @@ class Compare < ApplicationRecord
                  self.state="canceled"
                  self.save
             end
-        rescue =>e
-          logger.error e.message
-          logger error e.backtrace
-        end
-      ActiveRecord::Base.connection.close
-      end 
+ 
         
     end
     
