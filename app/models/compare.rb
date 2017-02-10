@@ -22,6 +22,50 @@ class Compare < ApplicationRecord
 #    module Helpers
 #        extend ActionView::Helpers::ComparesHelper
 #    end
+
+     def destroy
+          self.offer_ids.each_slice(10000) { |slice| Picture.where("offer_id"=>slice ).delete_all }
+          self.collects.delete_all
+          self.offer_ids.each_slice(10000) { |slice| Characteristic.where("property_id"=>slice ).delete_all }
+          self.offer_ids.each_slice(10000) { |slice| Price.where("variant_id"=>slice ).delete_all }
+          self.variants.delete_all 
+          self.collections.delete_all
+          self.collect_imports.delete_all
+          self.variant_imports.delete_all
+          self.offer_ids.each_slice(10000) { |slice| PictureImport.where("offer_import_id"=>slice ).delete_all }
+          self.offer_imports.delete_all
+          self.properties.delete_all
+          self.status_trackers.delete_all
+          self.result.destroy if self.result
+          self.delete
+          return self
+     end
+    
+    def launch
+        Thread.new do
+        begin
+            if self.site.compares.where(:state => "active" ).size ==0  
+                self.state="active"
+                self.save
+                self.getData
+                self.compareData
+                self.result.apply
+                self.state="inactive"
+                self.save
+            else
+                 self.status_trackers.add("FATAL","Запуск отменен. Другая синхронизация имееет активный статус ")
+                 self.state="canceled"
+                 self.save
+            end
+        rescue =>e
+          logger.error e.message
+          logger error e.backtrace
+        end
+      ActiveRecord::Base.connection.close
+      end 
+        
+    end
+    
     def to_json
         puts self.attributes
         ApplicationController.new.view_context.render( template: "compares/show.json.jbuilder", locals: {"compare" =>  self})

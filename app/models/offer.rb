@@ -1,11 +1,22 @@
 class Offer < ApplicationRecord
-    has_many :pictures, dependent: :destroy
+    has_many :pictures, dependent: :delete_all
     belongs_to :compare
-    has_many :collects, dependent: :destroy
+    has_many :collects, dependent: :delete_all
     has_many :collections, :through => :collects
-    has_many :characteristics, dependent: :destroy
+    has_many :characteristics, dependent: :delete_all
     has_many :properties, :through => :characteristics
     has_many :variants, dependent: :destroy 
+  
+  
+  def destroy
+      self.pictures.delete_all
+      self.collects.delete_all
+      self.characteristics.delete_all
+      Price.where("variant_id"=>self.variant_ids).delete_all
+      self.variants.delete_all 
+      self.delete
+      return self
+  end
   
     # def initialize (h)
     #     new_from_hash (h)

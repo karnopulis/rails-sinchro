@@ -1,7 +1,7 @@
 class Variant < ApplicationRecord
     belongs_to :offer
     belongs_to :compare
-    has_many :prices
+    has_many :prices, dependent: :destroy
     
     
     def new_from_hash (v,compare,offer)

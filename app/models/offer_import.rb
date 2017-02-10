@@ -1,6 +1,6 @@
 class OfferImport < ApplicationRecord
         belongs_to :compare
-        has_many :picture_imports
+        has_many :picture_imports, dependent: :delete_all
     
     def self.create_new(row,compare) 
         pi=[]

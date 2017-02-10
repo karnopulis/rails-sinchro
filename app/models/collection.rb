@@ -1,6 +1,6 @@
 class Collection < ApplicationRecord
     belongs_to :compare
-    has_many :collects, dependent: :destroy
+    has_many :collects, dependent: :delete_all
     has_many :offers, :through => :collects
   
 

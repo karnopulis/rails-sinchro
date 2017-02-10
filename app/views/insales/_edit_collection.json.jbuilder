@@ -1,4 +1,4 @@
 json.collection do
-    json.sort_type 10
+    json.sort_type 11
 
 end

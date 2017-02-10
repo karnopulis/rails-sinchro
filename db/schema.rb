@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170209113635) do
+ActiveRecord::Schema.define(version: 20170210125730) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20170209113635) do
     t.integer  "site_id"
     t.integer  "category_original_id"
     t.integer  "global_parent_id"
+    t.string   "state"
     t.index ["site_id"], name: "index_compares_on_site_id"
   end
 

@@ -1,7 +1,7 @@
 class NewCollection < ApplicationRecord
   belongs_to :result
   belongs_to :new_parent, class_name: "NewCollection"
-  has_many :new_collects
+  has_many :new_collects,dependent: :delete_all
   
   
    def self.create_new(item,par_cur,par_new,title,state)

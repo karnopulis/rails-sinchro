@@ -6,17 +6,19 @@
 <table>
   <thead>
     <tr>
+      <th>Статус</th>
       <th>Синхронизация</th>
       <th>Товары</th>
       <th>Параметры</th>
       <th>Рубрики</th>
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @compares.each do |compare| %>
       <tr>
+        <td><%= compare.state %></td>
         <td><%= compare.name %></td>
         <td>
           <%= link_to(site_offers_path( :compare=> compare.id)) do %>        
@@ -40,7 +42,6 @@
           <% end %>
         </td>
         <td><%= link_to 'Show', [compare.site,compare] %></td>
-        <td><%= link_to 'Edit', [:edit,compare.site,compare] %></td>
         <td><%= link_to 'Destroy', [compare.site,compare], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

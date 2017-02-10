@@ -1,6 +1,6 @@
 class Property < ApplicationRecord
     belongs_to :compare
-    has_many :characteristics, dependent: :destroy
+    has_many :characteristics, dependent: :delete_all
     has_many :offers, :through => :characteristics
     
     

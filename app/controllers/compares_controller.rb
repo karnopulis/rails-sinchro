@@ -86,18 +86,7 @@ class ComparesController < ApplicationController
         format.json { render json: @compare.errors, status: :unprocessable_entity }
       end
     end
-      Thread.new do
-        begin
-          @compare.getData
-          @compare.save
-          @compare.compareData
-          @compare.result.apply
-        rescue =>e
-          logger.error e.message
-          logger error e.backtrace
-        end
-      ActiveRecord::Base.connection.close
-      end
+    @compare.launch
   end
 
   # PATCH/PUT /compares/1

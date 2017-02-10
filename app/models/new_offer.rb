@@ -2,9 +2,9 @@
 
 
 class NewOffer < ApplicationRecord
-    has_many :edit_offers, dependent: :destroy
-    has_many :edit_variants, dependent: :destroy
-    has_many :new_pictures, dependent: :destroy
+    has_many :edit_offers, dependent: :delete_all
+    has_many :edit_variants, dependent: :delete_all
+    has_many :new_pictures, dependent: :delete_all
     belongs_to :result
     
     

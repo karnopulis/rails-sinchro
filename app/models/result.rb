@@ -1,15 +1,17 @@
 class Result < ApplicationRecord
   belongs_to :compare
-  has_many :new_collects, dependent: :destroy
-  has_many :old_collects, dependent: :destroy
-  has_many :new_collections, dependent: :destroy
-  has_many :old_collections, dependent: :destroy
-  has_many :new_offers, dependent: :destroy
-  has_many :old_offers, dependent: :destroy
-  has_many :edit_offers, dependent: :destroy
-  has_many :edit_variants, dependent: :destroy
-  has_many :new_pictures, dependent: :destroy
-  has_many :old_pictures, dependent: :destroy
+  has_many :new_collects, dependent: :delete_all
+  has_many :old_collects, dependent: :delete_all
+  has_many :new_collections, dependent: :delete_all
+  has_many :old_collections, dependent: :delete_all
+  has_many :new_offers, dependent: :delete_all
+  has_many :old_offers, dependent: :delete_all
+  has_many :edit_offers, dependent: :delete_all
+  has_many :edit_variants, dependent: :delete_all
+  has_many :new_pictures, dependent: :delete_all
+  has_many :old_pictures, dependent: :delete_all
+
+
 
  def validate_before_apply
      os =self.compare.offers.size 
@@ -326,6 +328,7 @@ class Result < ApplicationRecord
     end
     OldCollect.import old_collects
   end
+  
   def edit_Collection_temp
       ec=[]
       self.compare.collections.each do |e|
