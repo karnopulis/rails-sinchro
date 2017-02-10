@@ -156,15 +156,13 @@ class Compare < ApplicationRecord
          puts self.name
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
-         pid = fork do
-            ActiveRecord::Base.establish_connection
+         pid = Spawnling.new do
             self.status_trackers.add("INFO","1с FTP старт процесса загрузки")
             import_csv = self.site.get_import_from_odin_ass()
             get_import( import_csv ) if import_csv
             puts import_csv.size if import_csv
             self.status_trackers.add("INFO","1с FTP окончание процесса загрузки")
          end 
-         ActiveRecord::Base.establish_connection
          self.status_trackers.add("INFO","Insales старт процесса загрузки")
          categories_hash = self.site.get_Categories_from_insales
          if categories_hash
@@ -198,7 +196,7 @@ class Compare < ApplicationRecord
          puts self.collects.size
          self.status_trackers.add("INFO","Insales Размещений продуктов загружено: "+self.collects.size.to_s)
          
-        Process.wait(pid)
+        Spawnling.wait(pid)
         self.name= self.name + " "+ Time.now.to_formatted_s(:time) if self.name
         self.save
         self.status_trackers.add("INFO","Insales окончание процесса загрузки")

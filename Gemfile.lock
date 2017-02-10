@@ -132,6 +132,7 @@ GEM
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    spawnling (2.1.6)
     spring (2.0.0)
       activesupport (>= 4.2)
     sprockets (3.7.1)
@@ -179,6 +180,7 @@ DEPENDENCIES
   rails (>= 5.0.1, < 5.1)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  spawnling
   spring
   sqlite3
   turbolinks

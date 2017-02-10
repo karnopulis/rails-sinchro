@@ -27,7 +27,7 @@ gem 'devise'
 gem 'mysql2'
 gem 'bulk_insert'
 gem "activerecord-import"
-
+gem 'spawnling'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
