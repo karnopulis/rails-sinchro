@@ -36,8 +36,8 @@ class ComparesController < ApplicationController
         #@op = @op.where.not(:original_id => nil) if @op
         @part ="result"
       else  
-        @nc =rez.try(:new_collections).try(:group, :state ).try(:count)
         itogo=[]
+        itogo<< @nc =rez.try(:new_collections).try(:group, :state ).try(:count)
         itogo<< @oc =rez.try(:old_collections).try(:group, :state).try(:count)
         itogo<< @no =rez.try(:new_offers).try(:group, :state).try(:count)
         itogo<< @oo =rez.try(:old_offers).try(:group, :state).try(:count)

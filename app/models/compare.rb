@@ -217,6 +217,10 @@ class Compare < ApplicationRecord
          collections_hash = self.site.get_Collections_from_insales
          if collections_hash
              getCollections(collections_hash)
+             top_level = collections_hash.select{|a| a["title"] == site_global_parent }
+             top_level = top_level[0]["id"].to_i if top_level
+             self.global_parent_id =top_level
+             self.save
          end
          self.status_trackers.add("INFO","Insales Рубрик загружено: "+collections_hash.size.to_s)
         # #  offers_hash = get_Offers_from_insales_marketplace

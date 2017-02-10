@@ -7,12 +7,12 @@ class Collection < ApplicationRecord
     def new_from_hash (h,site_global_parent,compare_id)
         oo=[]
 #        top_level = h.select{|a| a["parent_id"].to_i==0 }
-        top_level = h.select{|a| a["title"] == site_global_parent }
-#        puts top_level
-        top_level = top_level[0]["id"].to_i if top_level
-        c= Compare.find(compare_id)
-        c.global_parent_id=top_level
-        c.save
+#         top_level = h.select{|a| a["title"] == site_global_parent }
+# #        puts top_level
+#         top_level = top_level[0]["id"].to_i if top_level
+#         c= Compare.find(compare_id)
+#         c.global_parent_id=top_level
+#         c.save
         h.each { |a| 
             o = Collection.new()
             o.original_id = a["id"].to_i
