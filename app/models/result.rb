@@ -231,7 +231,7 @@ class Result < ApplicationRecord
             oo_scu = off.scu
         else
             puts item
-            oo_scu = off.scu
+            oo_scu = off.scu.to_s
             oo_scu+=" DUPLICATE" 
         end
         old_offers<< OldOffer.create_new(oo_scu,item)

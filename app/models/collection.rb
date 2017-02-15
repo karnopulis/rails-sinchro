@@ -9,6 +9,7 @@ class Collection < ApplicationRecord
 #        top_level = h.select{|a| a["parent_id"].to_i==0 }
         top_level = h.select{|a| a["title"] == site_global_parent }
 #        puts top_level
+#        puts h.class
         top_level = top_level[0]["id"].to_i if top_level
         # c= Compare.find(compare_id)
         # c.global_parent_id=top_level
@@ -37,12 +38,16 @@ class Collection < ApplicationRecord
         top_level_include =0
         while  id!=0  do
 #            puts id
+#            puts id.class
             p= h.select{|a| a["id"]==id}
+#            puts h.class
+#            puts p.size
             if id == top_level
                 top_level_include= 1 
                 break
             else
                 cur_level =p[0]["title"].to_s
+#                puts cur_level
                 tflat=cur_level+";"+tflat 
                 id =p[0]["parent_id"].to_i
             end

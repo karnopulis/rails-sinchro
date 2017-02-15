@@ -1,0 +1,2 @@
+module OutsalesHelper
+end

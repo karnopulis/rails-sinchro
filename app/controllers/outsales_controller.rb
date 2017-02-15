@@ -1,0 +1,2 @@
+class OutsalesController < ApplicationController
+end
