@@ -16,6 +16,34 @@ class NewOffer < ApplicationRecord
           nc.result=result
       return nc
   end
+  def self.cicle(compare)
+        pid = Spawnling.new do
+            compare.status_trackers.add("DEBUG","Запуск процесса добавления продуктов") 
+
+            loop do 
+                list = where(:state => "listing" ).to_a
+                compare.status_trackers.add("DEBUG",list.size) 
+                num =where(:id => list.pluck("id") ).update_all(state: "active")
+                compare.status_trackers.add("DEBUG",num) 
+                list.each do|nc|
+                     begin
+                         nc.apply
+                     rescue Exception => exc
+                        logger.error exc.message
+                    end
+                end  
+  
+                new_offers = where(:state => "listing" )
+            break if  new_offers.size == 0
+                
+            end
+            compare.status_trackers.add("DEBUG","Окончание процесса добавления продуктов") 
+        end
+        Spawnling.wait(pid)
+        compare.result.new_collects.cicle(compare)
+        compare.result.new_pictures.cicle(compare)
+      
+    end
   
   def apply
      result = self.result.compare.site.add_Product_to_insales(self)

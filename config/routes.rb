@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :models
-  devise_for :users
-  #,:skip => :registrations
+  #devise_for :models
+  devise_for :users,:skip => :registrations
   resources :sites do
       resources :compares
       resources :offers

@@ -75,13 +75,13 @@ class Compare < ApplicationRecord
         self.save
         self.status_trackers.add("INFO","Cтарт процесса сравнения ")
 
-        new_collections,old_collections = compare_collections
+        new_collections,old_collections,old_collections_ids = compare_collections
         self.result.add_new_collections(new_collections)
         self.result.add_old_collections(old_collections)
         new_offers, old_offers, old_offers_ids = compare_offers_simple
         self.result.add_new_offers(new_offers)
         self.result.add_old_offers(old_offers, old_offers_ids)
-        new_collects, old_collects = compare_collects
+        new_collects, old_collects = compare_collects(old_collections_ids)
         self.result.add_new_collects(new_collects)
         self.result.add_old_collects(old_collects)
         edited_offers = compare_offers_props (old_offers_ids)
@@ -175,12 +175,14 @@ class Compare < ApplicationRecord
         puts "new_collections: " + new_collections.count.to_s
         puts "old_collections: " + old_collections.count.to_s
         puts "___________"
-        return new_collections, old_collections
+        old_collections_ids = self.collections.where(:flat=> old_collections).pluck("id")
+        return new_collections, old_collections,old_collections_ids
     end
     
-    def compare_collects
+    def compare_collects (old_collections_ids)
         imported = self.collect_imports.pluck("scu","flat").uniq
-        current =self.collects.includes(:collection,:offer).pluck("offers.scu","collections.flat")
+#        current =self.collects.includes(:collection,:offer).pluck("offers.scu","collections.flat")
+        current =self.collects.includes(:collection,:offer).where.not("collection_id" =>old_collections_ids).pluck("offers.scu","collections.flat")
         new_collects = imported-current
         old_collects = current-imported
         puts "new_collects: " + new_collects.count.to_s

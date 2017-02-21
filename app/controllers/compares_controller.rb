@@ -1,6 +1,10 @@
 #require 'pp'
 class ComparesController < ApplicationController
   before_action :set_compare, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, :except => :public
+  def after_sign_out_path_for(resource_or_scope)
+    root_path
+  end
 
   # GET /compares
   # GET /compares.json

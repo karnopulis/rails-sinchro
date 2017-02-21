@@ -13,6 +13,28 @@ class NewPicture < ApplicationRecord
         np.error =nil
         return np
     end 
+    
+    def self.cicle(compare)
+        pid = Spawnling.new do
+            compare.status_trackers.add("DEBUG","Запуск процесса добавления изображений") 
+
+            loop do 
+                 list = where(:state => "listing" ).to_a
+                 compare.status_trackers.add("DEBUG",list.size) 
+                 num =where(:id => list.pluck("id") ).update_all(state: "active")
+                 compare.status_trackers.add("DEBUG",num) 
+                 list.each do|nc|
+                     nc.apply
+                 end  
+  
+                new_images = where(:state => "listing" )
+            break if  new_images.size == 0
+                
+            end
+            compare.status_trackers.add("DEBUG","Окончание процесса добавления изображений") 
+        end    
+    end
+    
     def apply
      result = self.result.compare.site.add_Picture_to_insales(self)
      if result 

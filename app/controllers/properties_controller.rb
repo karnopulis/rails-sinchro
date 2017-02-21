@@ -1,6 +1,9 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: [:show, :edit, :update, :destroy]
-
+  before_filter :authenticate_user!, :except => :public
+  def after_sign_out_path_for(resource_or_scope)
+    root_path
+  end
   # GET /properties
   # GET /properties.json
   def index

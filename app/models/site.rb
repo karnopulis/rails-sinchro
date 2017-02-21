@@ -9,35 +9,50 @@ class Site < ApplicationRecord
     def self.dev_dump
         File.open("sites.yaml","w"){ |f| f.write(Site.all.to_yaml) }   
     end
+    def self.users_dump
+        File.open("users.yaml","w"){ |f| f.write(User.all.to_yaml) }   
+    end
+    def self.users_init
+        YAML.load_file("users.yaml").each { |v| User.new(v.attributes).save( :validate => false)}   
+    end
     
     def add_Collection_to_insales(collection)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_collection.json.jbuilder", :locals => {:new_collection =>  collection})
         
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"collections.json"),message , self.site_login, self.site_pass)
+#        response={:id=>Random.new.rand(1..10000000),:status=>"ok"}
         return response
     end
     def add_Product_to_insales(product)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_product.json.jbuilder", :locals => {:new_offer =>  product})
         
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"products.json"),message , self.site_login, self.site_pass)
+#        response={:id=>Random.new.rand(1..10000000),:status=>"ok",:variants=>{:id=>Random.new.rand(1..10000000)}}
+
         return response
     end
     def add_Collect_to_insales(collect)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_collect.json.jbuilder", :locals => {:new_collect => collect})
         
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"collects.json"),message , self.site_login, self.site_pass)
+#        response={:id=>Random.new.rand(1..10000000),:status=>"ok"}
+
         return response
     end
     def add_Picture_to_insales(image)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_image.json.jbuilder", :locals => {:new_image =>  image})
         
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+image.original_offer_id+"/images.json"),message , self.site_login, self.site_pass)
+#        response=true
+
         return response
     end
     def edit_Product_to_insales(product)
         message = ApplicationController.new.view_context.render( :partial => "insales/edit_product.json.jbuilder", :locals => {:edit_offer =>  product})
 
         response = put_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+product.original_id.to_s+".json"),message , self.site_login, self.site_pass)
+#        response=true
+
         return response
     end
     def edit_Collection_to_insales(collection)
@@ -49,27 +64,37 @@ class Site < ApplicationRecord
     def edit_Variants_to_insales(variants)
         message = ApplicationController.new.view_context.render( :partial => "insales/edit_variants.json.jbuilder", :locals => {:edit_variants =>  variants})
 
-        response = put_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+"variants_group_update.json"),message , self.site_login, self.site_pass)
+       response = put_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+"variants_group_update.json"),message , self.site_login, self.site_pass)
+#        f=[]
+#        variants.each  { |v|  f << {"id"=>v.original_id,"status"=>"ok"} }
+#        return f
         return response
     end
      def delete_Product_from_insales(product)
     
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"products/"+product.original_id.to_s+".json"), self.site_login, self.site_pass)
+#        response=true
         return response
     end
      def delete_Picture_from_insales(image)
     
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"products/"+image.original_offer_id.to_s+"/images/"+image.original_id.to_s+".json"), self.site_login, self.site_pass)
+#        response=true
+
         return response
     end
     def delete_Collection_from_insales(collection)
     
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"collections/"+collection.collection_original_id.to_s+".json"), self.site_login, self.site_pass)
+#        response=true
+
         return response
     end
         def delete_Collect_from_insales(collect)
     
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"collects/"+collect.collect_original_id.to_s+".json"), self.site_login, self.site_pass)
+#        response=true
+
         return response
     end
     def get_Collections_from_insales
@@ -265,6 +290,7 @@ class Site < ApplicationRecord
             
         }
         rescue Exception => exc
+             self.status_trackers.add("ERROR"+"Get from insales" +exc.message + uri.path)
             return nil
         end
         r = resp.get_fields("api-usage-limit")
@@ -284,6 +310,7 @@ class Site < ApplicationRecord
             end
         when Net::HTTPClientError, Net::HTTPInternalServerError
             puts (resp.code + resp.message)
+            self.status_trackers.add("ERROR"+"Get from insales" +resp.code + resp.message+uri.path)
             return nil
         end
     end
@@ -298,6 +325,7 @@ class Site < ApplicationRecord
         }
         rescue Exception => exc
             puts exc.message
+            self.status_trackers.add("ERROR"+"Get from FTP" +exc.message + uri.path)
             return nil
         end
         case response

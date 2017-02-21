@@ -14,6 +14,39 @@ class NewCollection < ApplicationRecord
       nc.state=state
       return nc
   end
+    def self.cicle(compare)
+        pid = Spawnling.new do
+            compare.status_trackers.add("DEBUG","Запуск процесса добавления коллекций") 
+
+            loop do 
+#                compare.status_trackers.add("DEBUG", try(:class)) 
+
+                 list = where(:state => "listing" ).to_a
+                 compare.status_trackers.add("DEBUG",list.size) 
+                 num =where(:id => list.pluck("id") ).update_all(state: "active")
+                 compare.status_trackers.add("DEBUG",num) 
+ #           compare.status_trackers.add("DEBUG",list.size) 
+                 list.each do|nc|
+                    begin
+                         nc.apply
+                    rescue Exception => exc
+                        logger.error exc.message
+                        logger.error exc.trace
+                    end
+                 end  
+                 new_collections =where(:state => "listing" )
+#            compare.status_trackers.add("DEBUG",new_collections) 
+            puts "==========="
+            puts     new_collections.size == 0
+            puts "================="
+            break if  new_collections.size == 0
+            end
+            compare.status_trackers.add("DEBUG","Окончание процесса добавления коллекций") 
+
+        end 
+        Spawnling.wait(pid)
+        compare.result.new_collects.cicle(compare)
+    end
   
   def apply
      result = self.result.compare.site.add_Collection_to_insales(self)
@@ -21,6 +54,7 @@ class NewCollection < ApplicationRecord
          self.state="completed"
          self.save
          self.update_listing(result["id"])
+         puts result
      else
          self.state="error"
          self.save
@@ -37,3 +71,4 @@ class NewCollection < ApplicationRecord
   end
   
 end
+

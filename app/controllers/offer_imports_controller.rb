@@ -1,6 +1,9 @@
 class OfferImportsController < ApplicationController
   before_action :set_offer_import, only: [:show, :edit, :update, :destroy]
-
+  before_filter :authenticate_user!, :except => :public
+  def after_sign_out_path_for(resource_or_scope)
+    root_path
+  end
   # GET /offer_imports
   # GET /offer_imports.json
   def index

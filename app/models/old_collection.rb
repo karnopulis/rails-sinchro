@@ -12,6 +12,38 @@ class OldCollection < ApplicationRecord
       return oc
   end
   
+  def self.cicle(compare)
+        pid = Spawnling.new do
+            compare.status_trackers.add("DEBUG","Запуск процесса удаления коллекций") 
+
+            loop do 
+                 list = where(:state => "listing" ).to_a
+                 compare.status_trackers.add("DEBUG",list.size) 
+                 num =where(:id => list.pluck("id") ).update_all(state: "active")
+                 compare.status_trackers.add("DEBUG",num) 
+                 list.each do|nc|
+                     nc.apply
+                 end 
+                 parent_ids = list.pluck(:old_collection_id).uniq.compact
+                #  puts parent_ids
+                 parent_ids.each do |pi|
+                     r= where(:old_collection_id => pi).where.not(:state =>"completed")
+                    #  puts r
+                     if  r.size== 0
+                         cur =find(pi)
+                         cur.state="listing"
+                         cur.save
+                     end
+                 end
+                 
+                break if  parent_ids.size == 0
+                
+            end
+            compare.status_trackers.add("DEBUG","Окончание процесса удаления коллекций") 
+        end    
+    end
+
+  
   def apply
      result = self.result.compare.site.delete_Collection_from_insales(self)
      if result 
