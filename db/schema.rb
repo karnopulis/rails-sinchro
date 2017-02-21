@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170214091250) do
+ActiveRecord::Schema.define(version: 20170221135454) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(version: 20170214091250) do
     t.integer  "compare_id"
     t.datetime "date"
     t.string   "level"
-    t.string   "thread"
+    t.integer  "thread"
     t.string   "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

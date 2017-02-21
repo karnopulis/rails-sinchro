@@ -44,8 +44,7 @@ class Result < ApplicationRecord
      self.new_pictures.cicle(self.compare)
      self.old_pictures.cicle(self.compare)
 
-
-
+     puts Process.waitall
      c =self.compare
      c.name= self.compare.name + " "+ Time.now.to_formatted_s(:time) if c.name
      c.save
