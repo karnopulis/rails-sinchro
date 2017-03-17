@@ -19,7 +19,6 @@ class CollectImport < ApplicationRecord
     
     
     ci_arr=[]
-    puts result.size
     result.each do |r|
       
       ci_arr << CollectImport.create_new(r,compare)
@@ -32,7 +31,6 @@ class CollectImport < ApplicationRecord
     rez=[]
 #    colls =row.to_hash.extract!(*csv_collection_order).compact.values
      colls =row[1..100].compact
-     puts colls
     begin
         if colls
             rez.push( [row[0],*colls] ) 

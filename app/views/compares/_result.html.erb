@@ -242,6 +242,33 @@
   </tbody>
 </table>
 </div>
+<h1>Редактирование свойств коллекций</h1>
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Путь</th>
+      <th>Позиция</th>
+
+      <th>Статус</th>
+      <th>Ошибка</th>
+ 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @eс.try(:each) do |elem| %>
+      <tr>
+        <td><%= elem.flat %></td>
+        <td><%= elem.position %></td>
+       
+        <td><%= elem.state %></td>
+        <td><%= elem.error %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
 <h1>Новые изображения</h1>
 <div style="overflow-x:auto;">
 <table>
