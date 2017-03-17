@@ -19,6 +19,7 @@ class Collection < ApplicationRecord
             o.original_id = a["id"].to_i
             o.name = a["title"]
             o.parent= a["parent_id"].to_i
+            o.position=a["position"].to_i
             o.compare_id =compare_id
             if (o.parent!=0)
                 # if o.name == site_global_parent

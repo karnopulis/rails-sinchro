@@ -5,6 +5,7 @@
     <tr>
       <th>Название</th>
       <th>Путь</th>
+      <th>Позиция</th>
       <th>Количество артикулов</th>
  
     </tr>
@@ -15,6 +16,8 @@
       <tr>
         <td><%= collect.flat.split(";").last %></td>
         <td><%= collect.flat %></td>
+        <td><%= collect.position %></td>
+
         <td><%= collect.scu %>
         </td>
 

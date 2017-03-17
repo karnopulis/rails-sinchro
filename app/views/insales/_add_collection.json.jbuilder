@@ -3,4 +3,5 @@ json.collection do
     json.sort_type 11
     json.title new_collection.title
     json.parent_id new_collection.parent_id
+    json.position new_collection.position 
 end

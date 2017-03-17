@@ -9,9 +9,9 @@ class CollectionsController < ApplicationController
   def index
     com_id= params[:compare]
     if com_id 
-      @collections = Compare.find(com_id).collections.where(params[:compare]).order(:flat)
+      @collections = Compare.find(com_id).collections.where(params[:compare]).order(:flat).page(params[:page]).per(50)
     else
-      @collections = Collection.all.order(:flat)
+      @collections = Collection.all.order(:flat).page(params[:page]).per(50)
     end
   end
 

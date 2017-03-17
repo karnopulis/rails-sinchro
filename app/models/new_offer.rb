@@ -26,12 +26,13 @@ class NewOffer < ApplicationRecord
                 num =where(:id => list.pluck("id") ).update_all(state: "active")
                 compare.status_trackers.add("DEBUG",num) 
                 list.each do|nc|
-                     begin
+                    begin
                          nc.apply
-                     rescue Exception => exc
+                    rescue Exception => exc
                         logger.error exc.message
+                        logger.error exc.backtrace
                     end
-                end  
+                 end  
   
                 new_offers = where(:state => "listing" )
             break if  new_offers.size == 0
@@ -47,19 +48,30 @@ class NewOffer < ApplicationRecord
   
   def apply
      result = self.result.compare.site.add_Product_to_insales(self)
-     if result 
+#     puts result
+     if result[:status]=="ok" 
          self.state="completed"
          self.edit_variants.each {|v| v.state="completed" ; v.save}
          self.edit_offers.each {|v| v.state="completed" ; v.save}
          self.save!
          self.update_listing(result["id"],result["variants"])
-     else
-         self.state="error"
-         self.save
-         self.error_handler
+         return nil
+     else if  self.state=="error"
+              return result[:error]
+          else 
+             self.state="error"
+             self.save
+            #  if eh.nil?
+            #     self.result.compare.status_trackers.add("DEBUG","Запуск обработчика ошибок добавления коллекций") 
+            #     eh = Spawnling.new do
+                    self.error_handler( result[:error] )
+            #     end
+            # end
+        end
      end
   end
-  def error_handler
+  def error_handler(error)
+      self.result.compare.handler_errors << HandlerError.create_new("new_offers",self.id,error)
   end
   def update_listing(id,var_ids)
      self.result.new_collects.where(:new_product_id =>self.id).update_all(:product_original_id =>id)

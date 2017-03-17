@@ -1,10 +1,10 @@
 #require 'pp'
 class ComparesController < ApplicationController
   before_action :set_compare, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, :except => :public
-  def after_sign_out_path_for(resource_or_scope)
-    root_path
-  end
+  # before_action :authenticate_user!, :except => :public
+  # def after_sign_out_path_for(resource_or_scope)
+  #   root_path
+  # end
 
   # GET /compares
   # GET /compares.json
@@ -34,6 +34,7 @@ class ComparesController < ApplicationController
         @eo = @eo.where.not(:original_id => nil) if @eo
         @ev =rez.try(:edit_variants)
         @ev = @ev.where.not(:original_id => nil).order(:scu) if @ev
+        @ec =rez.try(:edit_collections)
         @np =rez.try(:new_pictures)
         #@np = @np.where.not(:original_offer_id => nil) if @np
         @op =rez.try(:old_pictures)
@@ -49,6 +50,7 @@ class ComparesController < ApplicationController
         itogo<< @oco =rez.try(:old_collects).try(:group, :state).try(:count)
         itogo<< @eo =rez.try(:edit_offers).try(:group, :state).try(:count)
         itogo<< @ev =rez.try(:edit_variants).try(:group, :state).try(:count)
+        itogo<< @ec = rez.try(:edit_collections).try(:group, :state).try(:count)
         itogo<< @np =rez.try(:new_pictures).try(:group, :state).try(:count)
         itogo<< @op =rez.try(:old_pictures).try(:group, :state).try(:count)
         @total =itogo.inject{|tot,new| tot.merge(new){|_,x,y| x + y} }  

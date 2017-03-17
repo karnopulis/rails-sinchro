@@ -29,6 +29,10 @@ gem 'bulk_insert'
 gem "activerecord-import"
 gem 'spawnling'
 gem 'whenever', :require => false
+gem 'kaminari'
+
+
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

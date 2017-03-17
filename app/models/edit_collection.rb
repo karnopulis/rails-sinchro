@@ -1,26 +1,22 @@
-class NewCollect < ApplicationRecord
+class EditCollection < ApplicationRecord
   belongs_to :result
-  belongs_to :new_collection
-  belongs_to :new_product
-  
-  
-  def self.create_new (item,col_id,off_id,new_col,new_off,state)
-      nc = NewCollect.new 
-      nc.collection_original_id=col_id
-      nc.collection_flat=item[1]
-      nc.product_original_id=off_id
-      nc.product_scu=item[0]
-      nc.error=nil
-      nc.state=state
-      nc.new_collection_id = new_col.try(:id)
-      
-      nc.new_product_id = new_off.try(:id)
-      return nc
-  end
-  
-  def self.cicle(compare)
-       pid = Spawnling.new do
-            compare.status_trackers.add("DEBUG","Запуск процесса добавления размещений") 
+
+    def self.create_new (flat,pos,orig,result)
+        ec = EditCollection.new
+        ec.original_id = orig
+        ec.position = pos
+        ec.flat = flat
+        ec.result = result
+        ec.error=nil
+        ec.state="listing"  
+        
+        return ec        
+    end
+
+
+def self.cicle(compare)
+        pid = Spawnling.new do
+            compare.status_trackers.add("DEBUG","Запуск процесса редактирования коллекций") 
 
             loop do 
                  list = where(:state => "listing" ).to_a
@@ -36,17 +32,17 @@ class NewCollect < ApplicationRecord
                     end
                  end  
   
-                new_collects = where(:state => "listing" )
-            break if  new_collects.size == 0
+                edit_collections = where(:state => "listing" )
+            break if  edit_collections.size == 0
+                 
             end
-            compare.status_trackers.add("DEBUG","Окончание процесса добавления размещений") 
-
+            compare.status_trackers.add("DEBUG","Окончание процесса редактирования коллекций")
         end    
     end
-  
-  def apply
-     result = self.result.compare.site.add_Collect_to_insales(self)
-    if result[:status]=="ok" 
+    
+     def apply
+     result = self.result.compare.site.edit_collection_to_insales(self)
+     if result[:status]=="ok" 
          self.state="completed"
          self.save
 #         puts result
@@ -65,7 +61,11 @@ class NewCollect < ApplicationRecord
         end
      end
   end
- def error_handler(error)
-      self.result.compare.handler_errors << HandlerError.create_new("new_collects",self.id,error)
+  def error_handler(error)
+      self.result.compare.handler_errors << HandlerError.create_new("edit_collections",self.id,error)
   end
+
+
+
+
 end

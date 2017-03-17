@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  compare: one
+  model: MyString
+  model_id: 1
+  message: MyString
+  tryes_left: 1
+
+two:
+  compare: two
+  model: MyString
+  model_id: 1
+  message: MyString
+  tryes_left: 1

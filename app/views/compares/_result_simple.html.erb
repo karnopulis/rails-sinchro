@@ -2,6 +2,9 @@
 <br>
 <% progress_log = @compare.status_trackers.pluck(:thread, :date, :level, :message).map{ |v| "["+v.join("][")+"]" }  %>
 <%= text_area_tag "",progress_log.join("\n"), cols: 100, rows: 15, disabled: true, class: "progress", style: 'resize: none; overflow-y: scroll;' %>
+<% errors_log = @compare.handler_errors.pluck(:model, :model_id, :tryes_left, :message).map{ |v| "["+v.join("][")+"]" }  %>
+<%= text_area_tag "",errors_log.join("\n"), cols: 100, rows: 15, disabled: true, class: "errors", style: 'resize: none; overflow-y: scroll;' %>
+
 
 <h2>Всего</h2>
 <div style="overflow-x:auto;">
@@ -51,6 +54,12 @@
 <div style="overflow-x:auto;">
  <%= render :partial => "status", :locals => { :status_hash => @ev.to_h } %>
 </div>
+
+<h2>Редактирование свойств коллекций</h2>
+<div style="overflow-x:auto;">
+ <%= render :partial => "status", :locals => { :status_hash => @ec.to_h } %>
+</div>
+
 <h2>Новые изображения</h2>
 <div style="overflow-x:auto;">
  <%= render :partial => "status", :locals => { :status_hash => @np.to_h } %>

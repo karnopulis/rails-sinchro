@@ -20,81 +20,104 @@ class Site < ApplicationRecord
         message = ApplicationController.new.view_context.render( :partial => "insales/add_collection.json.jbuilder", :locals => {:new_collection =>  collection})
         
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"collections.json"),message , self.site_login, self.site_pass)
-#        response={:id=>Random.new.rand(1..10000000),:status=>"ok"}
+        # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end
         return response
     end
     def add_Product_to_insales(product)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_product.json.jbuilder", :locals => {:new_offer =>  product})
         
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"products.json"),message , self.site_login, self.site_pass)
-#        response={:id=>Random.new.rand(1..10000000),:status=>"ok",:variants=>{:id=>Random.new.rand(1..10000000)}}
-
+        # response={:id=>Random.new.rand(1..10000000),:variants=>{:id=>Random.new.rand(1..10000000)},:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end
         return response
     end
     def add_Collect_to_insales(collect)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_collect.json.jbuilder", :locals => {:new_collect => collect})
         
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"collects.json"),message , self.site_login, self.site_pass)
-#        response={:id=>Random.new.rand(1..10000000),:status=>"ok"}
-
+        # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end
         return response
     end
     def add_Picture_to_insales(image)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_image.json.jbuilder", :locals => {:new_image =>  image})
         
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+image.original_offer_id+"/images.json"),message , self.site_login, self.site_pass)
-#        response=true
-
+        # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end
         return response
     end
     def edit_Product_to_insales(product)
         message = ApplicationController.new.view_context.render( :partial => "insales/edit_product.json.jbuilder", :locals => {:edit_offer =>  product})
-
         response = put_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+product.original_id.to_s+".json"),message , self.site_login, self.site_pass)
-#        response=true
-
+        # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end
         return response
     end
-    def edit_Collection_to_insales(collection)
+    def edit_collection_to_insales(collection)
+        puts collection.original_id
+        puts "http://"+self.url+"/admin/"+"collections/"+collection.original_id.to_s+".json"
         message = ApplicationController.new.view_context.render( :partial => "insales/edit_collection.json.jbuilder", :locals => {:edit_collection =>  collection})
 
-        response = put_to_url_json(URI("http://"+self.url+"/admin/"+"collections/"+collection.collection_original_id.to_s+".json"),message , self.site_login, self.site_pass)
+        response = put_to_url_json(URI("http://"+self.url+"/admin/"+"collections/"+collection.original_id.to_s+".json"),message , self.site_login, self.site_pass)
+        
         return response
     end
     def edit_Variants_to_insales(variants)
+        
         message = ApplicationController.new.view_context.render( :partial => "insales/edit_variants.json.jbuilder", :locals => {:edit_variants =>  variants})
 
        response = put_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+"variants_group_update.json"),message , self.site_login, self.site_pass)
-#        f=[]
-#        variants.each  { |v|  f << {"id"=>v.original_id,"status"=>"ok"} }
-#        return f
+        # f=[]
+        # variants.each  { |v|  f << {"id"=>v.original_id,"status"=>Random.new.rand(1..10)<4 ? "error" : "ok"} }
+        # return f
         return response
     end
      def delete_Product_from_insales(product)
-    
+#        puts "http://"+self.url+"/admin/"+"products/"+product.original_id.to_s+".json"
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"products/"+product.original_id.to_s+".json"), self.site_login, self.site_pass)
-#        response=true
+        # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end        
         return response
     end
      def delete_Picture_from_insales(image)
     
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"products/"+image.original_offer_id.to_s+"/images/"+image.original_id.to_s+".json"), self.site_login, self.site_pass)
-#        response=true
-
+        # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end
         return response
     end
     def delete_Collection_from_insales(collection)
     
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"collections/"+collection.collection_original_id.to_s+".json"), self.site_login, self.site_pass)
-#        response=true
-
+        # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end
         return response
     end
         def delete_Collect_from_insales(collect)
     
         response = delete_url_json( URI("http://"+self.url+"/admin/"+"collects/"+collect.collect_original_id.to_s+".json"), self.site_login, self.site_pass)
-#        response=true
-
+        # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
+        # if response[:status]=="error" 
+        #     response[:error] ="err" 
+        # end
         return response
     end
     def get_Collections_from_insales
@@ -171,7 +194,7 @@ class Site < ApplicationRecord
         }
         rescue Exception => exc
             puts exc.message
-            return nil
+            return {:status=>"error",:error=>exc.message}
         end
         r = resp.get_fields("api-usage-limit")
         if r
@@ -183,9 +206,9 @@ class Site < ApplicationRecord
         case resp
         when Net::HTTPOK
             puts (resp.code + " " + resp.message)
-            h=JSON.parse(resp.body)
-            puts h
-            return h
+            # h=JSON.parse(resp.body)
+            # puts h
+            return {:status =>"ok"}
             # if h["nil_classes"]
             #     return nil
             # else
@@ -195,6 +218,7 @@ class Site < ApplicationRecord
             puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
             puts h
+            return {:status=>"error",:error=>h.to_s}
             return nil
         end
     end
@@ -211,7 +235,7 @@ class Site < ApplicationRecord
         }
         rescue Exception => exc
             puts exc.message
-            return nil
+            return {:status=>"error",:error=>exc.message}
         end
         r = resp.get_fields("api-usage-limit")
         if r
@@ -224,7 +248,12 @@ class Site < ApplicationRecord
         when Net::HTTPCreated
             puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
-            puts h
+            if h.class==Class::Array
+                h
+            else
+                h[:status]="ok"
+            end
+#            puts h
             return h
             # if h["nil_classes"]
             #     return nil
@@ -235,7 +264,7 @@ class Site < ApplicationRecord
             puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
             puts h
-            return nil
+            return {:status=>"error",:error=>h.to_s}
         end
     end
     def put_to_url_json(uri,message,id,key )
@@ -251,7 +280,7 @@ class Site < ApplicationRecord
         }
         rescue Exception => exc
             puts exc.message
-            return nil
+            return {:status=>"error",:error=>exc.message}
         end
         r = resp.get_fields("api-usage-limit")
         if r
@@ -264,6 +293,13 @@ class Site < ApplicationRecord
         when Net::HTTPOK
             puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
+            # puts h
+            # puts h.class
+            if h.class==Class::Array
+                h
+            else
+                h[:status]="ok"
+            end
             puts h
             return h
             # if h["nil_classes"]
@@ -275,7 +311,7 @@ class Site < ApplicationRecord
             puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
             puts h
-            return nil
+            return {:status=>"error",:error=>h.to_s}
         end
     end
  

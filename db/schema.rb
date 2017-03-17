@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170221135454) do
+ActiveRecord::Schema.define(version: 20170317140804) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20170221135454) do
     t.integer  "compare_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "position"
     t.index ["compare_id"], name: "index_collect_imports_on_compare_id"
   end
 
@@ -41,6 +42,7 @@ ActiveRecord::Schema.define(version: 20170221135454) do
     t.integer  "compare_id"
     t.integer  "original_id"
     t.string   "flat"
+    t.integer  "position"
     t.index ["compare_id"], name: "index_collections_on_compare_id"
   end
 
@@ -65,6 +67,18 @@ ActiveRecord::Schema.define(version: 20170221135454) do
     t.integer  "global_parent_id"
     t.string   "state"
     t.index ["site_id"], name: "index_compares_on_site_id"
+  end
+
+  create_table "edit_collections", force: :cascade do |t|
+    t.string   "flat"
+    t.integer  "result_id"
+    t.integer  "position"
+    t.integer  "original_id"
+    t.string   "state"
+    t.string   "error"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["result_id"], name: "index_edit_collections_on_result_id"
   end
 
   create_table "edit_offers", force: :cascade do |t|
@@ -98,6 +112,17 @@ ActiveRecord::Schema.define(version: 20170221135454) do
     t.index ["result_id"], name: "index_edit_variants_on_result_id"
   end
 
+  create_table "handler_errors", force: :cascade do |t|
+    t.integer  "compare_id"
+    t.string   "model"
+    t.integer  "model_id"
+    t.string   "message"
+    t.integer  "tryes_left"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["compare_id"], name: "index_handler_errors_on_compare_id"
+  end
+
   create_table "insales", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -113,6 +138,7 @@ ActiveRecord::Schema.define(version: 20170221135454) do
     t.integer  "result_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "position"
     t.index ["new_parent_id"], name: "index_new_collections_on_new_parent_id"
     t.index ["result_id"], name: "index_new_collections_on_result_id"
   end
@@ -301,10 +327,12 @@ ActiveRecord::Schema.define(version: 20170221135454) do
     t.string   "quantity_field"
     t.string   "title_field"
     t.string   "csv_images_order"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.string   "home_ftp"
     t.string   "home_file_name"
+    t.string   "site_collections_order"
+    t.string   "csv_collections_order"
   end
 
   create_table "status_trackers", force: :cascade do |t|

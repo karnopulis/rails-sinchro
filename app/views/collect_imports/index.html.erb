@@ -7,6 +7,7 @@
     <tr>
       <th>Название</th>
       <th>Путь</th>
+      <th>Порядок</th>
       <th>Количество артикулов</th>
  
     </tr>
@@ -17,6 +18,7 @@
       <tr>
         <td><%= collection_import.split(';').last %></td>
         <td><%= collection_import %></td>
+        <td><%= @collect_imports.where(:flat =>collection_import).last.position %></td>
         <td>
           <%= link_to([@collect_imports.where(:flat =>collection_import).first.compare.site,
                        @collect_imports.where(:flat =>collection_import).first]) do %>          

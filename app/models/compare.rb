@@ -17,6 +17,7 @@ class Compare < ApplicationRecord
     has_many :properties, dependent: :destroy
     
     has_many :status_trackers , dependent: :destroy
+    has_many :handler_errors , dependent: :destroy
 #    before_save :getData
     
 #    module Helpers
@@ -78,6 +79,8 @@ class Compare < ApplicationRecord
         new_collections,old_collections,old_collections_ids = compare_collections
         self.result.add_new_collections(new_collections)
         self.result.add_old_collections(old_collections)
+        edited_collections = compare_collections_props (old_collections_ids)
+        self.result.add_edit_collections(edited_collections)
         new_offers, old_offers, old_offers_ids = compare_offers_simple
         self.result.add_new_offers(new_offers)
         self.result.add_old_offers(old_offers, old_offers_ids)
@@ -133,6 +136,23 @@ class Compare < ApplicationRecord
         
         return edited_offers
     end
+        def compare_collections_props (old_collections)
+        imported = self.collect_imports.pluck("position","flat").uniq
+        current = self.collections.where.not("id" =>old_collections).pluck("position","flat").uniq
+        # current=[]
+        # self.offers.each do |o|  
+        #     var = o.variants.first
+        #     begin
+        #     current.push ( [o.scu, var.quantity, var.flat] ) if not old_offers.include? o.scu 
+        #     rescue Exception => exc
+        #         puts o.scu
+        #     end
+        # end
+        edited_collections = current- imported
+        puts "edited_collections " +edited_collections.count.to_s
+        return edited_collections
+    end
+    
     def compare_variants (old_offers)
         imported = self.variant_imports.pluck("scu","quantity","pric_flat").uniq
         puts "self.variants"
@@ -281,8 +301,7 @@ class Compare < ApplicationRecord
         VariantImport.import import
         self.status_trackers.add("INFO","1с FTP Свойств товаров загружено: "+import.size.to_s)
         import.clear
-        collections = csv.values_at(*self.site.scu_field,
-                                    *self.site.csv_collection_order.split(",")).uniq
+        collections = csv.values_at(*self.site.scu_field, *self.site.csv_collection_order.split(",")).uniq
 
         import = CollectImport.create_collects(collections,self)
         CollectImport.import import

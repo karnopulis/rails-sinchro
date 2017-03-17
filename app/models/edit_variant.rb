@@ -32,6 +32,8 @@ class EditVariant < ApplicationRecord
                         EditVariant.apply_bulk(slice,compare.result)
                     rescue Exception => exc
                         logger.error exc.message
+                        logger.error exc.backtrace
+
                     end
                  end  
   
@@ -46,15 +48,34 @@ class EditVariant < ApplicationRecord
     
      def self.apply_bulk(variants,result)
          res = result.compare.site.edit_Variants_to_insales(variants)
+#         puts res
          errors = res.select {|r| r["status"]!="ok"}
 
          success = res.select {|r| r["status"]=="ok"}
          succ= success.map{ |m| m["id"] }
          result.edit_variants.where(:original_id => succ).update_all(:state =>"completed")
-         EditVariant.error_handler(errors)
+         err= errors.map{ |m| m["id"] }
+         result.edit_variants.where(:original_id => err).update_all(:state =>"error")
+
+#         EditVariant.error_handler(errors,result)
      
     end
-      def self.error_handler(errors)
-          
-      end
+    def apply
+        puts self 
+        variants=[]
+        variants << self
+        puts variants
+        EditVariant.apply_bulk(variants, self.result)
+    end
+    def self.error_handler(errors,result)
+        handler_errors=[]
+        errors.each do |he|
+            puts he
+            ev =  result.edit_variants.find_by original_id: he["id"]
+            puts ev.id
+            handler_errors << HandlerError.create_new_no_save("edit_variants",ev.id,he["errors"].to_s)
+            handler_errors.last.compare = result.compare 
+        end
+        HandlerError.import handler_errors
+    end
 end

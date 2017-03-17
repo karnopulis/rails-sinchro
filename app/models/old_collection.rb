@@ -22,8 +22,13 @@ class OldCollection < ApplicationRecord
                  num =where(:id => list.pluck("id") ).update_all(state: "active")
                  compare.status_trackers.add("DEBUG",num) 
                  list.each do|nc|
-                     nc.apply
-                 end 
+                    begin
+                         nc.apply
+                    rescue Exception => exc
+                        logger.error exc.message
+                        logger.error exc.backtrace
+                    end
+                 end  
                  parent_ids = list.pluck(:old_collection_id).uniq.compact
                 #  puts parent_ids
                  parent_ids.each do |pi|
@@ -46,17 +51,27 @@ class OldCollection < ApplicationRecord
   
   def apply
      result = self.result.compare.site.delete_Collection_from_insales(self)
-     if result 
+     if result[:status]=="ok" 
          self.state="completed"
          self.save
-     else
-         self.state="error"
-         self.save
-         self.error_handler
+#         puts result
+         return nil
+     else if  self.state=="error"
+              return result[:error]
+          else 
+             self.state="error"
+             self.save
+            #  if eh.nil?
+            #     self.result.compare.status_trackers.add("DEBUG","Запуск обработчика ошибок добавления коллекций") 
+            #     eh = Spawnling.new do
+                    self.error_handler( result[:error] )
+            #     end
+            # end
+        end
      end
   end
-  def error_handler
-      
+  def error_handler(error)
+      self.result.compare.handler_errors << HandlerError.create_new("old_collections",self.id,error)
   end
   def update_listing
  #    self.result.old_collections.where(:old_collection =>self.id).update_all(:state=>"listing")

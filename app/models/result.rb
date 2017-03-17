@@ -8,6 +8,7 @@ class Result < ApplicationRecord
   has_many :old_offers, dependent: :delete_all
   has_many :edit_offers, dependent: :delete_all
   has_many :edit_variants, dependent: :delete_all
+  has_many :edit_collections, dependent: :delete_all
   has_many :new_pictures, dependent: :delete_all
   has_many :old_pictures, dependent: :delete_all
 
@@ -32,24 +33,50 @@ class Result < ApplicationRecord
  def apply
      self.compare.status_trackers.add("INFO","Запуск процесса внесения изменений") 
      return "beware!" if validate_before_apply.nil?
-     
-     self.new_collects.cicle(self.compare)
-     self.old_collects.cicle(self.compare)
-     self.new_collections.cicle(self.compare)
-     self.old_collections.cicle(self.compare)
-     self.new_offers.cicle(self.compare)
-     self.old_offers.cicle(self.compare)
-     self.edit_offers.cicle(self.compare)
-     self.edit_variants.cicle(self.compare)
-     self.new_pictures.cicle(self.compare)
-     self.old_pictures.cicle(self.compare)
-
-     puts Process.waitall
+     pid_errors = Spawnling.new do
+        HandlerError.cicle(self.compare,false)
+     end
+    self.cicle
+    compare.status_trackers.add("DEBUG","Окончание прямого процесса")
+    loop do
+        if  self.compare.handler_errors.where( "tryes_left > 0").size == 0 
+            puts pid_errors.handle
+            Process.kill("HUP",pid_errors.handle)
+            compare.status_trackers.add("DEBUG","Окончание процесса обработчика ошибок")
+            break
+        end
+        sleep 10
+    end
+     if self.compare.handler_errors.size > 0 
+         self.cicle
+     end
      c =self.compare
      c.name= self.compare.name + " "+ Time.now.to_formatted_s(:time) if c.name
      c.save
      self.compare.status_trackers.add("INFO","Завершение процесса внесения изменений") 
 
+ end
+ 
+ 
+ def cicle
+    pid_main = Spawnling.new do    
+         self.new_collects.cicle(self.compare)
+         self.old_collects.cicle(self.compare)
+         self.new_collections.cicle(self.compare)
+         self.old_collections.cicle(self.compare)
+         self.edit_collections.cicle(self.compare)
+
+         self.new_offers.cicle(self.compare)
+         self.old_offers.cicle(self.compare)
+         self.edit_offers.cicle(self.compare)
+         self.edit_variants.cicle(self.compare)
+         self.new_pictures.cicle(self.compare)
+         self.old_pictures.cicle(self.compare)
+    
+         puts Process.waitall
+    end 
+    Spawnling.wait(pid_main) 
+    
  end
   
  def add_new_images (edited_images)
@@ -139,7 +166,7 @@ class Result < ApplicationRecord
         if oo.include? off.scu 
             oo_scu = off.scu
         else
-            puts item
+#            puts item
             oo_scu = off.scu.to_s
             oo_scu+=" DUPLICATE" 
         end
@@ -157,10 +184,11 @@ class Result < ApplicationRecord
       title = parent_flat_arr.pop
       parent_flat =parent_flat_arr.join(';')+";"
       parent = self.compare.collections.find_by flat: parent_flat
+      current = self.compare.collect_imports.find_by flat: item
       if parent_flat_arr.size==0
           state="listing"
-          puts "+============================"
-          puts self.compare.global_parent_id
+#          puts "+============================"
+#          puts self.compare.global_parent_id
           parent_id =self.compare.global_parent_id
       else
           if parent
@@ -171,7 +199,7 @@ class Result < ApplicationRecord
             parent_new = self.new_collections.find_by collection_flat: parent_flat 
           end
       end
-      self.new_collections << NewCollection.create_new(item, parent_id ,parent_new, title, state)
+      self.new_collections << NewCollection.create_new(item, parent_id ,parent_new, title, current.position, state)
     #   new_collections.last.result=self
     end
     # new_collections.each do |c|
@@ -191,13 +219,13 @@ class Result < ApplicationRecord
       title = parent_flat.pop
       parent_flat =parent_flat.join(';')+";"
       parent_new = self.old_collections.find_by collection_flat: parent_flat 
-      puts parent_new.try(:attributes)
+#      puts parent_new.try(:attributes)
       if nc.select { |s| s.include?(item) }.size> 1
         state="waiting"    
       else
         state="listing"   
       end
-      puts "==========================="
+#      puts "==========================="
       self.old_collections << OldCollection.create_new(item,current.try(:original_id),parent_new.try(:id),state)
 #      old_collections.last.result=self
     end
@@ -238,14 +266,15 @@ class Result < ApplicationRecord
     OldCollect.import old_collects
   end
   
-  def edit_Collection_temp
-      ec=[]
-      self.compare.collections.each do |e|
+  def add_edit_collections(ec)
+      edit_collections=[]
+      ec.each do |e|
           oc =OldCollection.new
-          oc.collection_original_id=e.original_id
-          self.compare.site.edit_Collection_to_insales(oc)
-          
+          orig = self.compare.collections.where(:flat => e[1]).pluck(:original_id).first
+          pos = self.compare.collect_imports.where(:flat => e[1]).first.position
+          edit_collections << EditCollection.create_new(e[1],pos,orig,self) if pos          
       end
+     EditCollection.import edit_collections 
   end
   
 end

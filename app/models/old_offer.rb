@@ -20,7 +20,12 @@ class OldOffer < ApplicationRecord
                  num =where(:id => list.pluck("id") ).update_all(state: "active")
                  compare.status_trackers.add("DEBUG",num) 
                  list.each do|nc|
-                     nc.apply
+                    begin
+                         nc.apply
+                    rescue Exception => exc
+                        logger.error exc.message
+                        logger.error exc.backtrace
+                    end
                  end  
   
                 old_offers = where(:state => "listing" )
@@ -33,16 +38,28 @@ class OldOffer < ApplicationRecord
 
    def apply
      result = self.result.compare.site.delete_Product_from_insales(self)
-     if result 
+     puts self.to_s
+     puts result    
+     if result[:status]=="ok" 
          self.state="completed"
          self.save
-     else
-         self.state="error"
-         self.save
-         self.error_handler
+#         puts result
+         return nil
+     else if  self.state=="error"
+              return result[:error]
+          else 
+             self.state="error"
+             self.save
+            #  if eh.nil?
+            #     self.result.compare.status_trackers.add("DEBUG","Запуск обработчика ошибок добавления коллекций") 
+            #     eh = Spawnling.new do
+                    self.error_handler( result[:error] )
+            #     end
+            # end
+        end
      end
   end
-  def error_handler
-      
+  def error_handler(error)
+      self.result.compare.handler_errors << HandlerError.create_new("old_offers",self.id,error)
   end
 end

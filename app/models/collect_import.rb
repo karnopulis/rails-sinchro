@@ -12,7 +12,6 @@ class CollectImport < ApplicationRecord
     collections.each do |cc|
       
       rez =CollectImport.create_chain( cc )
-    
       result =result+rez if rez.size>0
     end
     
@@ -20,8 +19,10 @@ class CollectImport < ApplicationRecord
     
     
     ci_arr=[]
+    puts result.size
     result.each do |r|
-      ci_arr << CollectImport.create_new(r[0],r[1],compare)
+      
+      ci_arr << CollectImport.create_new(r,compare)
     end
     return ci_arr
     #return result
@@ -31,9 +32,11 @@ class CollectImport < ApplicationRecord
     rez=[]
 #    colls =row.to_hash.extract!(*csv_collection_order).compact.values
      colls =row[1..100].compact
+     puts colls
     begin
         if colls
-            rez << [row[0],colls.join(";")] 
+            rez.push( [row[0],*colls] ) 
+#            puts [row[0],colls] 
             colls.pop
         else 
             return rez
@@ -42,10 +45,13 @@ class CollectImport < ApplicationRecord
     return rez
   end
  
-  def self.create_new(scu,arr,compare) 
+  def self.create_new(arr,compare) 
     ci = self.new
-    ci.scu =scu
-    ci.flat=arr+";"
+    ci.scu =arr[0]
+#    puts scu
+#    puts arr.join("f")
+    ci.position=arr.last.split("|").try(:second).try(:to_i)
+    ci.flat=arr[1...100].map{|v| v.split("|").first }.compact.join(";")+";"
     ci.compare=compare
     return ci
   end
