@@ -37,6 +37,7 @@ class Compare < ApplicationRecord
           self.offer_imports.delete_all
           self.properties.delete_all
           self.status_trackers.delete_all
+          self.handler_errors.delete_all
           self.result.destroy if self.result
           self.delete
           return self

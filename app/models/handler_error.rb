@@ -26,21 +26,21 @@ def self.create_new(model,model_id,message)
             loop do 
                 
                 errors = compare.handler_errors.where.not(:tryes_left=> 0 )
-                logger.error errors.size
-                logger.error term
+#                logger.error errors.size
+#                logger.error term
                 errors.each do |e|
 #                    puts e.model
                    obj = compare.result.try(e.model).find(e.model_id) 
                    result = obj.apply
                    if result 
-                       logger.error e.model
-                       logger.error e.model_id
+#                       logger.error e.model
+#                       logger.error e.model_id
 
-                       logger.error result
+                       #logger.error result
                        e.message= e.message + "|" + result 
-                       logger.error e.message
+                       #logger.error e.message
                        
-                       logger.error "-- -- - -- -- - - - --"
+                       #logger.error "-- -- - -- -- - - - --"
                        e.tryes_left-=1
                        e.save
                       if e.tryes_left == 0
