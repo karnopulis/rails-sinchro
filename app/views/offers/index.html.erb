@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing offers</h1>
-
+<%= paginate @offers %>
 <table>
   <thead>
     <tr>
@@ -34,7 +34,7 @@
     <% end %>
   </tbody>
 </table>
-
+<%= paginate @offers %>
 <br>
 
 <%= link_to 'New offer',  new_site_offer_path(:compare => params[:compare]) %>

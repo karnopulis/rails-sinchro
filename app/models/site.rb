@@ -48,7 +48,7 @@ class Site < ApplicationRecord
     end
     def add_Picture_to_insales(image)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_image.json.jbuilder", :locals => {:new_image =>  image})
-        
+        puts "http://"+self.url+"/admin/"+"products/"+image.original_offer_id+"/images.json"
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+image.original_offer_id+"/images.json"),message , self.site_login, self.site_pass)
         # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
         # if response[:status]=="error" 

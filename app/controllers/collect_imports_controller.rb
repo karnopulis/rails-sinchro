@@ -10,10 +10,10 @@ class CollectImportsController < ApplicationController
     com_id= params[:compare]
     if com_id 
       @collect_imports = Compare.find(com_id).collect_imports.where(params[:compare])
-      @collection_imports = @collect_imports.pluck("flat").uniq.sort!
+      @collection_imports = Kaminari.paginate_array(@collect_imports.pluck("flat").uniq.sort!).page(params[:page]).per(50)
     else
       @collect_imports = CollectImport.all
-      @collection_imports = @collect_imports.pluck("flat").uniq.sort!
+      @collection_imports =Kaminari.paginate_array( @collect_imports.pluck("flat").uniq.sort!).page(params[:page]).per(50)
     end
 
   end

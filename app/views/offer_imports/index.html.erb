@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Offer Imports</h1>
-
+<%= paginate @offer_imports %>
 <table>
   <thead>
     <tr>
@@ -33,6 +33,7 @@
     <% end %>
   </tbody>
 </table>
+<%= paginate @offer_imports %>
 
 <br>
 

@@ -33,11 +33,11 @@ def self.create_new(model,model_id,message)
                    obj = compare.result.try(e.model).find(e.model_id) 
                    result = obj.apply
                    if result 
-#                       logger.error e.model
-#                       logger.error e.model_id
+                       logger.error e.model
+                       logger.error e.model_id
 
                        #logger.error result
-                       e.message= e.message + "|" + result 
+                       e.message= e.message + "|" + result.to_s if result.try(to_s)
                        #logger.error e.message
                        
                        #logger.error "-- -- - -- -- - - - --"

@@ -43,7 +43,7 @@ class OldCollect < ApplicationRecord
      if result[:status]=="ok" 
          self.state="completed"
          self.save
-         self.update_listing(result["id"])
+#         self.update_listing(result["id"])
 #         puts result
          return nil
      else if  self.state=="error"

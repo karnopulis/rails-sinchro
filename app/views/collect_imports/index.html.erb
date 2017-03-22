@@ -1,6 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Collect Imports</h1>
+<%= paginate @collection_imports %>
 
 <table>
   <thead>
@@ -30,6 +31,7 @@
     <% end %>
   </tbody>
 </table>
+<%= paginate @collection_imports %>
 
 <br>
 
