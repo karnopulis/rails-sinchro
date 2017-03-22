@@ -37,7 +37,7 @@ def self.create_new(model,model_id,message)
                        logger.error e.model_id
 
                        #logger.error result
-                       e.message= e.message + "|" + result.to_s if result.try(to_s)
+                       e.message= e.message + "|" + result.to_s 
                        #logger.error e.message
                        
                        #logger.error "-- -- - -- -- - - - --"
