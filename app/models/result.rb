@@ -79,26 +79,30 @@ class Result < ApplicationRecord
     
  end
   
- def add_new_images (edited_images)
+ def add_new_images (new_images)
    new_pictures=[]
-   edited_images.each do |e| 
-     poid= self.compare.offers.where(:scu => e[0]).first.original_id
-     imgs= self.compare.offer_imports.where(:scu => e[0]).first.picture_imports
-     imgs.each do |pi|
-        new_pictures << NewPicture.create_new(e[0],poid,pi.url,pi.position,self,nil)
-     end
+   new_images.each do |e| 
+     po= self.compare.offers.where(:scu => e[0]).first
+     pi =self.compare.offer_imports.includes(:picture_imports).references(:picture_imports).where("picture_imports.filename" => e[1]).pluck("picture_imports.url","picture_imports.position").flatten
+    #  imgs= self.compare.offer_imports.where(:scu => e[0]).first.picture_imports
+    #  imgs.each do |pi|
+        new_pictures << NewPicture.create_new(e[0],po.original_id,pi[0],pi[1],self,nil)
+#        puts new_pictures.last.attributes
+    #  end
      
    end
+   
    NewPicture.import new_pictures
  end
  
- def add_old_images (edited_images)
+ def add_old_images (old_images)
    old_pictures=[]
-   edited_images.each do |e|
-    self.compare.offers.where("scu" => e[0]).first.pictures.each do |p|
-      old_pictures << OldPicture.create_new(e[0],p.original_id,p.offer.original_id)
+   old_images.each do |e|
+      of = self.compare.offers.where(:scu => e[0]).first
+ #     puts e
+      p = of.pictures.where(:filename => e[1]).where(:position => e[2]).first
+      old_pictures << OldPicture.create_new(e[0],p.original_id,p.offer.original_id,e[2])
       old_pictures.last.result=self
-    end
     
    end
    OldPicture.import old_pictures

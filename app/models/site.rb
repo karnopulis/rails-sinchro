@@ -326,7 +326,7 @@ class Site < ApplicationRecord
             
         }
         rescue Exception => exc
-             self.status_trackers.add("ERROR"+"Get from insales" +exc.message + uri.path)
+             self.compares.last.status_trackers.add("ERROR"+"Get from insales" +exc.message + uri.path)
             return nil
         end
         r = resp.get_fields("api-usage-limit")
@@ -346,7 +346,7 @@ class Site < ApplicationRecord
             end
         when Net::HTTPClientError, Net::HTTPInternalServerError
             puts (resp.code + resp.message)
-            self.status_trackers.add("ERROR"+"Get from insales" +resp.code + resp.message+uri.path)
+            self.compares.last.status_trackers.add("ERROR"+"Get from insales" +resp.code + resp.message+uri.path)
             return nil
         end
     end
@@ -361,7 +361,7 @@ class Site < ApplicationRecord
         }
         rescue Exception => exc
             puts exc.message
-            self.status_trackers.add("ERROR"+"Get from FTP" +exc.message + uri.path)
+            self.compares.last.status_trackers.add("ERROR"+"Get from FTP" +exc.message + uri.path)
             return nil
         end
         case response

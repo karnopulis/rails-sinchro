@@ -6,6 +6,7 @@ class PictureImport < ApplicationRecord
         pi.url = url
         pi.offer_import=oi
         pi.scu=scu
+        pi.filename= url.split("/").last
         pi.position=pos
     return pi
   end

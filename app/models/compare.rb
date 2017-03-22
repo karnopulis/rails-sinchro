@@ -93,10 +93,10 @@ class Compare < ApplicationRecord
         edited_variants = compare_variants (old_offers_ids)
         self.result.add_edit_variants (edited_variants)
     
-         edited_images = compare_images(old_offers_ids)
+         new_images,old_images = compare_images(old_offers_ids)
     
-         self.result.add_new_images (edited_images)
-         self.result.add_old_images (edited_images)
+         self.result.add_new_images (new_images)
+         self.result.add_old_images (old_images)
         
         
         # puts self.name
@@ -176,16 +176,26 @@ class Compare < ApplicationRecord
         
     end
     def compare_images (old_offers)
-        imported = self.offer_imports.pluck("scu","image_status").uniq
-        current=[]
-        self.offers.each do |o|  
+        # imported = self.offer_imports.pluck("scu","image_status").uniq
+        # current=[]
+        # self.offers.each do |o|  
             
-            current.push ( [o.scu,o.image_status] ) if not old_offers.include? o.original_id 
-        end
-        edited_pictures = current- imported
-        puts "edited_images " +edited_pictures.count.to_s
-        
-        return edited_pictures
+        #     current.push ( [o.scu,o.image_status] ) if not old_offers.include? o.original_id 
+        # end
+        # edited_pictures = current- imported
+        # puts "edited_images " +edited_pictures.count.to_s
+        imported = self.offer_imports.includes(:picture_imports).references(:picture_imports).where.not("picture_imports.url" => nil).pluck("offer_imports.scu","picture_imports.filename","picture_imports.position")
+        current = self.offers.includes(:pictures).where.not("offers.id"=>old_offers).where.not("pictures.filename" => nil).pluck("offers.scu","pictures.filename","pictures.position")
+        # dubs = current.find_all { |e| current.count(e) > 1 }
+        # dubs1 = imported.find_all { |e| imported.count(e) > 1 }
+        # puts dubs 
+        # puts dubs1
+        new_pictures = imported - current
+        old_pictures = current - imported
+        puts "new_pictures: " + new_pictures.count.to_s
+        puts "old_pictures: " + old_pictures.count.to_s
+        puts "___________"
+        return new_pictures, old_pictures
         
     end
     def compare_collections

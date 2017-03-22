@@ -16,7 +16,9 @@ class Picture < ApplicationRecord
     def new_from_hash_products(h,offer,scu)
        self.url = h["original_url"]
        self.original_id = h["id"]
+       self.position=h["position"]
        self.scu=scu
+       self.filename= h["filename"]
        self.offer=offer
        return self
     end

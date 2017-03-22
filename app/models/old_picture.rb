@@ -1,10 +1,11 @@
 class OldPicture < ApplicationRecord
    belongs_to :result
-        def self.create_new (scu,original_id,original_offer_id)
+        def self.create_new (scu,original_id,original_offer_id,pos)
         op =OldPicture.new 
         op.scu= scu
         op.original_id = original_id
         op.original_offer_id =original_offer_id
+        op.position=pos
         op.state ="listing"
         op.error =nil
         return op

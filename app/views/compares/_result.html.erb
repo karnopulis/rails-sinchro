@@ -277,6 +277,7 @@
       <th>Артикул</th>
       <th>Путь</th>
       <th>ИД Артикула</th>
+      <th>Позиция</th>
       <th>Статус</th>
       <th>Ошибка</th>
  
@@ -289,6 +290,7 @@
         <td><%= elem.scu %></td>
         <td><%= elem.url %></td>
         <td><%= elem.original_offer_id %></td>
+        <td><%= elem.position %></td>
         <td><%= elem.state %></td>
         <td><%= elem.error %></td>
       </tr>
@@ -303,6 +305,7 @@
   <thead>
     <tr>
       <th>Артикул</th>
+      <th>Позиция</th>
       <th>ИД Артикула</th>
       <th>Статус</th>
       <th>Ошибка</th>
@@ -314,6 +317,7 @@
     <% @op.try(:each) do |elem| %>
       <tr>
         <td><%= elem.scu %></td>
+        <td><%= elem.position %></td>
         <td><%= elem.original_id %></td>
         <td><%= elem.state %></td>
         <td><%= elem.error %></td>

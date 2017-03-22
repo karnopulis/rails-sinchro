@@ -9,10 +9,10 @@ class OfferImportsController < ApplicationController
   def index
     com_id= params[:compare]
     if com_id 
-      @offer_imports = Compare.find(com_id).offer_imports.where(params[:compare]).page(params[:page]).per(50)
+      @offer_imports = Compare.find(com_id).offer_imports.where(params[:compare]).order(:scu).page(params[:page]).per(50)
       @variant_imports = Compare.find(com_id).variant_imports.where(params[:compare])
     else
-       @offer_imports = OfferImport.all.page(params[:page]).per(50)
+       @offer_imports = OfferImport.all.order(:scu).page(params[:page]).per(50)
        @variant_imports = OfferImport.all
     end
 
