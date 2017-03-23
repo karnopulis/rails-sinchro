@@ -82,6 +82,7 @@ class Result < ApplicationRecord
  def add_new_images (new_images)
    new_pictures=[]
    new_images.each do |e| 
+       puts e
      po= self.compare.offers.where(:scu => e[0]).first
      pi =self.compare.offer_imports.includes(:picture_imports).references(:picture_imports).where("picture_imports.filename" => e[1]).pluck("picture_imports.url","picture_imports.position").flatten
     #  imgs= self.compare.offer_imports.where(:scu => e[0]).first.picture_imports
