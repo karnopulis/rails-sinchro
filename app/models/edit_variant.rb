@@ -47,7 +47,7 @@ class EditVariant < ApplicationRecord
     
     
      def self.apply_bulk(variants,result)
-         res = result.compare.site.edit_Variants_to_insales(variants)
+         res = result.compare.site.edit_Variants_to_frontend(variants)
 #         puts res
          errors = res.select {|r| r["status"]!="ok"}
 

@@ -39,7 +39,7 @@ class OldCollect < ApplicationRecord
     end
   
   def apply
-     result = self.result.compare.site.delete_Collect_from_insales(self)
+     result = self.result.compare.site.delete_Collect_from_frontend(self)
      if result[:status]=="ok" 
          self.state="completed"
          self.save

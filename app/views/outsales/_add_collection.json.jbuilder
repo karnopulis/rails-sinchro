@@ -1,9 +1,6 @@
-json.collections do
-    json.array! new_collections do |nc|
-        json.collection do
-            json.sort_type 11
-            json.title nc.title
-            json.parent_id nc.parent_id
+ json.collection do
+            json.sort 1
+            json.title new_collection.title
+            json.parent new_collection.parent_id
+            json.position new_collection.position
         end
-    end
-end

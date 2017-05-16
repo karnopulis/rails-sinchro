@@ -1,9 +1,5 @@
-json.images do
-    json.array! new_images do |ni|
-        json.image do
-            json.src ni.url
-            json.position ni.position
-            json.product_id ni.original_offer_id
-        end
-    end
+json.image do
+            json.original_url new_image.url
+            json.position new_image.position
+            json.product_id new_image.original_offer_id
 end

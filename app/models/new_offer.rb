@@ -47,7 +47,7 @@ class NewOffer < ApplicationRecord
     end
   
   def apply
-     result = self.result.compare.site.add_Product_to_insales(self)
+     result = self.result.compare.site.add_Product_to_frontend(self)
 #     puts result
      if result[:status]=="ok" 
          self.state="completed"

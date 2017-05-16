@@ -32,7 +32,7 @@ class Result < ApplicationRecord
 
  def apply
      self.compare.status_trackers.add("INFO","Запуск процесса внесения изменений") 
-     return "beware!" if validate_before_apply.nil?
+#     return "beware!" if validate_before_apply.nil?
      pid_errors = Spawnling.new do
         HandlerError.cicle(self.compare,false)
      end
@@ -62,17 +62,17 @@ class Result < ApplicationRecord
     pid_main = Spawnling.new do    
          self.new_collects.cicle(self.compare)
          self.old_collects.cicle(self.compare)
-         self.new_collections.cicle(self.compare)
          self.old_collections.cicle(self.compare)
          self.edit_collections.cicle(self.compare)
 
-         self.new_offers.cicle(self.compare)
          self.old_offers.cicle(self.compare)
          self.edit_offers.cicle(self.compare)
          self.edit_variants.cicle(self.compare)
          self.new_pictures.cicle(self.compare)
          self.old_pictures.cicle(self.compare)
-    
+         self.new_offers.cicle(self.compare)
+         self.new_collections.cicle(self.compare)
+
          puts Process.waitall
     end 
     Spawnling.wait(pid_main) 
@@ -82,7 +82,7 @@ class Result < ApplicationRecord
  def add_new_images (new_images)
    new_pictures=[]
    new_images.each do |e| 
-       puts e
+#       puts e
      po= self.compare.offers.where(:scu => e[0]).first
      pi =self.compare.offer_imports.includes(:picture_imports).references(:picture_imports).where("picture_imports.filename" => e[1]).pluck("picture_imports.url","picture_imports.position").flatten
     #  imgs= self.compare.offer_imports.where(:scu => e[0]).first.picture_imports

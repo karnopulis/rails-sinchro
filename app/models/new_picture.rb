@@ -41,7 +41,7 @@ class NewPicture < ApplicationRecord
     end
     
     def apply
-     result = self.result.compare.site.add_Picture_to_insales(self)
+     result = self.result.compare.site.add_Picture_to_frontend(self)
      if result[:status]=="ok" 
          self.state="completed"
          self.save

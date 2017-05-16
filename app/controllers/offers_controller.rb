@@ -13,9 +13,9 @@ class OffersController < ApplicationController
   def index
     com_id= params[:compare]
     if com_id 
-      @offers = Compare.find(com_id).offers.where(params[:compare]).page(params[:page]).per(50)
+      @offers = Compare.find(com_id).offers.where(params[:compare]).order(:scu).page(params[:page]).per(50)
     else
-      @offers = Offer.all.page(params[:page]).per(50)
+      @offers = Offer.all.order(:scu).page(params[:page]).per(50)
     end
 
     

@@ -30,6 +30,7 @@ gem "activerecord-import"
 gem 'spawnling'
 gem 'whenever', :require => false
 gem 'kaminari'
+gem 'savon', '~> 2.11.0'
 
 
 

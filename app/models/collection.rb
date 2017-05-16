@@ -10,7 +10,12 @@ class Collection < ApplicationRecord
         top_level = h.select{|a| a["title"] == site_global_parent }
 #        puts top_level
 #        puts h.class
-        top_level = top_level[0]["id"].to_i if top_level
+        if top_level.empty?
+            StatusTracker.Add("FATAL","На сайте не найдена корневая рубрика",Compare.find(compare_id))
+            abort
+        else
+            top_level = top_level[0]["id"].to_i 
+        end
         # c= Compare.find(compare_id)
         # c.global_parent_id=top_level
         # c.save

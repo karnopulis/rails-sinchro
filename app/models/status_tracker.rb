@@ -11,4 +11,14 @@ class StatusTracker < ApplicationRecord
       st.save
         return st
   end
+  def self.Add(level,message,compare)
+      st=StatusTracker.new
+      st.date =Time.now.to_formatted_s(:db)
+#      st.compare=compare
+      st.message=message
+      st.level=level
+      st.thread = Process.pid
+      st.save
+        return st
+  end
 end

@@ -41,7 +41,7 @@ def self.cicle(compare)
     end
     
      def apply
-     result = self.result.compare.site.edit_collection_to_insales(self)
+     result = self.result.compare.site.edit_Collection_to_frontend(self)
      if result[:status]=="ok" 
          self.state="completed"
          self.save

@@ -44,13 +44,22 @@ class Compare < ApplicationRecord
      end
     
     def launch
-
             if self.site.compares.where(:state => "active" ).size ==0  
                 self.state="active"
                 self.save
-                self.getData
-                self.compareData
-                self.result.apply
+                case self.site.model
+                
+                when "insales"
+                    com=Insale.new(self.site.attributes).reload.compares.last
+
+                when "outsales"
+                    com=Outsale.new(self.site.attributes).reload.compares.last
+                else 
+                    com=Insale.new(self.site.attributes).reload.compares.last
+                end
+                com.getData
+                com.compareData
+                com.result.apply
                 self.state="inactive"
                 self.save
             else
@@ -187,7 +196,7 @@ class Compare < ApplicationRecord
         imported = self.offer_imports.includes(:picture_imports).references(
             :picture_imports).where.not("offer_imports.scu"=>new_offers).where.not(
                 "picture_imports.url" => nil).pluck("offer_imports.scu","picture_imports.filename","picture_imports.position")
-        current = self.offers.includes(:pictures).where.not("offers.id"=>old_offers).where.not(
+        current = self.offers.includes(:pictures).where.not("offers.original_id"=>old_offers).where.not(
             "pictures.filename" => nil).pluck("offers.scu","pictures.filename","pictures.position")
         # dubs = current.find_all { |e| current.count(e) > 1 }
         # dubs1 = imported.find_all { |e| imported.count(e) > 1 }
@@ -231,26 +240,26 @@ class Compare < ApplicationRecord
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
          pid = Spawnling.new do
-            self.status_trackers.add("INFO","1с FTP старт процесса загрузки")
+            self.status_trackers.add("INFO","1с старт процесса загрузки")
             import_csv = self.site.get_import_from_odin_ass()
             get_import( import_csv ) if import_csv
             puts import_csv.size if import_csv
-            self.status_trackers.add("INFO","1с FTP окончание процесса загрузки")
+            self.status_trackers.add("INFO","1с окончание процесса загрузки")
          end 
          self.status_trackers.add("INFO","Insales старт процесса загрузки")
-         categories_hash = self.site.get_Categories_from_insales
+         categories_hash = self.site.get_Categories_from_frontend
          if categories_hash
              getLastCategory(categories_hash)
          end
          self.status_trackers.add("INFO","Insales Категорий загружено: "+categories_hash.size.to_s)
-         properties_hash = self.site.get_Properties_from_insales
+         properties_hash = self.site.get_Properties_from_frontend
          if properties_hash
              getProperties(properties_hash)
          end
          self.status_trackers.add("INFO","Insales Параметров товаров  загружено: "+properties_hash.size.to_s)
 
          properties_hash=nil
-         collections_hash = self.site.get_Collections_from_insales
+         collections_hash = self.site.get_Collections_from_frontend
          if collections_hash
              getCollections(collections_hash)
              top_level = collections_hash.select{|a| a["title"] == self.site.site_global_parent }
@@ -259,17 +268,17 @@ class Compare < ApplicationRecord
              self.save
          end
          self.status_trackers.add("INFO","Insales Рубрик загружено: "+collections_hash.size.to_s)
-        # #  offers_hash = get_Offers_from_insales_marketplace
+        # #  offers_hash = get_Offers_from_frontend_marketplace
         # #  if offers_hash
         # #      getOffers_marketplace(offers_hash) 
         # #  end
         collections_hash=nil
         GC.start
-         self.site.get_Offers_from_insales_products(self)
+         self.site.get_Offers_from_frontend_products(self)
          puts "offers"
          puts self.offers.size
          self.status_trackers.add("INFO","Insales Товаров загружено: "+self.offers.size.to_s)
-         self.site.get_Collects_from_insales(self)
+         self.site.get_Collects_from_frontend(self)
          puts "collects"
          puts self.collects.size
          self.status_trackers.add("INFO","Insales Размещений продуктов загружено: "+self.collects.size.to_s)

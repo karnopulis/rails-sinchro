@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322141951) do
+ActiveRecord::Schema.define(version: 20170414090100) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -337,6 +337,10 @@ ActiveRecord::Schema.define(version: 20170322141951) do
     t.string   "home_file_name"
     t.string   "site_collections_order"
     t.string   "csv_collections_order"
+    t.string   "model"
+    t.string   "soap_login"
+    t.string   "soap_pass"
+    t.string   "soap_url"
   end
 
   create_table "status_trackers", force: :cascade do |t|

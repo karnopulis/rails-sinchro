@@ -50,7 +50,7 @@ class NewCollection < ApplicationRecord
     end
   
   def apply
-     result = self.result.compare.site.add_Collection_to_insales(self)
+     result = self.result.compare.site.add_Collection_to_frontend(self)
 #     eh=nil
      if result[:status]=="ok" 
          self.state="completed"
