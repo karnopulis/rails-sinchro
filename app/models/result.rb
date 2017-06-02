@@ -30,9 +30,12 @@ class Result < ApplicationRecord
      end 
  end
 
- def apply
+ def apply( ignore = false)
+    
      self.compare.status_trackers.add("INFO","Запуск процесса внесения изменений") 
-     return "beware!" if validate_before_apply.nil?
+     if ignore == false
+             return "beware!" if validate_before_apply.nil?
+     end
      pid_errors = Spawnling.new do
         HandlerError.cicle(self.compare,false)
      end

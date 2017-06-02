@@ -9,7 +9,7 @@ class Site < ApplicationRecord
         YAML.load_file("sites.yaml").each { |v|self.create!(v.attributes)}
     end
     def self.dev_dump
-        File.open("sites.yaml","w"){ |f| f.write(Site.last.to_yaml) }   
+        File.open("sites.yaml","w"){ |f| f.write(Site.all.to_yaml) }   
     end
     def self.users_dump
         File.open("users.yaml","w"){ |f| f.write(User.all.to_yaml) }   
