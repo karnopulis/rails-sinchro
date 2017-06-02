@@ -34,7 +34,10 @@ class Result < ApplicationRecord
     
      self.compare.status_trackers.add("INFO","Запуск процесса внесения изменений") 
      if ignore == false
-             return "beware!" if validate_before_apply.nil?
+              if validate_before_apply.nil?
+                  self.compare.state="Warning"
+                 return "beware" 
+              end
      end
      pid_errors = Spawnling.new do
         HandlerError.cicle(self.compare,false)

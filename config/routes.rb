@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   #devise_for :models
+  post 'compares/:id' => 'compares#ignore'
+
   devise_for :users,:skip => :registrations
   resources :sites do
       resources :compares
@@ -9,6 +11,7 @@ Rails.application.routes.draw do
       resources :offer_imports
       resources :collect_imports
   end
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

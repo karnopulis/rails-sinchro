@@ -47,16 +47,7 @@ class Compare < ApplicationRecord
             if self.site.compares.where(:state => "active" ).size ==0  
                 self.state="active"
                 self.save
-                case self.site.model
-                
-                when "insales"
-                    com=Insale.new(self.site.attributes).reload.compares.last
-
-                when "outsales"
-                    com=Outsale.new(self.site.attributes).reload.compares.last
-                else 
-                    com=Insale.new(self.site.attributes).reload.compares.last
-                end
+                com = self.get_model
                 com.getData
                 com.compareData
                 com.result.apply
@@ -69,6 +60,20 @@ class Compare < ApplicationRecord
             end
  
         
+    end
+    
+    def get_model
+        case self.site.model
+                
+                when "insales"
+                    com=Insale.new(self.site.attributes).reload.compares.last
+
+                when "outsales"
+                    com=Outsale.new(self.site.attributes).reload.compares.last
+                else 
+                    com=Insale.new(self.site.attributes).reload.compares.last
+                end
+        return com
     end
     
     def to_json

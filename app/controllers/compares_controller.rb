@@ -1,6 +1,6 @@
 #require 'pp'
 class ComparesController < ApplicationController
-  before_action :set_compare, only: [:show, :edit, :update, :destroy]
+  before_action :set_compare, only: [:show, :edit, :update, :destroy, :ignore]
   before_action :authenticate_user!, :except => :public
   # def after_sign_out_path_for(resource_or_scope)
   #   root_path
@@ -66,6 +66,10 @@ class ComparesController < ApplicationController
     
   end
 
+  def ignore
+    c= Compare.find(params[:id]).get_model
+    c.result.apply(true)
+  end
   # GET /compares/new
   def new
     @compare = Compare.new

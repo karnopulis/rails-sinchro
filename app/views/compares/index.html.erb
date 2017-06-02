@@ -18,7 +18,13 @@
   <tbody>
     <% @compares.each do |compare| %>
       <tr>
-        <td><%= compare.state %></td>
+        <td>
+          
+          <%= compare.state %>
+          <% if compare.state=="warning" %>
+        <%= link_to "Игнорировать",{controller: "compares",action: "ignore",id: compare.id}, { data: { confirm: "Вы уверены что хотите запустить обновления игнорируя проверки?" }, method: :post,remote: true, class: "btn btn-danger"}%>
+        <% end %>
+        </td>
         <td><%= compare.name %></td>
         <td>
           <%= link_to(site_offers_path( :compare=> compare.id)) do %>        
