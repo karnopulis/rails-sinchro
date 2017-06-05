@@ -36,6 +36,7 @@ class Result < ApplicationRecord
      if ignore == false
               if validate_before_apply.nil?
                   self.compare.state="Warning"
+                  self.compare.save
                  return "beware" 
               end
      end
