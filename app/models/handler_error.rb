@@ -5,7 +5,7 @@ def self.create_new(model,model_id,message)
       he=HandlerError.new
       he.model=model
       he.model_id=model_id
-      he.message=message
+      he.message=message.truncate(254)
       he.tryes_left =3
       he.save
       return he
