@@ -99,7 +99,7 @@ class Compare < ApplicationRecord
         new_offers, old_offers, old_offers_ids = compare_offers_simple
         self.result.add_new_offers(new_offers)
         self.result.add_old_offers(old_offers, old_offers_ids)
-        new_collects, old_collects = compare_collects(old_collections_ids)
+        new_collects, old_collects = compare_collects(old_collections_ids,old_offers)
         self.result.add_new_collects(new_collects)
         self.result.add_old_collects(old_collects)
         edited_offers = compare_offers_props (old_offers_ids)
@@ -227,10 +227,11 @@ class Compare < ApplicationRecord
         return new_collections, old_collections,old_collections_ids
     end
     
-    def compare_collects (old_collections_ids)
+    def compare_collects (old_collections_ids,old_offers)
+        old_offers_ids = self.offers.where(:scu => old_offers).ids
         imported = self.collect_imports.pluck("scu","flat").uniq
 #        current =self.collects.includes(:collection,:offer).pluck("offers.scu","collections.flat")
-        current =self.collects.includes(:collection,:offer).where.not("collection_id" =>old_collections_ids).pluck("offers.scu","collections.flat")
+        current =self.collects.includes(:collection,:offer).where.not("collection_id" =>old_collections_ids).where.not("offer_id" =>old_offers_ids).pluck("offers.scu","collections.flat")
         new_collects = imported-current
         old_collects = current-imported
         puts "new_collects: " + new_collects.count.to_s

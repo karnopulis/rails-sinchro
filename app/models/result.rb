@@ -272,6 +272,7 @@ class Result < ApplicationRecord
     oc.each do |item|
       col_id = self.compare.collects.includes(:collection,:offer).where("collections.flat=? and offers.scu=?",
                item[1],item[0]).references(:collection,:offer).pluck("collects.original_id")
+    
       old_collects << OldCollect.create_new(item,col_id.first)
       old_collects.last.result=self
     end
