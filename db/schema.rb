@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170414090100) do
+ActiveRecord::Schema.define(version: 20170609101231) do
 
   create_table "characteristics", force: :cascade do |t|
     t.integer  "original_id"
@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(version: 20170414090100) do
     t.string   "error"
     t.integer  "new_offer_id"
     t.integer  "position"
+    t.integer  "size"
     t.index ["new_offer_id"], name: "index_new_pictures_on_new_offer_id"
     t.index ["result_id"], name: "index_new_pictures_on_result_id"
   end
@@ -273,6 +274,7 @@ ActiveRecord::Schema.define(version: 20170414090100) do
     t.string   "scu"
     t.integer  "position"
     t.string   "filename"
+    t.integer  "size"
     t.index ["offer_import_id"], name: "index_picture_imports_on_offer_import_id"
   end
 
@@ -285,6 +287,7 @@ ActiveRecord::Schema.define(version: 20170414090100) do
     t.string   "scu"
     t.integer  "position"
     t.string   "filename"
+    t.integer  "size"
     t.index ["offer_id"], name: "index_pictures_on_offer_id"
   end
 

@@ -12,6 +12,8 @@ class Variant < ApplicationRecord
        #dd= v.keys.select { |d| d.to_s.start_with?('price') } 
        compare.site.site_variant_order.split(",").each do |k|
         p= Price.new
+#        puts k
+#        puts v[k]
         flat << v[k].to_s
         prices << p.new_price(k, v[k],v["sku"]) 
        end

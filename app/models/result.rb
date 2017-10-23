@@ -91,10 +91,10 @@ class Result < ApplicationRecord
    new_images.each do |e| 
 #       puts e
      po= self.compare.offers.where(:scu => e[0]).first
-     pi =self.compare.offer_imports.includes(:picture_imports).references(:picture_imports).where("picture_imports.filename" => e[1]).pluck("picture_imports.url","picture_imports.position").flatten
+     pi =self.compare.offer_imports.includes(:picture_imports).references(:picture_imports).where("picture_imports.filename" => e[1]).pluck("picture_imports.url","picture_imports.position","picture_imports.size").flatten
     #  imgs= self.compare.offer_imports.where(:scu => e[0]).first.picture_imports
     #  imgs.each do |pi|
-        new_pictures << NewPicture.create_new(e[0],po.original_id,pi[0],pi[1],self,nil)
+        new_pictures << NewPicture.create_new(e[0],po.original_id,pi[0],pi[1],pi[2],self,nil)
 #        puts new_pictures.last.attributes
     #  end
      
@@ -152,7 +152,7 @@ class Result < ApplicationRecord
                edit_offers << EditOffer.create_new(item,nil,off_import.prop_flat,off_import.title,off_import.sort_order,self,no)
                edit_variants << EditVariant.create_new(item,nil,var_import.pric_flat,var_import.quantity,self,no)
               off_import.picture_imports.each do |pi|
-                  new_pictures << NewPicture.create_new(item,nil,pi.url,pi.position,self,no)
+                  new_pictures << NewPicture.create_new(item,nil,pi.url,pi.position,pi.size,self,no)
               end
          end
          NewOffer.import new_offers

@@ -156,7 +156,6 @@ class Insale < Site
 #            get_Collections_from_frontend
             
             r = get_from_url(uri_page, self.site_login, self.site_pass)
-
             puts uri_page.to_s
             break if r == nil
  #           File.open("products"+i.to_s+".xml", "w") { |file| file.write r.to_xml}
@@ -174,7 +173,7 @@ class Insale < Site
             i+=1
 #            puts h.class
         end
-#        return h
+        
     end
     def delete_url_json(uri,id,key )
         req  = Net::HTTP::Delete.new(uri.request_uri)

@@ -19,6 +19,7 @@ class Picture < ApplicationRecord
        self.position=h["position"]
        self.scu=scu
        self.filename= h["filename"]
+       self.size=h["size"]
        self.offer=offer
        return self
     end

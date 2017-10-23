@@ -21,7 +21,7 @@
         <td>
           
           <%= compare.state %>
-          <% if compare.state=="warning" %>
+          <% if compare.state=="Warning" %>
         <%= link_to "Игнорировать",{controller: "compares",action: "ignore",id: compare.id}, { data: { confirm: "Вы уверены что хотите запустить обновления игнорируя проверки?" }, method: :post,remote: true, class: "btn btn-danger"}%>
         <% end %>
         </td>

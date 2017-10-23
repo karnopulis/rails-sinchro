@@ -1,7 +1,7 @@
 class NewPicture < ApplicationRecord
   belongs_to :result   
   belongs_to :new_offer
-    def self.create_new(scu,original_id,url,pos,result,no)
+    def self.create_new(scu,original_id,url,pos,size,result,no)
         np =NewPicture.new 
         np.scu= scu
         np.original_offer_id = original_id
@@ -9,6 +9,7 @@ class NewPicture < ApplicationRecord
         np.position=pos
         np.result=result
         np.new_offer=no
+        np.size=size
         no==nil ? np.state="listing" : np.state="waiting" 
         np.error =nil
         return np

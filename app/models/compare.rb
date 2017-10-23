@@ -50,9 +50,11 @@ class Compare < ApplicationRecord
                 com = self.get_model
                 com.getData
                 com.compareData
-                com.result.apply
-                self.state="inactive"
-                self.save
+                rez = com.result.apply
+                if rez != "beware"
+                    self.state="inactive"
+                    self.save
+                end
             else
                  self.status_trackers.add("FATAL","Запуск отменен. Другая синхронизация имееет активный статус ")
                  self.state="canceled"
@@ -67,7 +69,6 @@ class Compare < ApplicationRecord
                 
                 when "insales"
                     com=Insale.new(self.site.attributes).reload.compares.last
-
                 when "outsales"
                     com=Outsale.new(self.site.attributes).reload.compares.last
                 else 
@@ -200,9 +201,9 @@ class Compare < ApplicationRecord
         # puts "edited_images " +edited_pictures.count.to_s
         imported = self.offer_imports.includes(:picture_imports).references(
             :picture_imports).where.not("offer_imports.scu"=>new_offers).where.not(
-                "picture_imports.url" => nil).pluck("offer_imports.scu","picture_imports.filename","picture_imports.position")
+                "picture_imports.url" => nil).pluck("offer_imports.scu","picture_imports.filename","picture_imports.position","picture_imports.size")
         current = self.offers.includes(:pictures).where.not("offers.original_id"=>old_offers).where.not(
-            "pictures.filename" => nil).pluck("offers.scu","pictures.filename","pictures.position")
+            "pictures.filename" => nil).pluck("offers.scu","pictures.filename","pictures.position","pictures.size")
         # dubs = current.find_all { |e| current.count(e) > 1 }
         # dubs1 = imported.find_all { |e| imported.count(e) > 1 }
         # puts dubs 
@@ -351,6 +352,7 @@ class Compare < ApplicationRecord
        }
    end
     def getOffers_products(h)
+        
         h.each_slice(400) do |slice|
             offers=[]
             characteristics=[]
@@ -358,7 +360,6 @@ class Compare < ApplicationRecord
             pictures=[]
             prices=[]
             slice.each do |item|
-  
                    o = Offer.new()
                    o.compare=self
 
@@ -383,7 +384,11 @@ class Compare < ApplicationRecord
             keys= variants.map(&:sku)
             no_ids = Variant.where(:compare=>self,:sku=>keys).pluck(:sku,:id).to_h
             prices.each { |n| n.variant_id= no_ids[n.sku] }
+            puts "--------------"
+            prices.each {|n| puts n.attributes }
             Price.import prices
+            puts "++++++++++++++"
+
             offers.clear
             characteristics.clear
             variants.clear
