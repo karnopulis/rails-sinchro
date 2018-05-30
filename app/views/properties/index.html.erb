@@ -16,9 +16,9 @@
       <tr>
         <td><%= property.title %></td>
         <td><%= property.characteristics.pluck("title").uniq.join("; ") %></td>
-        <td><%= link_to 'Show', property %></td>
-        <td><%= link_to 'Edit', edit_property_path(property) %></td>
-        <td><%= link_to 'Destroy', property, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     <% end %>
   </tbody>
