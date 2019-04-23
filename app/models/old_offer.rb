@@ -11,7 +11,7 @@ class OldOffer < ApplicationRecord
       return nc
   end
    def self.cicle(compare)
-        pid = Spawnling.new do
+        # pid = Spawnling.new do
             compare.status_trackers.add("DEBUG","Запуск процесса удаления продуктов") 
 
             loop do 
@@ -33,7 +33,7 @@ class OldOffer < ApplicationRecord
             end
             compare.status_trackers.add("DEBUG","Окончание процесса удаления продуктов") 
 
-        end    
+        # end    
     end
 
    def apply

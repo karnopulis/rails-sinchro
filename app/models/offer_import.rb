@@ -16,6 +16,13 @@ class OfferImport < ApplicationRecord
 
          oi.image_status=""
          oi.image_status = row[3].split("/").last+";" if not row[3]==nil
+        #  kostil=nil
+        #  row[5]=nil if row[3]==nil
+        #  if  row[5]!=nil && row[5]="есть"
+        #      yura_suka = row[3].split(".")
+        #      yura_suka[yura_suka.size-1] = "back."+yura_suka.last
+        #      kostil=yura_suka.join(".")
+        #  end
          oi.image_status += row[5].split("/").last+";" if not row[5]==nil
 #         puts oi.image_status
          pi << PictureImport.create_new(row[3],oi,row[0],1,row[4])  if not row[3]==nil

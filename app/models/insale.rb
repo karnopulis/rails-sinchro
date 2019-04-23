@@ -417,7 +417,9 @@ class Insale < Site
             return h
         rescue Exception => exc
                 puts exc.message
-                self.compares.last.status_trackers.add("ERROR","Get from SOAP " +exc.message )
+                self.compares.last.status_trackers.add("ERROR","Get from SOAP " +exc.message.encode(Encoding::UTF_8, Encoding::UTF_8, {   :invalid => :replace,
+                                                                                :undef   => :replace,
+                                                                                :replace => '?'}) )
                 return nil
         end
     end
