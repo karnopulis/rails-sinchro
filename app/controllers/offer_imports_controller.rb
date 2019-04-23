@@ -1,6 +1,6 @@
 class OfferImportsController < ApplicationController
   before_action :set_offer_import, only: [:show, :edit, :update, :destroy]
-  before_filter :authenticate_user!, :except => :public
+  before_action :authenticate_user!, :except => :public
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
