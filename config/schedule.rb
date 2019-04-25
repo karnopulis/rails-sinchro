@@ -22,5 +22,5 @@
 #    runner  "Site.where(:name => 'horosho-gk.ru').first.compares.new(:name => 'Автоматическая').launch"
 # end
 every 3.hours do
-   runner  "Site.where(:name => 'horosho-ufa.ru').first.compares.new(:name => 'Автоматическая').launch"
+   runner  "Site.where(:name => 'horosho-ufa.ru').first.compares.new(:name => 'auto').launch"
 end
