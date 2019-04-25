@@ -18,9 +18,9 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-every 2.hours do
-   runner  "Site.where(:name => 'horosho-gk.ru').first.compares.new(:name => 'Автоматическая').launch"
-end
+# every 2.hours do
+#    runner  "Site.where(:name => 'horosho-gk.ru').first.compares.new(:name => 'Автоматическая').launch"
+# end
 every 3.hours do
    runner  "Site.where(:name => 'horosho-ufa.ru').first.compares.new(:name => 'Автоматическая').launch"
 end
