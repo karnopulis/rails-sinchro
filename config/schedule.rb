@@ -4,7 +4,7 @@
 # http://en.wikipedia.org/wiki/Cron
 
 # Example:
-#
+ job_type :runner,  "cd :path && RAILS_ENV=production /home/sed/.rbenv/shims/rails runner  ':task' :output"
  set :output, "~/rails-sinchro/log/cron_log.log"
 #
 # every 2.hours do
@@ -23,4 +23,10 @@
 # end
 every 3.hours do
    runner  "Site.where(:name => 'horosho-ufa.ru').first.compares.new(:name => 'auto').launch"
+end
+every 1.day, at: '1:00 am' do
+     runner "Compare.where(:updated_at=>(1.year.ago..5.days.ago)).destroy_all"
+end
+every 1.day, at: '1:30 am' do
+     runner "ActiveRecord::Base.connection.execute('VACUUM')"
 end
