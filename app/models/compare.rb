@@ -78,7 +78,7 @@ class Compare < ApplicationRecord
     end
     
     def to_json
-        puts self.attributes
+        # puts self.attributes
         ApplicationController.new.view_context.render( template: "compares/show.json.jbuilder", locals: {"compare" =>  self})
 #           ,
 # #          locals: { self.class.model_name.element => self },
@@ -131,9 +131,9 @@ class Compare < ApplicationRecord
         dubs.uniq.each do |d|
             old_offers_ids<< self.offers.where(:scu => d).pluck("original_id").drop(1)
         end
-        puts "new offers " + new_offers.count.to_s
-        puts "_____________"
-        puts "old offers " + old_offers.count.to_s
+        # puts "new offers " + new_offers.count.to_s
+        # puts "_____________"
+        # puts "old offers " + old_offers.count.to_s
         return new_offers, old_offers, old_offers_ids.flatten
     end
     def compare_offers_props (old_offers)
@@ -148,7 +148,7 @@ class Compare < ApplicationRecord
 #             current.push ( [o.scu,o.title,o.sort_weight,o.flat] ) if not old_offers.include? o.original_id 
 #         end
         edited_offers = current- imported
-        puts "edited offers " + edited_offers.count.to_s
+        # puts "edited offers " + edited_offers.count.to_s
         
         return edited_offers
     end
@@ -165,14 +165,14 @@ class Compare < ApplicationRecord
         #     end
         # end
         edited_collections = current- imported
-        puts "edited_collections " +edited_collections.count.to_s
+        # puts "edited_collections " +edited_collections.count.to_s
         return edited_collections
     end
     
     def compare_variants (old_offers)
         imported = self.variant_imports.pluck("scu","quantity","pric_flat").uniq
-        puts "self.variants"
-        puts self.variants.size
+        # puts "self.variants"
+        # puts self.variants.size
         current = self.variants.includes(:offer).where.not("offers.original_id" =>old_offers).pluck("variants.sku","variants.quantity","variants.flat").uniq
         
         # current=[]
@@ -185,7 +185,7 @@ class Compare < ApplicationRecord
         #     end
         # end
         edited_variants = current- imported
-        puts "edited_variants " +edited_variants.count.to_s
+        # puts "edited_variants " +edited_variants.count.to_s
         
         return edited_variants
         
@@ -210,9 +210,9 @@ class Compare < ApplicationRecord
         # puts dubs1
         new_pictures = imported - current
         old_pictures = current - imported
-        puts "new_pictures: " + new_pictures.count.to_s
-        puts "old_pictures: " + old_pictures.count.to_s
-        puts "___________"
+        # puts "new_pictures: " + new_pictures.count.to_s
+        # puts "old_pictures: " + old_pictures.count.to_s
+        # puts "___________"
         return new_pictures, old_pictures
         
     end
@@ -221,9 +221,9 @@ class Compare < ApplicationRecord
         current = self.collections.pluck("flat")
         new_collections = imported-current
         old_collections = current-imported
-        puts "new_collections: " + new_collections.count.to_s
-        puts "old_collections: " + old_collections.count.to_s
-        puts "___________"
+        # puts "new_collections: " + new_collections.count.to_s
+        # puts "old_collections: " + old_collections.count.to_s
+        # puts "___________"
         old_collections_ids = self.collections.where(:flat=> old_collections).pluck("id")
         return new_collections, old_collections,old_collections_ids
     end
@@ -235,22 +235,22 @@ class Compare < ApplicationRecord
         current =self.collects.includes(:collection,:offer).where.not("collection_id" =>old_collections_ids).where.not("offer_id" =>old_offers_ids).pluck("offers.scu","collections.flat")
         new_collects = imported-current
         old_collects = current-imported
-        puts "new_collects: " + new_collects.count.to_s
-        puts "old_collects: " + old_collects.count.to_s
-        puts "_____________"
+        # puts "new_collects: " + new_collects.count.to_s
+        # puts "old_collects: " + old_collects.count.to_s
+        # puts "_____________"
         return new_collects, old_collects
     end
     
     
     def getData
-         puts self.name
+        #  puts self.name
          self.name= self.name + DateTime.now.to_formatted_s(:long) if self.name
          self.save
          pid = Spawnling.new do
             self.status_trackers.add("INFO","1с старт процесса загрузки")
             import_csv = self.site.get_import_from_odin_ass()
             get_import( import_csv ) if import_csv
-            puts import_csv.size if import_csv
+            # puts import_csv.size if import_csv
             self.status_trackers.add("INFO","1с окончание процесса загрузки")
          end 
          self.status_trackers.add("INFO","Insales старт процесса загрузки")
@@ -282,12 +282,12 @@ class Compare < ApplicationRecord
         collections_hash=nil
         GC.start
          self.site.get_Offers_from_frontend_products(self)
-         puts "offers"
-         puts self.offers.size
+        #  puts "offers"
+        #  puts self.offers.size
          self.status_trackers.add("INFO","Insales Товаров загружено: "+self.offers.size.to_s)
          self.site.get_Collects_from_frontend(self)
-         puts "collects"
-         puts self.collects.size
+        #  puts "collects"
+        #  puts self.collects.size
          self.status_trackers.add("INFO","Insales Размещений продуктов загружено: "+self.collects.size.to_s)
          
         Spawnling.wait(pid)
@@ -298,8 +298,8 @@ class Compare < ApplicationRecord
     end
     
     def get_import(csv)
-        puts "csv"
-        puts csv.size
+        # puts "csv"
+        # puts csv.size
         import=[]
         p_import=[]
         offers = csv.values_at(*self.site.scu_field, 
@@ -343,8 +343,8 @@ class Compare < ApplicationRecord
     def getOffers_marketplace(h)
 #      h= Hash.from_xml(File.open("24025.xml"))
 #       h=hash["yml_catalog"]["shop"]["offers"]["offer"]
-        puts "offers"
-        puts h.size
+        # puts "offers"
+        # puts h.size
        h.each { |a| 
            o = Offer.new()
            o.new_from_hash_marketplace (a)
@@ -384,10 +384,10 @@ class Compare < ApplicationRecord
             keys= variants.map(&:sku)
             no_ids = Variant.where(:compare=>self,:sku=>keys).pluck(:sku,:id).to_h
             prices.each { |n| n.variant_id= no_ids[n.sku] }
-            puts "--------------"
-            prices.each {|n| puts n.attributes }
+            # puts "--------------"
+            # prices.each {|n| puts n.attributes }
             Price.import prices
-            puts "++++++++++++++"
+            # puts "++++++++++++++"
 
             offers.clear
             characteristics.clear
@@ -401,8 +401,8 @@ class Compare < ApplicationRecord
         self.save
     end
     def getProperties(h)
-        puts "properties"
-        puts h.size
+        # puts "properties"
+        # puts h.size
         pr=[]
         h.each { |a| 
             o=Property.new
@@ -414,8 +414,8 @@ class Compare < ApplicationRecord
     end
     def getCollections(h)
 #       h=hash["collections"]
-        puts "collections"
-        puts h.size
+        # puts "collections"
+        # puts h.size
        o=Collection.new
        o = o.new_from_hash(h,self.site.site_global_parent,self.id)
        Collection.import o
@@ -425,8 +425,8 @@ class Compare < ApplicationRecord
     #    self.save
  ##На маркетплейс невыгружается товар без остатков. 
  ##отключи на сайте галочку не показывать товар при нудевых остатках       
-        puts "collects"
-        puts h.size
+        # puts "collects"
+        # puts h.size
         Collect.bulk_insert do |worker|
             worker.set_size = 500
             h.each do |a| 
@@ -437,15 +437,15 @@ class Compare < ApplicationRecord
                 offer_index = self.offers.index{ |c|  c.original_id == offer_id }
     
                 if ( !collection_index )
-                    puts "Error not existing or duplicate collection"
-                    puts collection_id
-                    puts a["id"]
+                    # puts "Error not existing or duplicate collection"
+                    # puts collection_id
+                    # puts a["id"]
                     next
                 end
                 if ( !offer_index )
-                    puts "Error not existing or duplicate offer"  
-                    puts offer_id
-                    puts a["id"]
+                    # puts "Error not existing or duplicate offer"  
+                    # puts offer_id
+                    # puts a["id"]
                     next
                 end
     #            self.collections[collection_index].offers << self.offers[offer_index]

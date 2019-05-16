@@ -32,7 +32,7 @@ class Insale < Site
     end
     def add_Picture_to_frontend(image)
         message = ApplicationController.new.view_context.render( :partial => "insales/add_image.json.jbuilder", :locals => {:new_image =>  image})
-        puts "http://"+self.url+"/admin/"+"products/"+image.original_offer_id+"/images.json"
+        # puts "http://"+self.url+"/admin/"+"products/"+image.original_offer_id+"/images.json"
         response = post_to_url_json(URI("http://"+self.url+"/admin/"+"products/"+image.original_offer_id+"/images.json"),message , self.site_login, self.site_pass)
         # response={:id=>Random.new.rand(1..10000000),:status=>Random.new.rand(1..10)<4 ? "error" : "ok"}
         # if response[:status]=="error" 
@@ -50,8 +50,8 @@ class Insale < Site
         return response
     end
     def edit_Collection_to_frontend(collection)
-        puts collection.original_id
-        puts "http://"+self.url+"/admin/"+"collections/"+collection.original_id.to_s+".json"
+        # puts collection.original_id
+        # puts "http://"+self.url+"/admin/"+"collections/"+collection.original_id.to_s+".json"
         message = ApplicationController.new.view_context.render( :partial => "insales/edit_collection.json.jbuilder", :locals => {:edit_collection =>  collection})
 
         response = put_to_url_json(URI("http://"+self.url+"/admin/"+"collections/"+collection.original_id.to_s+".json"),message , self.site_login, self.site_pass)
@@ -114,7 +114,7 @@ class Insale < Site
     end
     def get_Categories_from_frontend
         response = get_from_url( URI("http://"+self.url+"/admin/"+"categories.xml"), self.site_login, self.site_pass)
-                puts response
+                # puts response
 
         response["categories"]
     end
@@ -156,7 +156,7 @@ class Insale < Site
 #            get_Collections_from_frontend
             
             r = get_from_url(uri_page, self.site_login, self.site_pass)
-            puts uri_page.to_s
+            # puts uri_page.to_s
             break if r == nil
  #           File.open("products"+i.to_s+".xml", "w") { |file| file.write r.to_xml}
             case model
@@ -187,19 +187,19 @@ class Insale < Site
             
         }
         rescue Exception => exc
-            puts exc.message
+            # puts exc.message
             return {:status=>"error",:error=>exc.message}
         end
         r = resp.get_fields("api-usage-limit")
         if r
             r= r[0].split('/')
-            puts resp.get_fields("api-usage-limit").to_s
-            puts r[0].to_i
+            # puts resp.get_fields("api-usage-limit").to_s
+            # puts r[0].to_i
         end
-        puts resp
+        # puts resp
         case resp
         when Net::HTTPOK
-            puts (resp.code + " " + resp.message)
+            # puts (resp.code + " " + resp.message)
             # h=JSON.parse(resp.body)
             # puts h
             return {:status =>"ok"}
@@ -209,9 +209,9 @@ class Insale < Site
             #     return h
             # end
         when Net::HTTPClientError, Net::HTTPInternalServerError
-            puts (resp.code + " " + resp.message)
+            # puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
-            puts h
+            # puts h
             return {:status=>"error",:error=>h.to_s}
             return nil
         end
@@ -221,28 +221,28 @@ class Insale < Site
         req.basic_auth id,key
         req.content_type="application/json"
         req.body=message
-        puts    req.body 
+        # puts    req.body 
         begin
         resp = Net::HTTP.start(uri.hostname,uri.port) { |http|
             http.request(req)
             
         }
         rescue Exception => exc
-            puts exc.message
+            # puts exc.message
             return {:status=>"error",:error=>exc.message}
         end
         r = resp.get_fields("api-usage-limit")
         if r
             r= r[0].split('/')
-            puts resp.get_fields("api-usage-limit").to_s
-            puts r[0].to_i
+            # puts resp.get_fields("api-usage-limit").to_s
+            # puts r[0].to_i
         end
-        puts resp
+        # puts resp
         case resp
         when Net::HTTPCreated
-            puts (resp.code + " " + resp.message)
+            # puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
-            if h.class==Class::Array
+            if h.class==Array
                 h
             else
                 h[:status]="ok"
@@ -255,9 +255,9 @@ class Insale < Site
             #     return h
             # end
         when Net::HTTPClientError, Net::HTTPInternalServerError
-            puts (resp.code + " " + resp.message)
+            # puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
-            puts h
+            # puts h
             return {:status=>"error",:error=>h.to_s}
         end
     end
@@ -266,35 +266,35 @@ class Insale < Site
         req.basic_auth id,key
         req.content_type="application/json"
         req.body=message
-        puts    req.body 
+        # puts    req.body 
         begin
         resp = Net::HTTP.start(uri.hostname,uri.port) { |http|
             http.request(req)
             
         }
         rescue Exception => exc
-            puts exc.message
+            # puts exc.message
             return {:status=>"error",:error=>exc.message}
         end
         r = resp.get_fields("api-usage-limit")
         if r
             r= r[0].split('/')
-            puts resp.get_fields("api-usage-limit").to_s
-            puts r[0].to_i
+            # puts resp.get_fields("api-usage-limit").to_s
+            # puts r[0].to_i
         end
-        puts resp
+        # puts resp
         case resp
         when Net::HTTPOK
-            puts (resp.code + " " + resp.message)
+            # puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
             # puts h
             # puts h.class
-            if h.class==Class::Array
+            if h.class==Array
                 h
             else
                 h[:status]="ok"
             end
-            puts h
+            # puts h
             return h
             # if h["nil_classes"]
             #     return nil
@@ -302,9 +302,9 @@ class Insale < Site
             #     return h
             # end
         when Net::HTTPClientError, Net::HTTPInternalServerError
-            puts (resp.code + " " + resp.message)
+            # puts (resp.code + " " + resp.message)
             h=JSON.parse(resp.body)
-            puts h
+            # puts h
             return {:status=>"error",:error=>h.to_s}
         end
     end
@@ -313,10 +313,10 @@ class Insale < Site
     def get_from_url (uri, id,key )
         req  = Net::HTTP::Get.new(uri.request_uri)
         req.basic_auth id,key
-        puts "+++++++++++++++++++"
+        # puts "+++++++++++++++++++"
         begin
-        puts uri.hostname
-        puts uri.port
+        # puts uri.hostname
+        # puts uri.port
         resp = Net::HTTP.start(uri.hostname,uri.port) { |http|
             http.request(req)
             
@@ -328,7 +328,7 @@ class Insale < Site
         r = resp.get_fields("api-usage-limit")
         if r
             r= r[0].split('/')
-            puts resp.get_fields("api-usage-limit").to_s
+            # puts resp.get_fields("api-usage-limit").to_s
 #            puts r[0].to_i
         end
         case resp
@@ -341,7 +341,7 @@ class Insale < Site
                 return h
             end
         when Net::HTTPClientError, Net::HTTPInternalServerError
-            puts (resp.code + resp.message)
+            # puts (resp.code + resp.message)
             self.compares.last.status_trackers.add("ERROR","Get from insales" +resp.code + resp.message+uri.path)
             return nil
         end
@@ -356,7 +356,7 @@ class Insale < Site
             http.request(req)
         }
         rescue Exception => exc
-            puts exc.message
+            # puts exc.message
             self.compares.last.status_trackers.add("ERROR","Get from FTP" +exc.message + uri.path)
             return nil
         end
@@ -371,7 +371,7 @@ class Insale < Site
 
             return h
          when Net::HTTPClientError, Net::HTTPInternalServerError
-            puts (response.code + response.message)
+            # puts (response.code + response.message)
             return nil
         end
     end    
@@ -380,7 +380,7 @@ class Insale < Site
 
     def get_csv_from_ftp (uri,file,id,key)
         ftp = Net::FTP.new
-        puts uri
+        # puts uri
         begin
         ftp.connect(uri,21)
         ftp.login(id,key)
@@ -388,7 +388,7 @@ class Insale < Site
         filename = "tmp/upload.csv"+DateTime.now.to_i.to_s
         ftp.getbinaryfile(file,filename)
         rescue Exception => exc
-                puts exc.message
+                # puts exc.message
                 logger.error exc.message
                 return nil
         end
@@ -401,7 +401,7 @@ class Insale < Site
                             {:headers => true,  :col_sep => ';'})
                 
                 logger.info h.size if h
-                puts h.size
+                # puts h.size
                 File.delete(filename)
                 return h
     
@@ -416,7 +416,7 @@ class Insale < Site
             throw r.body[:get_data_response][:return] if h.size== 0  
             return h
         rescue Exception => exc
-                puts exc.message
+                # puts exc.message
                 self.compares.last.status_trackers.add("ERROR","Get from SOAP " +exc.message.encode(Encoding::UTF_8, Encoding::UTF_8, {   :invalid => :replace,
                                                                                 :undef   => :replace,
                                                                                 :replace => '?'}) )

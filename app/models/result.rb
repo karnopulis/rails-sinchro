@@ -47,7 +47,7 @@ class Result < ApplicationRecord
     compare.status_trackers.add("DEBUG","Окончание прямого процесса")
     loop do
         if  self.compare.handler_errors.where( "tryes_left > 0").size == 0 
-            puts pid_errors.handle
+            # puts pid_errors.handle
             Process.kill("HUP",pid_errors.handle)
             compare.status_trackers.add("DEBUG","Окончание процесса обработчика ошибок")
             break
