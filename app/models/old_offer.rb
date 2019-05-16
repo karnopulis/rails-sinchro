@@ -38,8 +38,8 @@ class OldOffer < ApplicationRecord
 
    def apply
      result = self.result.compare.site.delete_Product_from_frontend(self)
-     puts self.to_s
-     puts result    
+    #  puts self.to_s
+    #  puts result    
      if result[:status]=="ok" 
          self.state="completed"
          self.save
