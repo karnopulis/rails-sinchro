@@ -44,7 +44,7 @@ class Compare < ApplicationRecord
      end
     
     def launch
-            if self.site.compares.where(:state => "active" ).size ==0  
+            # if self.site.compares.where(:state => "active" ).size ==0  
                 self.state="active"
                 self.save
                 com = self.get_model
@@ -55,11 +55,11 @@ class Compare < ApplicationRecord
                     self.state="inactive"
                     self.save
                 end
-            else
-                 self.status_trackers.add("FATAL","Запуск отменен. Другая синхронизация имееет активный статус ")
-                 self.state="canceled"
-                 self.save
-            end
+            # else
+            #      self.status_trackers.add("FATAL","Запуск отменен. Другая синхронизация имееет активный статус ")
+            #      self.state="canceled"
+            #      self.save
+            # end
  
         
     end
