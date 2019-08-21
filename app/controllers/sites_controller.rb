@@ -10,6 +10,14 @@ class SitesController < ApplicationController
   def index
     @sites = Site.all
   end
+  def public
+    @sites = [{:name=>"Хорошо Нижний Новгород",:address=>"horosho-nn.ru"},{:name=>"Хорошо Уфа",:address=>"horosho-ufa.ru"}]
+    respond_to do |format|
+      
+        format.json { render "public.json" }
+    end
+    
+  end
 
   # GET /sites/1
   # GET /sites/1.json

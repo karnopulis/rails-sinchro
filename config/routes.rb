@@ -10,6 +10,9 @@ Rails.application.routes.draw do
       resources :collections
       resources :offer_imports
       resources :collect_imports
+      collection do 
+        get "public"
+      end
   end
   
   # The priority is based upon order of creation: first created -> highest priority.
