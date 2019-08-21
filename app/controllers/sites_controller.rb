@@ -18,8 +18,7 @@ class SitesController < ApplicationController
   def public
     @sites = [{:name=>"Хорошо Нижний Новгород",:address=>"horosho-nn.ru"},{:name=>"Хорошо Уфа",:address=>"horosho-ufa.ru"}]
     respond_to do |format|
-        response.headers['Content-Type'] = 'application/json'
-        format.json { render json: @sites , :content_type => 'application/javascript' }
+        format.json { render json: @sites , :content_type => 'application/javascript', :callback => params[:callback] }
     end
     
   end
