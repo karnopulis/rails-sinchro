@@ -1,6 +1,11 @@
 class SitesController < ApplicationController
   before_action :set_site, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, :except => :public
+  before_action :set_headers
+
+  def set_headers
+    response.headers['Content-Type'] = 'application/vnd.api+json'
+  end
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
@@ -13,8 +18,8 @@ class SitesController < ApplicationController
   def public
     @sites = [{:name=>"Хорошо Нижний Новгород",:address=>"horosho-nn.ru"},{:name=>"Хорошо Уфа",:address=>"horosho-ufa.ru"}]
     respond_to do |format|
-      
-        format.json { render "public.json" }
+        response.headers['Content-Type'] = 'application/json'
+        format.json { render json: @sites , :content_type => 'application/javascript' }
     end
     
   end
